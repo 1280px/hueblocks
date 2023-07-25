@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hb multicolor test</title>
+</head>
+
+<body>
+    <div id="colorbar" style="display: flex;">
+        <input type="color" class="colorbarColor">
+        <input type="text" class="colorbarLength" value=5>
+        <input type="color" class="colorbarColor">
+    </div>
+
+    <button id="addseg" onclick="addseg(0)">+L</button>
+    <button id="addseg" onclick="addseg(1)">+R</button>
+    <button id="remseg" onclick="remseg()">-S</button>
+    <button id="gen" onclick="gen()">GEN</button>
+
+    <pre id="output" style="width: 400px; background-color: wheat;"></pre>
+</body>
+
+<script>
+
+function addseg(dir) {
+    let newColor = document.createElement("input");
+    newColor.type = "color";
+    newColor.value = "#e60c0c";
+    newColor.classList.add("colorbarColor");
+
+    let newLength = document.createElement("input");
+    newLength.type = "text";
+    newLength.value = 5;
+    newLength.classList.add("colorbarLength");
+
+    let colorbar = document.querySelector("#colorbar");
+    // 0 -- insert to left, 1 -- insert to right
+    if (dir == 0) {
+        colorbar.prepend(newColor, newLength);
+    } else {
+        colorbar.append(newLength, newColor);
+    }
+}
+
+function remseg() {
+    if (document.querySelectorAll(".colorbarColor").length <= 2) {
+        return alert("You cannot have less than 1 gradient on colorbar!");
+    }
+    const colorToRemove = +prompt("Which color to remove? (starting from 1)") - 1;
+
+    document.querySelectorAll(".colorbarColor")[colorToRemove].remove();
+    document.querySelectorAll(".colorbarLength")[colorToRemove].remove();
+}
+
+/* compact HEX <-> RGB converter I found on stackoverflow */
+function hexToRgb(h){return['0x'+h[1]+h[2]|0,'0x'+h[3]+h[4]|0,'0x'+h[5]+h[6]|0]}
+function rgbToHex(i){return"#"+((1<<24)+(i[0]<<16)+(i[1]<<8)+ i[2]).toString(16).slice(1)}
+
+function gen() {
+    document.querySelector("#output").innerHTML = "";
+
+    let colors = [], lengths = [];
+    document.querySelectorAll(".colorbarColor").forEach((item) => colors.push(item.value));
+    document.querySelectorAll(".colorbarLength").forEach((item) => lengths.push(item.value));
+
+    for (let i = 0; i < lengths.length; i++) {
+        document.querySelector("#output").append(`=== gradient ${i}: ===`);
+
+        const gradientLen = lengths[i],
+              color1 = hexToRgb(colors[i]), color2 = hexToRgb(colors[i+1]);
+        for (let currSegment = 0; currSegment < gradientLen; currSegment++) {
+            let result = rgbToHex([
+                Math.floor(color1[0]*((gradientLen - currSegment) / gradientLen) + color2[0]*(currSegment / gradientLen)),
+                Math.floor(color1[1]*((gradientLen - currSegment) / gradientLen) + color2[1]*(currSegment / gradientLen)),
+                Math.floor(color1[2]*((gradientLen - currSegment) / gradientLen) + color2[2]*(currSegment / gradientLen))
+            ]);
+
+            let newOutput = document.createElement("div");
+            newOutput.innerHTML = result;
+            newOutput.style.backgroundColor = result;
+            document.querySelector("#output").append(newOutput);
+        }
+    }
+}
+
+</script>
+</html>
