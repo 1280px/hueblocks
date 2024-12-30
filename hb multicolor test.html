@@ -67,10 +67,10 @@ function gen() {
     for (let i = 0; i < lengths.length; i++) {
         document.querySelector("#output").append(`=== gradient ${i}: ===`);
 
-        const gradientLen = lengths[i],
+        const gradientLen = lengths[i] - 1,
               color1 = hexToRgb(colors[i]), color2 = hexToRgb(colors[i+1]);
-        for (let currSegment = 0; currSegment < gradientLen; currSegment++) {
-            let result = rgbToHex([
+        for (let currSegment = 0; currSegment <= gradientLen; currSegment++) {
+            const result = rgbToHex([
                 Math.floor(color1[0]*((gradientLen - currSegment) / gradientLen) + color2[0]*(currSegment / gradientLen)),
                 Math.floor(color1[1]*((gradientLen - currSegment) / gradientLen) + color2[1]*(currSegment / gradientLen)),
                 Math.floor(color1[2]*((gradientLen - currSegment) / gradientLen) + color2[2]*(currSegment / gradientLen))
