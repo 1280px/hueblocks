@@ -29,10 +29,9 @@ filters:
   - grass_side$
   - grass_top$
   - hopper$
-  - itemframe_back.png
+  - itemframe$
   - lava$
   - leaves_$
-  - piston_bottom.png
   - piston_inner_top.png
   - quartz_block_chiseled.png
   - quartz_block_chiseled_top.png
@@ -53,7 +52,6 @@ filters:
   - dropper_front_vertical.png
   - enchanting_table_$
   - end_portal_frame_top.png
-  - itemframe_background.png
   - jukebox$
   - observer_front.png
   - observer_back$
@@ -78,6 +76,7 @@ filters:
   - dark_oak_door$
   - dark_oak_log_top.png
   - fletching_table_side.png
+  - hay_block_side.png
   - item_frame.png
   - iron_door$
   - jigsaw_side.png
@@ -117,6 +116,7 @@ filters:
   - mangrove_log_top.png
   - pink_petals_stem.png
   - quartz_bricks.png
+  - quartz_pillar_top.png
   - respawn_anchor_side$
   - sculk_catalyst_$
   - sculk_sensor_$
@@ -130,17 +130,13 @@ filters:
   # 1.21.3
   - $copper_bulb_lit_powered.png
   - $copper_bulb_powered.png
-  - $copper_door_bottom.png
   - $copper_door_top.png
-  - crafter_east_crafting.png
-  - crafter_east_triggered.png
-  - crafter_north_crafting.png
-  - crafter_north_triggered.png
-  - crafter_south_triggered.png
-  - crafter_west_crafting.png
-  - crafter_west_triggered.png
-  - crafter_top_crafting.png
-  - crafter_top_triggered.png
+  - $copper_door_bottom.png
+  - crafter_east_$
+  - crafter_north_$
+  - crafter_south_$
+  - crafter_west_$
+  - crafter_top_$
   - pale_moss_carpet.png
   - pale_oak_door$
   - trial_spawner_top$

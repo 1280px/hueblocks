@@ -30,15 +30,14 @@ def extract_blocks_from_jar(jar_path, output_path):
     return
 
 
-def get_blacklisted_blocks(blacklist_path, blocks_path):
-    blocks_names = sorted(os.listdir(blocks_path))
-    blacklist = []
+def compute_filter(lines, names):
+    # Sequentially computes a filter; returns LIST OF PAIRS of filtered
+    # block names and filter type metadata, which will be used later for
+    # prioritization of regular filter rules over wildcard filter rules.
+    rules = {}
+    print(f'Computing filter from {len(lines)} lines...')
 
-    with open(blacklist_path, 'r') as blacklist_f:
-        # blacklist = load(blacklist_f, Loader=Loader)
-        blacklist_raw = safe_load(blacklist_f)
-
-    for line in blacklist_raw['filters']:
+    for line in lines:
         # Exclude wildcard-only filter, just in case
         if line == '$':
             print('Wildcard filter "$" is not allowed -- like, why would you want to remove EVERYTHING from blockset?')
@@ -47,31 +46,113 @@ def get_blacklisted_blocks(blacklist_path, blocks_path):
         line_star = line.find('$')
 
         if line_star == -1: # No wildcard
-            blacklist.append(line)
+            rules[line] = 'R'
 
         elif line_star == len(line)-1: # Prefix wildcard
-            for block_name in blocks_names:
-                if block_name.startswith(line.split('$')[0]):
-                    blacklist.append(block_name)
+            for name in names:
+                if name.startswith(line.split('$')[0]):
+                    # Prioritize regular filters over wildcard!
+                    if name not in rules or rules[name] != 'R':
+                        rules[name] = 'W'
 
         elif line_star == 0: # Suffix wildcard
-            for block_name in blocks_names:
-                if block_name.endswith(line.split('$')[1]):
-                    blacklist.append(block_name)
-    return blacklist
+            for name in names:
+                if name.endswith(line.split('$')[1]):
+                    # Prioritize regular filters over wildcard!
+                    if name not in rules or rules[name] != 'R':
+                        rules[name] = 'W'
+
+    print(f'Finished computation into {len(rules)} rules.\n')
+    return rules
 
 
-def get_autoparse_rules(autoparse_path):
-    raise NotImplementedError
+def get_blacklisted_blocks(blacklist_path, blocks_path):
+    blocks_names = sorted(os.listdir(blocks_path))
+
+    with open(blacklist_path, 'r') as blacklist_f:
+        # blacklist = load(blacklist_f, Loader=Loader)
+        blacklist_raw = safe_load(blacklist_f)
+
+    blacklist = compute_filter(blacklist_raw['filters'], blocks_names)
+    test = blacklist.keys()
+
+    # We don't care about metadata in this case, so we just strip it out
+    return list(blacklist.keys())
 
 
-def generate_texture_data(texture_path, autoparse_rules):
+def get_autoparse_facing(autoparse_path, blocks_path):
+    sides = ['top', 'bottom', 'north', 'south', 'east', 'west', 'sides', 'all']
+    blocks_names = sorted(os.listdir(blocks_path))
+
+    with open(autoparse_path, 'r') as autoparse_f:
+        # blacklist = load(autoparse_f, Loader=Loader)
+        autoparse_raw = safe_load(autoparse_f)
+
+    # First we compute filters for every single facing option (bruh!!1)
+    facing_filters = {
+        side: {} for side in sides
+    }
+    for side in facing_filters.keys():
+        print(side)
+        facing_filters[side] = compute_filter(autoparse_raw['facing'][side], blocks_names)
+
+    # Now we need to convert this object of objects into a list of pairs
+    # consisting out of a texture name and a tuple of its applicable sides.
+    # We will also get rid of duplicates by prioritizing regular filters
+    # over wildcard filters and one-sided options over multi-sided options.
+    textures_to_sides = dict()
+
+    for name in blocks_names:
+        name_present = {
+            side: facing_filters[side].get(name, 'X') for side in sides
+        }
+        print(name, name_present)
+
+        present_sides = []
+        # Since "all" option currently includes overrides only, it has the
+        # highest priority at this moment; the second priority have all the
+        # one-sided options; so, 'sides' option actually the least important!
+        # We also translate "all" and "sides" multi-side options into list
+        # of one-side options, just to make blockset facing data more simple.
+        if name_present['all'] != 'X':
+            present_sides = sides.copy()[:-2]
+        
+        else:
+            for side in sides[:-2]: 
+                if name_present[side] != 'X':
+                    present_sides.append(side)
+            
+            if present_sides:
+                pass
+
+            elif name_present['sides'] != 'X':
+                present_sides = sides.copy()[2:-2]
+
+            # No filters matched, meaning this texture is used on all sides
+            else:
+                present_sides = sides.copy()[:-2]
+        print(present_sides, '\n')
+
+        textures_to_sides[name] = present_sides
+    return textures_to_sides
+
+
+def get_autoparse_naming(autoparse_path):
+    with open(autoparse_path, 'r') as autoparse_f:
+        # blacklist = load(autoparse_f, Loader=Loader)
+        autoparse_raw = safe_load(autoparse_f)
+    
+    naming_rules = autoparse_raw['naming']
+    return naming_rules
+
+
+def generate_textures_data(autoparse_facing, autoparse_naming, blocks_path):
     raise NotImplementedError
 
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print('Not enough arguments! See README for help.')
+        print('\nNot enough arguments! See README for help.')
         sys.exit(0)
     JAR_PATH = sys.argv[1]
     EXCLUDE_ALPHA = (sys.argv[2] == '1') if len(sys.argv) >= 3 else True
@@ -89,19 +170,18 @@ if __name__ == "__main__":
 
     # Ask what to do if output directory already exists
     if os.path.isdir(OUTPUT_PATH):
-        if input(f'Output dir "{OUTPUT_PATH}" already exists! Type Y to replace: ').upper() == 'Y':
+        if input(f'\nOutput dir "{OUTPUT_PATH}" already exists! Type Y to replace: ').upper() == 'Y':
             rmtree(OUTPUT_PATH)
     os.mkdir(OUTPUT_PATH)
 
 
     # Extract block texture assets from jar
     extract_blocks_from_jar(JAR_PATH, OUTPUT_PATH)
+    print(f'\nExtracted {len(os.listdir(OUTPUT_PATH))} assets from JAR\n')
 
-    # Populate list of blacklisted blocks
+    # Populate list of blacklisted block textures
     blacklist = get_blacklisted_blocks(BLACKLIST_PATH, OUTPUT_PATH)
 
-
-    print('')
 
     # Now let's go through every extracted file and remove the unwanted ones
     for fname in sorted(os.listdir(OUTPUT_PATH)):
@@ -166,16 +246,21 @@ if __name__ == "__main__":
     for fname in sorted(os.listdir(OUTPUT_PATH)):
         if fname.endswith('.mcmeta') or fname.endswith('.txt'):
             os.remove(os.path.join(OUTPUT_PATH, fname))
+    print(f'Filtered out down to {len(os.listdir(OUTPUT_PATH))} assets\n')
 
 
     # (D) TODO: Generate blockset data about each texture
-    auroparse_rules = get_autoparse_rules(AUTOPARSE_PATH)
-    blockset_data = []
+    autoparse_facing_filters = get_autoparse_facing(AUTOPARSE_PATH, OUTPUT_PATH)
+    autoparse_naming_rules = get_autoparse_naming(AUTOPARSE_PATH)
+    print(autoparse_facing_filters, autoparse_naming_rules)
 
-    for fname in sorted(os.listdir(OUTPUT_PATH)):
-        texture_data = generate_texture_data(os.path.join(OUTPUT_PATH, fname), auroparse_rules)
-        blockset_data.append(texture_data)
+    blockset_data = {
+        'name': None,
+        'dir': None,
+        'count': None,
+        'data': generate_textures_data(os.path.join(OUTPUT_PATH), autoparse_facing_filters, autoparse_naming_rules)
+    }
 
 
-    # (D) TODO: Finally, generate remaining blockset data and save as JSON file
+    # TODO: Finally, fill out remaining blockset data and save as JSON file
     raise NotImplementedError

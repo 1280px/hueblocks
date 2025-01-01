@@ -1,16 +1,13 @@
 # Method used for texture/blockset name autogeneration. Allowed methods are:
 # title (Purple Wool), capital (Purple wool), sep (puRPle wOoL) and none (puRPle_wOoL)
-textures_naming = title
-blockset_naming = sep
+naming:
+  textures: title
+  blockset: sep
 
 # List of filters for autoparse to recognize what side a given texture is for,
 # using the same notation as in the blacklist file (see comments there).
 # See facing notation's meaning here: https://optifine.readthedocs.io/ctm.html#faces
-# If several occurences are found for a wildcard and a regular filter, then
-# ONLY REGULAR fitler match will be considered; if several occurences found for
-# mutiple regular filters, then BOTH OF THEM will be considered; and if several
-# occurences are found for mutiple wildcard filter, ONLY THE LATTER will be used.
-filters:
+facing:
   top:
     - $_top.png
     # Dispenser-like blocks
@@ -23,15 +20,13 @@ filters:
     - podzol.png
     - crimson_nylium.png
     - warped_nylium.png
-    # Melon, hay and pumpkin use their top textures as bottom as well
+    # Melon, pumpkin and beehive use their top textures for bottom as well
     - pumpkin_top.png
     - melon_top.png
-    - hay_block_top.png
+    - beehive_end.png
     # Same does creaking heart (wtf is wrong with new Minecraft versions?)
     - creaking_heart_top.png
     - creaking_heart_top_active.png
-    # Beehive's uses "end" texture for both its top and bottom
-    - beehive_end.png
     # Chiseled bookshelf top (to override wildcard filter)
     - chiseled_bookshelf_top.png
     # Crafter top (to override wildcard filter)
@@ -45,42 +40,54 @@ filters:
     # Daylight detector uses the same texture for side and bottom,
     # and its height is way too small to be used for building
     - daylightDetector_side.png
-    # Melon, hay and pumpkin use their top textures as bottom as well
+    - daylight_detector_side.png
+    # Melon, pumpkin and beehive use their top textures for bottom as well
     - pumpkin_top.png
     - melon_top.png
-    - hay_block_top.png
+    - beehive_end.png
     # Same does creaking heart (wtf is wrong with new Minecraft versions?)
     - creaking_heart_top.png
     - creaking_heart_top_active.png
-    # Beehive's uses "end" texture for both its top and bottom
-    - beehive_end.png
     # Chiseled bookshelf bottom (to override wildcard filter)
     - chiseled_bookshelf_bottom.png
     # Crafter bottom (to override wildcard filter)
     - crafter_bottom.png
 
   north:
-    # Crafting, flething and smithing tables use "front" texture for N and E
+    # Crafting, flething and smithing tables use "front" texture for N and S
     - workbench_front.png
     - crafting_table_front.png
     - fletching_table_front.png
     - smithing_table_front.png
+    # Cartography table's side2 (with globe on the right) always faces W
+    - cartography_table_side3.png
+
   south:
-    # Crafting, flething and smithing tables use "side" texture for S and W
-    - workbench_side.png
-    - crafting_table_side.png
-    - fletching_table_side.png
-    - smithing_table_side.png
-  east:
-    # Crafting, flething and smithing tables use "front" texture for N and E
+    # Crafting, flething and smithing tables use "front" texture for N and S
     - workbench_front.png
     - crafting_table_front.png
-  west:
-    # Crafting, flething and smithing tables use "side" texture for S and W
+    - fletching_table_front.png
+    - smithing_table_front.png
+    # Cartography table's side2 (with globe on the right) always faces W
+    - cartography_table_side1.png
+
+  east:
+    # Crafting, flething and smithing tables use "side" texture for W and E
     - workbench_side.png
     - crafting_table_side.png
     - fletching_table_side.png
     - smithing_table_side.png
+    # Cartography table's side2 (with globe on the right) always faces W
+    - cartography_table_side3.png
+
+  west:
+    # Crafting, flething and smithing tables use "side" texture for W and E
+    - workbench_side.png
+    - crafting_table_side.png
+    - fletching_table_side.png
+    - smithing_table_side.png
+    # Cartography table's side2 (with globe on the right) always faces W
+    - cartography_table_side2.png
 
   sides:
     - $_side.png
@@ -114,13 +121,15 @@ filters:
     - creaking_heart.png
     - creaking_heart_active.png
 
+  # Note that "all" is also set automatically if none of the filters matched,
+  # so this section should ONLY contain override filters, NOT global filters!
   all:
-    # Pistons can be rotated in any direction, so are its textures
-    - piston_side.png
-    - piston_top.png
-    - piston_top_normal.png
-    - piston_top_sticky.png
-    # Same is true for column-like blocks...
+    # Furnace top texture is actually used for much more blocks than
+    # the name implies, including ones allowing freeform rotation.
+    - furnace_top.png
+    # Pistons can be rotated in any direction, so are their textures
+    - piston$
+    # Same is true for ALMOST all column-like blocks...
     - quartzblock_lines$
     - quartz_block_lines$
     - quartz_pillar$
@@ -128,15 +137,22 @@ filters:
     - purpur_pillar$
     - basalt$
     - polished_basalt$
+    - hay_block$
     # ...barrels...
     - barrel_$
     # ...and, of course, for logs and stems
     - tree_top.png
+    - log_acacia_top.png
+    - log_big_oak_top.png
+    - log_birch_top.png
+    - log_jungle_top.png
+    - log_oak_top.png
+    - log_spruce_top.png
     - $_log_top.png
     - $_stem_top.png
-    # Smooth sandstone and smooth stone blocks
+    # Smooth sandstone and smooth stone (both inobtainable block
+    # from older versions and obtainable block from newer versions)
     - sandstone_top.png
     - red_sandstone_top.png
     - smooth_stone.png
-
-  # Note that "all" is also set automatically if none of the filters matched!
+    - stone_slab_top.png
