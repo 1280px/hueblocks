@@ -1,15 +1,19 @@
-import zipfile
 import os
-import shutil
 import sys
+from shutil import rmtree
+import datetime
+
 import numpy as np
 from PIL import Image
-import datetime
+
+import zipfile
+from yaml import safe_load
+from json import encoder
 
 
 def extract_blocks_from_jar(jar_path, output_path):
-    with zipfile.ZipFile(jar_path, 'r') as jar:
-        for file in jar.namelist():
+    with zipfile.ZipFile(jar_path, 'r') as jar_f:
+        for file in jar_f.namelist():
             if (
                 file.startswith('assets/minecraft/textures/block') # 1.13+
                 or file.startswith('assets/minecraft/textures/blocks') # 1.6.1--1.12.2
@@ -18,7 +22,7 @@ def extract_blocks_from_jar(jar_path, output_path):
                 fname = os.path.basename(file)
 
                 if fname: # Exclude directories themselves
-                    with jar.open(file) as source, open(os.path.join(output_path, fname), 'wb') as target:
+                    with jar_f.open(file) as source, open(os.path.join(output_path, fname), 'wb') as target:
                         # Note that we intentionally do not exclude .txt/.mcmeta files,
                         # as they'll be useful later to determine whether the texture
                         # is actually animated or just has an irregular non-square shape!
@@ -30,39 +34,39 @@ def get_blacklisted_blocks(blacklist_path, blocks_path):
     blocks_names = sorted(os.listdir(blocks_path))
     blacklist = []
 
-    with open(blacklist_path, 'r') as blist:
-        for line_raw in blist:
-            # Skip comments and empty lines
-            if line_raw.startswith('#') or line_raw == '\n':
-                continue
+    with open(blacklist_path, 'r') as blacklist_f:
+        # blacklist = load(blacklist_f, Loader=Loader)
+        blacklist_raw = safe_load(blacklist_f)
 
-            line = line_raw.strip('\n')
-            line_star = line.find('*')
+    for line in blacklist_raw['filters']:
+        # Exclude wildcard-only filter, just in case
+        if line == '$':
+            print('Wildcard filter "$" is not allowed -- like, why would you want to remove EVERYTHING from blockset?')
+            continue
+        
+        line_star = line.find('$')
 
-            # Exclude wildcard-only filter, just in case
-            if line == '*':
-                print('Wildcard filter "*" is not allowed -- like, why would you want to remove EVERYTHING from blockset?')
-                continue
+        if line_star == -1: # No wildcard
+            blacklist.append(line)
 
-            if line_star == -1: # No wildcard
-                blacklist.append(line)
-                continue
+        elif line_star == len(line)-1: # Prefix wildcard
+            for block_name in blocks_names:
+                if block_name.startswith(line.split('$')[0]):
+                    blacklist.append(block_name)
 
-            elif line_star == len(line)-1: # Prefix wildcard
-                for block_name in blocks_names:
-                    if block_name.startswith(line.split('*')[0]):
-                        blacklist.append(block_name)
-
-            elif line_star == 0: # Suffix wildcard
-                for block_name in blocks_names:
-                    if block_name.endswith(line.split('*')[1]):
-                        blacklist.append(block_name)
+        elif line_star == 0: # Suffix wildcard
+            for block_name in blocks_names:
+                if block_name.endswith(line.split('$')[1]):
+                    blacklist.append(block_name)
     return blacklist
 
 
-
 def get_autoparse_rules(autoparse_path):
-    return
+    raise NotImplementedError
+
+
+def generate_texture_data(texture_path, autoparse_rules):
+    raise NotImplementedError
 
 
 if __name__ == "__main__":
@@ -74,11 +78,11 @@ if __name__ == "__main__":
     EXCLUDE_ANIMATED = (sys.argv[3] == '1') if len(sys.argv) >= 4 else True
     BLACKLIST_PATH = (
         (sys.argv[4] if (sys.argv[4] != 'None') else None)
-        if len(sys.argv) >= 5 else 'blacklist-default.cfg'
+        if len(sys.argv) >= 5 else 'blacklist-default.yml'
     )
     AUTOPARSE_PATH = (
         (sys.argv[5] if (sys.argv[5] != 'None') else None)
-        if len(sys.argv) >= 6 else 'autoparser-rules.cfg'
+        if len(sys.argv) >= 6 else 'autoparse-default.yml'
     )
     # print(JAR_PATH, EXCLUDE_ALPHA, EXCLUDE_ANIMATED, BLACKLIST_PATH, AUTOPARSE_PATH)
     OUTPUT_PATH = os.path.splitext(JAR_PATH)[0]
@@ -86,7 +90,7 @@ if __name__ == "__main__":
     # Ask what to do if output directory already exists
     if os.path.isdir(OUTPUT_PATH):
         if input(f'Output dir "{OUTPUT_PATH}" already exists! Type Y to replace: ').upper() == 'Y':
-            shutil.rmtree(OUTPUT_PATH)
+            rmtree(OUTPUT_PATH)
     os.mkdir(OUTPUT_PATH)
 
 
@@ -109,7 +113,7 @@ if __name__ == "__main__":
             if EXCLUDE_ALPHA:
                 # Older textures used P onlu for textures without alpha and RBGA only
                 # for ones with alpha. However, some newer textures also use P even
-                # though they use alpha, so, we have to check it as well to be sure.
+                # though they use alpha, so, we have to check it as well, to be sure.
                 if img.mode == 'RGBA':
                     if (img_np[:, :, 3].min()) < 255:
                         os.remove(os.path.join(OUTPUT_PATH, fname))
@@ -133,17 +137,18 @@ if __name__ == "__main__":
                 os.path.isfile(os.path.join(OUTPUT_PATH, fname_noext + '.txt'))
                 or os.path.isfile(os.path.join(OUTPUT_PATH, fname + '.mcmeta'))
             ):
-                # (B) Exclude textures with .txt/.mcmeta is option is true;
-                # otherwise, use blend of first & last frames as a new texture
+                # (B) Exclude textures with .txt/.mcmeta if option is true;
+                # otherwise, use blend of first & last frames as a new texture.
                 if EXCLUDE_ANIMATED:
                     os.remove(os.path.join(OUTPUT_PATH, fname))
                     # print('Excluded', fname, '(B)')
+
                 else:
                     img_first_frame = img.convert("RGBA").crop((0, 0, img_np.shape[1], img_np.shape[1]))
                     img_last_frame = img.convert("RGBA").crop((0, img_np.shape[0]-img_np.shape[1], img_np.shape[1], img_np.shape[0]))
 
                     img_new = Image.blend(img_first_frame, img_last_frame, alpha=0.5)
-                    img_new.save(os.path.join(OUTPUT_PATH, fname))
+                    img_new.convert("RGB").save(os.path.join(OUTPUT_PATH, fname))
                     # img_new.show()
                     # print('Modified', fname, '(B)')
 
@@ -152,8 +157,8 @@ if __name__ == "__main__":
                 try:
                     os.remove(os.path.join(OUTPUT_PATH, fname))
                     # print('Excluded', fname, '(C)')
-                except:  # In case teh file was deleted already,
-                    pass # or didn't even exist in the first place 
+                except:  # Prevent FileNotFoundError in case teh file was already deleted
+                    pass # by the filters below, or didn't even exist in the first place.
 
             img.close()
 
@@ -163,12 +168,14 @@ if __name__ == "__main__":
             os.remove(os.path.join(OUTPUT_PATH, fname))
 
 
-    # (D) TODO: Finally, generate file with data about each texture
-    # auroparse = get_autoparse_rules(AUTOPARSE_PATH)
-    # blockset_data = []
+    # (D) TODO: Generate blockset data about each texture
+    auroparse_rules = get_autoparse_rules(AUTOPARSE_PATH)
+    blockset_data = []
 
-    # for fname in sorted(os.listdir(OUTPUT_PATH)):
-    #     texture_data = generate_texture_data(fname, OUTPUT_PATH, auroparse.naming, auroparse.facing)
-    #     blockset_data.append(texture_data)
+    for fname in sorted(os.listdir(OUTPUT_PATH)):
+        texture_data = generate_texture_data(os.path.join(OUTPUT_PATH, fname), auroparse_rules)
+        blockset_data.append(texture_data)
 
 
+    # (D) TODO: Finally, generate remaining blockset data and save as JSON file
+    raise NotImplementedError

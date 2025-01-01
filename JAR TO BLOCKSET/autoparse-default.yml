@@ -1,0 +1,142 @@
+# Method used for texture/blockset name autogeneration. Allowed methods are:
+# title (Purple Wool), capital (Purple wool), sep (puRPle wOoL) and none (puRPle_wOoL)
+textures_naming = title
+blockset_naming = sep
+
+# List of filters for autoparse to recognize what side a given texture is for,
+# using the same notation as in the blacklist file (see comments there).
+# See facing notation's meaning here: https://optifine.readthedocs.io/ctm.html#faces
+# If several occurences are found for a wildcard and a regular filter, then
+# ONLY REGULAR fitler match will be considered; if several occurences found for
+# mutiple regular filters, then BOTH OF THEM will be considered; and if several
+# occurences are found for mutiple wildcard filter, ONLY THE LATTER will be used.
+filters:
+  top:
+    - $_top.png
+    # Dispenser-like blocks
+    - $_front_vertical.png
+
+    # Farmland uses unique textures only for its top
+    - farmland$
+    # Grass/dirt pathes, podzol and Nether-specific grass
+    - $path_top.png
+    - podzol.png
+    - crimson_nylium.png
+    - warped_nylium.png
+    # Melon, hay and pumpkin use their top textures as bottom as well
+    - pumpkin_top.png
+    - melon_top.png
+    - hay_block_top.png
+    # Same does creaking heart (wtf is wrong with new Minecraft versions?)
+    - creaking_heart_top.png
+    - creaking_heart_top_active.png
+    # Beehive's uses "end" texture for both its top and bottom
+    - beehive_end.png
+    # Chiseled bookshelf top (to override wildcard filter)
+    - chiseled_bookshelf_top.png
+    # Crafter top (to override wildcard filter)
+    - crafter_top.png
+
+  bottom:
+    - $_bottom.png
+    # Dispenser-like blocks
+    - $_front_vertical.png
+
+    # Daylight detector uses the same texture for side and bottom,
+    # and its height is way too small to be used for building
+    - daylightDetector_side.png
+    # Melon, hay and pumpkin use their top textures as bottom as well
+    - pumpkin_top.png
+    - melon_top.png
+    - hay_block_top.png
+    # Same does creaking heart (wtf is wrong with new Minecraft versions?)
+    - creaking_heart_top.png
+    - creaking_heart_top_active.png
+    # Beehive's uses "end" texture for both its top and bottom
+    - beehive_end.png
+    # Chiseled bookshelf bottom (to override wildcard filter)
+    - chiseled_bookshelf_bottom.png
+    # Crafter bottom (to override wildcard filter)
+    - crafter_bottom.png
+
+  north:
+    # Crafting, flething and smithing tables use "front" texture for N and E
+    - workbench_front.png
+    - crafting_table_front.png
+    - fletching_table_front.png
+    - smithing_table_front.png
+  south:
+    # Crafting, flething and smithing tables use "side" texture for S and W
+    - workbench_side.png
+    - crafting_table_side.png
+    - fletching_table_side.png
+    - smithing_table_side.png
+  east:
+    # Crafting, flething and smithing tables use "front" texture for N and E
+    - workbench_front.png
+    - crafting_table_front.png
+  west:
+    # Crafting, flething and smithing tables use "side" texture for S and W
+    - workbench_side.png
+    - crafting_table_side.png
+    - fletching_table_side.png
+    - smithing_table_side.png
+
+  sides:
+    - $_side.png
+    - $_front.png
+    # Furnace-like blocks
+    - $_front_lit.png
+    - $_front_on.png
+    - $_front_off.png
+    # Dispenser-like blocks
+    - $_front_horizontal.png
+    # Crafter (except for top and bottom, which are overriden above)
+    - crafter_$
+
+    # Bookshelves
+    - bookshelf.png
+    - chiseled_bookshelf_$
+    # Pumpkin and Jack'o'lantern (except for top and bottom texture,
+    # which is already overriden somewhere above)
+    - pumpkin_$
+    - carved_pumpkin.png
+    - jack_o_lantern.png
+    # Sandstone variations
+    - $sandstone_normal.png
+    - $sandstone_smooth.png
+    - $sandstone_carved.png
+    - chiseled_sandstone.png
+    - chiseled_red_sandstone.png
+    - cut_sandstone.png
+    - cut_red_sandstone.png
+    # Creaking heart
+    - creaking_heart.png
+    - creaking_heart_active.png
+
+  all:
+    # Pistons can be rotated in any direction, so are its textures
+    - piston_side.png
+    - piston_top.png
+    - piston_top_normal.png
+    - piston_top_sticky.png
+    # Same is true for column-like blocks...
+    - quartzblock_lines$
+    - quartz_block_lines$
+    - quartz_pillar$
+    - bone_block$
+    - purpur_pillar$
+    - basalt$
+    - polished_basalt$
+    # ...barrels...
+    - barrel_$
+    # ...and, of course, for logs and stems
+    - tree_top.png
+    - $_log_top.png
+    - $_stem_top.png
+    # Smooth sandstone and smooth stone blocks
+    - sandstone_top.png
+    - red_sandstone_top.png
+    - smooth_stone.png
+
+  # Note that "all" is also set automatically if none of the filters matched!

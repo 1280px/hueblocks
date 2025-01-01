@@ -20,18 +20,29 @@ A simple Python script to extract assets from MCJE .jar file, filter only needed
     - $C:$ Filter out blacklisted blocks according to blacklist file, and
     - $D:$ Autogenerate texture names and facing according to autoparser rules file.
 
-    If you wish to change this behaviour, run the script like this: `python3 ./jar2blockset.py YOUR_MCJE_VER.jar A B C BLACKLIST.txt`, where $A,B$ are corresponding options (1 for True, 0 for False), and $C,D$ are pathes to blacklist file and autoparser rules (uses `blacklist-default.cfg` and `autoparser-rules.cfg` if nothing is provided; to disable, pass `None` as arguments)
+    If you wish to change this behaviour, run the script like this: `python3 ./jar2blockset.py YOUR_MCJE_VER.jar A B C BLACKLIST.txt`, where $A,B$ are corresponding options (1 for True, 0 for False), and $C,D$ are pathes to blacklist file and autoparser rules (uses `blacklist-default.yml` and `autoparse-default.yml` if nothing is provided; to disable, pass `None` as arguments)
 
 
 ## Output
 
-A directory containing all the filtered textures, and a .json file with a list of data for each texture, structured like this:
+A directory containing all the filtered textures, and a JSONfile with a list of data for each texture, structured like this:
+
 ```js
 {
-    'texture': 'cool_block_top.png', // Name of block texture with .png extension
-    'name': 'Cool Block Top' // Block texture name, generated automatically
-    'color': (123, 45, 67),  // Average color, computed by sum of squares
-    'side': ['up'] // List of block texture sides in OptiFine's CTM facing notation
+    "name": "Sample Blockset", // Blockset name, generated automatically
+    "dir": "sample-blockset", // Directory where blockset textures stored, allowing
+                              // multiple blocksets to use shared directory (files, not
+                              // included in blockset JSON data, will simply be ignored)
+    "count": 42, // How many textures are in the blockset
+    "data": [
+        {
+            "texture": "cool_block_top.png", // Name of block texture with .png extension
+            "name": "Cool Block Top", // Block texture name, generated automatically
+            "color": [123, 45, 67], // Average color, computed by sum of squares
+            "side": ["up"] // List of block texture sides in OptiFine CTM facing notation
+        },
+        ...
+    ]
 }
 ```
 
