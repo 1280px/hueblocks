@@ -28,10 +28,10 @@ A simple Python script to extract assets from MCJE .jar file, filter only needed
 A directory containing all the filtered textures, and a file with a JSON object of data about blockset and data for each parsed non-filtered texture, structured like this:
 ```js
 {
-    "name": "Sample Blockset", // Blockset name, generated automatically
-    "dir": "sample-blockset", // Directory where blockset textures stored, allowing
-                              // multiple blocksets to use shared directory (files, not
-                              // included in blockset JSON data, will simply be ignored).
+    "name": "My Blockset", // Blockset name, generated automatically
+    "dir": "./res/my-blockset", // Directory where blockset textures stored, allowing
+                                // multiple blocksets to use shared directory (files, not
+                                // included in blockset JSON data, will simply be ignored).
     "count": 42, // How many textures are in the blockset
     "data": [
         {

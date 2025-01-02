@@ -2,7 +2,7 @@
 # title (Purple Wool), capital (Purple wool), sep (puRPle wOoL) and none (puRPle_wOoL)
 naming:
   textures: title
-  blockset: sep
+  blockset: title
 
 # Method of avg color calculation, either legacy (resize) or modern (sqrts of mean of squares)
 colorcalc: modern
@@ -15,6 +15,9 @@ facing:
     - $_top.png
     # Dispenser-like blocks
     - $_front_vertical.png
+    # Respawn anchor-like blocks
+    - $_top_on.png
+    - $_top_off.png
 
     # Farmland uses unique textures only for its top
     - farmland$
@@ -103,6 +106,9 @@ facing:
     - $_front_horizontal.png
     # Crafter (except for top and bottom, which are overriden above)
     - crafter_$
+    # Snowed grass sides
+    - grass_block_snow.png
+    - grass_side_snowed.png
 
     # Bookshelves
     - bookshelf.png

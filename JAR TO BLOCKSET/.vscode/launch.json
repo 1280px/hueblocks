@@ -12,10 +12,11 @@
             "console": "integratedTerminal",
             "args": [
                 // "./examples/minecraft-1.5.1-client.jar",
-                "./examples/minecraft-1.12.2-client.jar",
+                // "./examples/minecraft-1.8.9-client.jar",
+                // "./examples/minecraft-1.12.2-client.jar",
                 // "./examples/minecraft-1.14.4-client.jar",
                 // "./examples/minecraft-1.20.1-client.jar",
-                // "./examples/minecraft-1.21.3-client.jar",
+                "./examples/minecraft-1.21.3-client.jar",
                 "1", "0",
                 "blacklist-default.yml", "autoparse-default.yml"
             ]

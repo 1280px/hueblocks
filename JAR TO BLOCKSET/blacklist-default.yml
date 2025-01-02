@@ -26,7 +26,8 @@ filters:
   - dropper_front.png
   - enchantment_$
   - endframe_top.png
-  - grass_side$
+  - grass_side.png
+  - grass_side_overlay.png
   - grass_top$
   - hopper$
   - itemframe$
@@ -39,12 +40,14 @@ filters:
   - repeater$
   - stonebricksmooth_cracked.png
   - water$
+  - workbench_front.png
 
   # 1.12.2
   - brewing_stand_base.png
   - chorus_$
   - chain_command_block_$
   - command_block_$
+  - crafting_table_front.png
   - door_$
   - dispenser_front_vertical.png
   - dragon_egg.png
@@ -76,7 +79,8 @@ filters:
   - dark_oak_door$
   - dark_oak_log_top.png
   - fletching_table_side.png
-  - hay_block_side.png
+  - grass_block_side.png
+  - grass_block_top.png
   - item_frame.png
   - iron_door$
   - jigsaw_side.png
@@ -86,9 +90,7 @@ filters:
   - oak_door$
   - oak_log_top.png
   - smithing_table_front.png
-  - smithing_table_side.png
   - smoker_front$
-  - smoker_top.png
   - spruce_door$
   - spruce_log_top.png
   - stonecutter_top.png
@@ -132,7 +134,7 @@ filters:
   - $copper_bulb_powered.png
   - $copper_door_top.png
   - $copper_door_bottom.png
-  - crafter_east_$
+  - crafter_east$
   - crafter_north_$
   - crafter_south_$
   - crafter_west_$

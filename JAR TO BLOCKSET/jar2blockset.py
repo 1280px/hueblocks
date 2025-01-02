@@ -7,7 +7,7 @@ from PIL import Image
 
 import zipfile
 from yaml import safe_load
-from json import encoder
+from json import dump
 
 
 def extract_blocks_from_jar(jar_path, output_path):
@@ -71,6 +71,7 @@ def get_blacklisted_blocks(blacklist_path, blocks_path):
     with open(blacklist_path, 'r') as blacklist_f:
         blacklist_raw = safe_load(blacklist_f)
 
+    print('blacklist')
     blacklist = compute_filter(blacklist_raw['filters'], blocks_names)
 
     # We don't care about metadata in this case, so we just strip it out
@@ -89,7 +90,7 @@ def get_autoparse_facing(autoparse_path, blocks_path):
         side: {} for side in sides
     }
     for side in facing_filters.keys():
-        # print(side)
+        print(side)
         facing_filters[side] = compute_filter(autoparse_raw['facing'][side], blocks_names)
 
     # Now we need to convert this object of objects into a list of pairs
@@ -188,16 +189,16 @@ def calc_avg_color(texture_path, colorcalc_rule):
         mean_of_squares = np.mean(img_np, axis=(0, 1))
         sqrts_of_mean_of_squares = np.floor(
             np.sqrt(mean_of_squares),
-            # dtype=np.uint8
         ).astype(np.uint8) # Prevent color being out of 0-255 range
 
         # Compare results!
-        img_proc = img.resize((1, 1), Image.Resampling.LANCZOS)
-        img_proc_np = np.asarray(img_proc.convert("RGB"))
-        img_color = img_proc_np[0][0]
-        print(texture_path, '\nlegacy:', list(img_color), 'modern:', list(sqrts_of_mean_of_squares), '\n')
+        # img_proc = img.resize((1, 1), Image.Resampling.LANCZOS)
+        # img_proc_np = np.asarray(img_proc.convert("RGB"))
+        # img_color = img_proc_np[0][0]
+        # print(texture_path, '\nlegacy:', list(img_color), 'modern:', list(sqrts_of_mean_of_squares), '\n')
 
-        return list(sqrts_of_mean_of_squares)
+        img.close()
+        return [int(c) for c in sqrts_of_mean_of_squares]
 
     # Legacy method -- just like it worked in older versions of HueBlocks:
     # using PIL antialias, shrink image to a single pixel and take its color
@@ -207,10 +208,12 @@ def calc_avg_color(texture_path, colorcalc_rule):
         img_proc_np = np.asarray(img_proc.convert("RGB"))
         img_color = img_proc_np[0][0]
 
-        return list(img_color)
+        img.close()
+        return [int(c) for c in img_color]
 
     else:
         print(f'Incorrect colorcalc rule "{colorcalc_rule}"!')
+        img.close()
         sys.exit(1)
 
 
@@ -241,7 +244,7 @@ def generate_textures_data(textures_path, facing_filters, naming_rule, colorcalc
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print('\nNot enough arguments! See README for help.')
-        sys.exit(0)
+        sys.exit(1)
     JAR_PATH = sys.argv[1]
     EXCLUDE_ALPHA = (sys.argv[2] == '1') if len(sys.argv) >= 3 else True
     EXCLUDE_ANIMATED = (sys.argv[3] == '1') if len(sys.argv) >= 4 else True
@@ -339,7 +342,7 @@ if __name__ == "__main__":
     for fname in sorted(os.listdir(OUTPUT_PATH)):
         if fname.endswith('.mcmeta') or fname.endswith('.txt'):
             os.remove(os.path.join(OUTPUT_PATH, fname))
-    print(f'Filtered out down to {len(os.listdir(OUTPUT_PATH))} assets\n')
+    print(f'Filtered assets down to {len(os.listdir(OUTPUT_PATH))} textures\n')
 
 
     # (D) Generate blockset data about each texture
@@ -357,8 +360,13 @@ if __name__ == "__main__":
             autoparse_facing_filters, autoparse_naming_rules['textures'], autoparse_colorcalc_rule
         )
     }
-    print('Blockset generation finished!\n')
+    print('Blockset data generation finished!')
+
 
     # Finally, save blockset data as JSON
-    raise NotImplementedError
-    print('Blockset data saved as {OUTPUT_PATH + ".json"}')
+    with open(OUTPUT_PATH + '.json', 'w') as out_f:
+        dump(blockset_data, out_f, indent=2, ensure_ascii=True)
+    print(f'Results saved as {OUTPUT_PATH + ".json"}\n')
+
+
+    sys.exit(0)
