@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>j2bs blockset viz</title>
+</head>
+
+<body>
+    <header>
+        <div>
+            <div>
+                <big><b id="blocksetCount">N</b> textures, side: </big>
+                <select name="side" id="sidePicker">
+                    <option value="top">Top</option>
+                    <option value="bottom">Bottom</option>
+                    <option value="north">North</option>
+                    <option value="south">South</option>
+                    <option value="east">East</option>
+                    <option value="west">West</option>
+                </select>
+            </div>
+            <div>
+                <big>Blockset: <b id="blocksetStatus">not loaded</b> </big>
+                <button id="loadDatasetBtn">New</button>
+            </div>
+        </div>
+        <hr>
+    </header>
+
+    <main>
+        <div id="blocksetViz">
+            <b>If you're getting CORS errors, either load this tool via local server (i.e. "Live Server" addon for VS Code), or disable CORS protection temporarily!</b>
+            <br><br>
+            BlockViz is a small visualization tool to quickly check blockset output data and textures. Please load a dataset to begin.
+        </div>
+    </main>
+</body>
+
+<style>
+    body {
+        margin: 20px;
+        background-color: bisque;
+    }
+    body, input, button, textarea {
+        font-family: system-ui, sans-serif;
+    }
+
+    header > div {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    #blocksetViz {
+        display: flex;
+        flex: 1 0 0;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+        gap: 4px;
+    }
+
+    .blockViz {
+        padding: 8px;
+    }
+    .blockViz:hover {
+        box-shadow: 0 0 8px #0008;
+        scale: 1.25;
+    }
+
+    .blockVizImage {
+        width: 64px; height: 64px;
+        image-rendering: pixelated;
+    }
+    .blockViz:hover .blockVizImage {
+        box-shadow: 0 0 4px #0008;
+    }
+
+</style>
+
+<script>
+    async function getBlocksetData() {
+        blocksetPath = prompt(
+            'Please enter blockset data (.json) file name to open. ' +
+            'Make sure it is IN THE SAME DIR with BlockViz, and has correct path to resources dir:',
+            './examples/minecraft-1.12.2-client.json'
+        );
+
+        try {
+            const blocksetRes = await fetch(blocksetPath);
+            console.log(blocksetRes);
+
+            if (blocksetRes.status !== 200) {
+                alert(
+                    `Unable to open blockset "${blocksetPath}": ` +
+                    blocksetRes.statusText
+                )
+            }
+
+            const blocksetData = await blocksetRes.json();
+            console.log(blocksetData);
+
+            return blocksetData
+        }
+        catch(err) {
+            alert('Your browsers seems to be blocking fetch requests! See bold text above for help.')
+        }
+    }
+
+    async function visualizeTextureData(data, path) {
+        texturePath = path + '/' + data.texture;
+        textureColor = `rgb(${data.color[0]}, ${data.color[1]}, ${data.color[2]})`; 
+
+        const blockVizImage = document.createElement('img');
+        blockVizImage.classList.add(['blockVizImage']);
+        blockVizImage.src = texturePath;
+
+        const blockViz = document.createElement('div');
+        console.log(textureColor);
+        blockViz.style.backgroundColor = textureColor;
+        blockViz.classList.add(['blockViz'])
+        blockViz.title = data.name;
+
+        blockViz.append(blockVizImage);
+        
+        return blockViz;
+    }
+
+
+    const sidePicker = document.querySelector('#sidePicker');
+    const loadBlocksetBtn = document.querySelector('#loadDatasetBtn');
+    const blocksetCount = document.querySelector('#blocksetCount');
+    const blocksetViz = document.querySelector('#blocksetViz');
+    const blocksetStatus = document.querySelector('#blocksetStatus');
+    
+    loadBlocksetBtn.addEventListener('click', async (e) => {
+        const blocksetData = await getBlocksetData();
+
+        const currSide = sidePicker.value;
+
+        blocksetStatus.innerText = 'LOADING…';
+        blocksetCount.innerText = blocksetData.count;
+        blocksetViz.innerHTML = '';
+
+        for (textureData of blocksetData.data) {
+            if (textureData.sides.includes(currSide)) {
+                blockViz = await visualizeTextureData(textureData, blocksetData.dir);
+                blocksetViz.appendChild(blockViz);
+            }
+        }
+
+        blocksetStatus.innerText = blocksetData.name;
+    });
+
+    window.onload = () => loadBlocksetBtn.click();
+</script>
+</html>
