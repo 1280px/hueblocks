@@ -33,6 +33,7 @@ filters:
   - itemframe$
   - lava$
   - leaves_$
+  - piston_bottom.png
   - piston_inner_top.png
   - quartz_block_chiseled.png
   - quartz_block_chiseled_top.png
@@ -55,12 +56,16 @@ filters:
   - dropper_front_vertical.png
   - enchanting_table_$
   - end_portal_frame_top.png
+  - furnace_front_on.png
   - jukebox$
   - observer_front.png
   - observer_back$
   - piston_inner.png
+  - quartzblock_chiseled$
   - quartz_block_chiseled$
+  - quartzblock_lines_top.png
   - repeating_command_block_$
+  - stonebrick_cracked.png
   - structure_block$
   - debug$
 
@@ -78,18 +83,18 @@ filters:
   - cartography_table_side3.png
   - dark_oak_door$
   - dark_oak_log_top.png
-  - fletching_table_side.png
+  - fletching_table_$
   - grass_block_side.png
   - grass_block_top.png
   - item_frame.png
   - iron_door$
-  - jigsaw_side.png
+  - jigsaw$
   - jungle_log_top.png
   - jungle_door$
   - lectern_$
   - oak_door$
   - oak_log_top.png
-  - smithing_table_front.png
+  - smithing_table_side.png
   - smoker_front$
   - spruce_door$
   - spruce_log_top.png
@@ -112,13 +117,12 @@ filters:
   - crimson_door$
   - crimson_stem_top.png
   - glow_item_frame.png
-  - jigsaw_lock.png
-  - lodestone_side.png
   - mangrove_door$
   - mangrove_log_top.png
   - pink_petals_stem.png
   - quartz_bricks.png
   - quartz_pillar_top.png
+  - respawn_anchor_bottom.png
   - respawn_anchor_side$
   - sculk_catalyst_$
   - sculk_sensor_$
@@ -134,13 +138,15 @@ filters:
   - $copper_bulb_powered.png
   - $copper_door_top.png
   - $copper_door_bottom.png
+  - chiseled_tuff_bricks.png
   - crafter_east$
   - crafter_north_$
   - crafter_south_$
-  - crafter_west_$
-  - crafter_top_$
+  - crafter_west$
+  - crafter_top_triggered.png
   - pale_moss_carpet.png
   - pale_oak_door$
+  - pale_oak_log_top.png
   - trial_spawner_top$
   - vault_bottom$
   - vault_top$

@@ -30,6 +30,10 @@ def extract_blocks_from_jar(jar_path, output_path):
 
 
 def compute_filter(lines, names):
+    if lines is None:
+        print('Warning -- This filter doesn\'t have any lines specified!\n')
+        return {}
+
     # Sequentially computes a filter; returns LIST OF PAIRS of filtered
     # block names and filter type metadata, which will be used later for
     # prioritization of regular filter rules over wildcard filter rules.

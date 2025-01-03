@@ -30,13 +30,13 @@ facing:
     - pumpkin_top.png
     - melon_top.png
     - beehive_end.png
-    # Same does creaking heart (wtf is wrong with new Minecraft versions?)
-    - creaking_heart_top.png
-    - creaking_heart_top_active.png
+    # Same do creaking heart (wtf is wrong with new Minecraft?) and netherite
+    - creaking_heart_top$
+    - netherite_top.png
     # Chiseled bookshelf top (to override wildcard filter)
     - chiseled_bookshelf_top.png
     # Crafter top (to override wildcard filter)
-    - crafter_top.png
+    - crafter_top$
 
   bottom:
     - $_bottom.png
@@ -51,13 +51,13 @@ facing:
     - pumpkin_top.png
     - melon_top.png
     - beehive_end.png
-    # Same does creaking heart (wtf is wrong with new Minecraft versions?)
-    - creaking_heart_top.png
-    - creaking_heart_top_active.png
-    # Chiseled bookshelf bottom (to override wildcard filter)
-    - chiseled_bookshelf_bottom.png
+    # Same do creaking heart (wtf is wrong with new Minecraft?) and netherite
+    - creaking_heart_top$
+    - netherite_top.png
+    # Chiseled bookshelf top (to override wildcard filter)
+    - chiseled_bookshelf_top.png
     # Crafter bottom (to override wildcard filter)
-    - crafter_bottom.png
+    - crafter_bottom$
 
   north:
     # Crafting, flething and smithing tables use "front" texture for N and S

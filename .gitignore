@@ -1,2 +1,4 @@
 JAR\ TO\ BLOCKSET/examples/
+regen-examples.sh
+*.jar
 *.pyc
