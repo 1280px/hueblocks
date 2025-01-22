@@ -21,7 +21,7 @@ A modular Python script to extract assets from MCJE .jar file, filter only neede
     - $D:$ Use `blacklist-default.yml` file for textures exclusion filter;
     - $E:$ Use `palettes-default.yml` file for texture palettes inclusing filter.
 
-    If you wish to change this behaviour, run the script like this: `python3 ./_main.py YOUR_MCJE_VER.jar A B C D E`, where $A,B$ are corresponding options (`1` for True, `0` for False), and $C,D$ are either athes to .yml configuration files. You can also use 'None' to disable blacklist and palettes, but providing valid autoparser file is necessary; Every omitted option will use its default value instead. 
+    If you wish to change this behaviour, run the script like this: `python3 ./_main.py YOUR_MCJE_VER.jar A B C D E`, where $A,B$ are corresponding options (`1` for True, `0` for False), and $C,D,E$ are pathes to .yml configuration files. You can also use 'None' to disable blacklist and palettes, but providing valid autoparser file is necessary; Every omitted option will use its default value instead. 
 
 
 ## Output

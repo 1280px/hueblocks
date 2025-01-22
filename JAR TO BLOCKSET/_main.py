@@ -6,6 +6,7 @@ from PIL import Image
 from shutil import rmtree
 import zipfile
 from json import dump
+from datetime import datetime, timezone
 
 import blockdata
 import palettes
@@ -145,6 +146,11 @@ if __name__ == "__main__":
     blockdata_res = blockdata.generate_textures_data(
         OUTPUT_PATH,
         autoparser['facing'], autoparser['naming']['textures'], autoparser['colorcalc']
+    )
+
+    # Add generation timestamp (like it used to be in older HB)
+    blockdata_res.insert(0,
+        'Generated at: ' + str(datetime.now(timezone.utc)).split('.')[0]
     )
     print('Blockdata generation finished.')
 
