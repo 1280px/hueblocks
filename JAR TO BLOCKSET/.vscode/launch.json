@@ -1,11 +1,9 @@
 {
-    // Используйте IntelliSense, чтобы узнать о возможных атрибутах.
-    // Наведите указатель мыши, чтобы просмотреть описания существующих атрибутов.
-    // Для получения дополнительной информации посетите: https://go.microsoft.com/fwlink/?linkid=830387
+    // https://www.youtube.com/watch?v=BHb0T6MLJdA
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Отладчик Python: Текущий файл с аргументами",
+            "name": "Sample j2bs VSC launch file",
             "type": "debugpy",
             "request": "launch",
             "program": "${file}",
@@ -16,9 +14,10 @@
                 // "./examples/minecraft-1.12.2-client.jar",
                 // "./examples/minecraft-1.14.4-client.jar",
                 // "./examples/minecraft-1.20.1-client.jar",
-                "./examples/minecraft-1.21.3-client.jar",
+                // "./examples/minecraft-1.21.3-client.jar",
+                "./examples/minecraft-1.21.4-client.jar",
                 "1", "0",
-                "blacklist-default.yml", "autoparse-default.yml"
+                "autoparser-default.yml", "blacklist-default.yml", "palettes-default.yml"
             ]
         }
     ]
