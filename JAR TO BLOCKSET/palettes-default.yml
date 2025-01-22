@@ -1,18 +1,28 @@
 # Palettes, essentially, use the same filter computation mechanic -- except, these are
-# whitelist filters, meaning blocks NOT selected by the filter, will NOT be included.
+# whitelist filters, meaning blocks NOT in "includes", will NOT be in the palette;
+# the "excludes" category is only used for include overrides, i.e. when you want to
+# include every "red_$" block from the blockset EXCEPT for "red_sandstone$".
 # If a computed pallete happens to contain zero blocks, it won't be added to the list.
 
 palettes:
   - name: 'Supah Cool Blocks!!1'
     includes:
       - acacia_leaves.png
-      - ancient_debris_*
+      - ancient_debris_$
       - emerald_block.png
       - copper_bulb.png
-  - name: 'Another epic palette!!1'
+    excludes:
+
+  - name: 'Another epic palette!!111'
     includes:
-      - jungle_log.png
-      - white_*
-      - yellow_*
-      - amethyst_block.png
       - resin_block.png
+      - sand$
+      - $shulker_box.png
+      - obsidian.png
+      - respawn_anchor_top_on.png
+      - red_$
+      - brown_$
+    excludes:
+      - red_sandstone$
+      - red_mushroom$
+      - brown_mushroom$

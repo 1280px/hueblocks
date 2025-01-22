@@ -117,6 +117,7 @@ filters:
   - crimson_door$
   - crimson_stem_top.png
   - glow_item_frame.png
+  - lightning_rod$
   - mangrove_door$
   - mangrove_log_top.png
   - pink_petals_stem.png
@@ -124,7 +125,8 @@ filters:
   - quartz_pillar_top.png
   - respawn_anchor_bottom.png
   - respawn_anchor_side$
-  - sculk_catalyst_$
+  - sculk_catalyst_side_bloom.png
+  - sculk_catalyst_top$
   - sculk_sensor_$
   - sculk_shrieker_$
   - soul_campfire_log_lit.png
@@ -133,7 +135,7 @@ filters:
   - warped_door$
   - warped_stem_top.png
 
-  # 1.21.3
+  # 1.21.4
   - $copper_bulb_lit_powered.png
   - $copper_bulb_powered.png
   - $copper_door_top.png

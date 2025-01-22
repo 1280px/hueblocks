@@ -128,6 +128,8 @@ facing:
     - cut_red_sandstone.png
     # Creaking heart
     - creaking_heart$
+    # Chiseled tuff
+    - chiseled_tuff.png
 
   # Note that "all" is also set automatically if none of the filters matched,
   # so this section should ONLY contain override filters, NOT global filters!

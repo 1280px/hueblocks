@@ -39,7 +39,7 @@ if __name__ == "__main__":
     EXCLUDE_ALPHA = (sys.argv[2] == '1') if len(sys.argv) >= 3 else True
     EXCLUDE_ANIMATED = (sys.argv[3] == '1') if len(sys.argv) >= 4 else True
     AUTOPARSER_PATH = (
-        (sys.argv[4] if (sys.argv[4] != 'None') else 'autoparser-default.yml')
+        (sys.argv[4] if (len(sys.argv) >= 5) and (sys.argv[4] != 'None') else 'autoparser-default.yml')
     )
     BLACKLIST_PATH = (
         (sys.argv[5] if (sys.argv[5] != 'None') else None)
@@ -150,13 +150,13 @@ if __name__ == "__main__":
 
     # Add generation timestamp (like it used to be in older HB)
     blockdata_res.insert(0,
-        'Generated at: ' + str(datetime.now(timezone.utc)).split('.')[0]
+        'Generated at: ' + str(datetime.now(timezone.utc)).split('.')[0] + ' UTC'
     )
     print('Blockdata generation finished.')
 
     with open(os.path.join(OUTPUT_PATH, '_blockdata.json'), 'w') as blockdata_f:
         dump(blockdata_res, blockdata_f, indent=2, ensure_ascii=True)
-    print(f'Blockdata saved as {OUTPUT_PATH + ".json"}\n')
+    print(f'Blockdata saved as {os.path.join(OUTPUT_PATH, "_blockdata.json")}\n')
 
 
     # TODO: (E) Compute palettes for the blockset, save as JSON
@@ -168,7 +168,7 @@ if __name__ == "__main__":
 
         with open(os.path.join(OUTPUT_PATH, '_palettes.json'), 'w') as palettes_f:
             dump(palettes_res, palettes_f, indent=2, ensure_ascii=True)
-        print(f'Palettes saved as {OUTPUT_PATH + ".json"}\n')
+        print(f'Palettes saved as {os.path.join(OUTPUT_PATH, "_palettes.json")}\n')
 
 
     # TODO: Finally, generate blockset description, write/append as JSON

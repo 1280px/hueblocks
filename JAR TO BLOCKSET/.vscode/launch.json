@@ -14,8 +14,8 @@
                 // "./examples/minecraft-1.12.2-client.jar",
                 // "./examples/minecraft-1.14.4-client.jar",
                 // "./examples/minecraft-1.20.1-client.jar",
-                // "./examples/minecraft-1.21.3-client.jar",
                 "./examples/minecraft-1.21.4-client.jar",
+                // Default parameters
                 "1", "0",
                 "autoparser-default.yml", "blacklist-default.yml", "palettes-default.yml"
             ]

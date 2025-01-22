@@ -143,7 +143,7 @@ def calc_avg_color(texture_path, colorcalc_rule):
     # Legacy method -- just like it worked in older versions of HueBlocks:
     # using PIL antialias, shrink image to a single pixel and take its color
     elif colorcalc_rule == 'legacy':
-        # Image.LANCZOS does exactly the same as now-deprecated Image.ANTIALIAS
+        # Image.LANCZOS gives almost the same colors as long-deprecated Image.ANTIALIAS
         img_proc = img.resize((1, 1), Image.Resampling.LANCZOS)
         img_proc_np = np.asarray(img_proc.convert("RGB"))
         img_color = img_proc_np[0][0]
