@@ -141,7 +141,7 @@ if __name__ == "__main__":
 
     # (D) Generate blockdata for each texture, save as JSON
     autoparser = blockdata.get_autoparser_rules(AUTOPARSER_PATH, OUTPUT_PATH)
-    print('Computed autoparser rules, processing textures...\n')
+    print('Computed autoparser rules, processing textures data...\n')
 
     blockdata_res = blockdata.generate_textures_data(
         OUTPUT_PATH,
@@ -159,10 +159,10 @@ if __name__ == "__main__":
     print(f'Blockdata saved as {os.path.join(OUTPUT_PATH, "_blockdata.json")}\n')
 
 
-    # TODO: (E) Compute palettes for the blockset, save as JSON
+    # (E) Compute palettes for the blockset, save as JSON
     if PALETTES_PATH:
-        palettes_res = palettes.compute_palettes(
-            OUTPUT_PATH, PALETTES_PATH
+        palettes_res = palettes.get_palettes_data(
+            PALETTES_PATH, OUTPUT_PATH
         )
         print('Blockset palettes computation finished.')
 
@@ -172,7 +172,7 @@ if __name__ == "__main__":
 
 
     # TODO: Finally, generate blockset description, write/append as JSON
-    blockset_desc = {
+    description_res = {
         'name': blockdata.generate_naming(
             os.path.split(JAR_PATH)[-1],
             autoparser['naming']['blockset']
@@ -181,7 +181,7 @@ if __name__ == "__main__":
         'count': len(os.listdir(OUTPUT_PATH))
     }
 
-    print(blockset_desc)
+    print(description_res)
     raise NotImplementedError
 
 

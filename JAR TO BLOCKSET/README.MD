@@ -58,12 +58,12 @@ A modular Python script to extract assets from MCJE .jar file, filter only neede
         ```js
         [
             "name": "My Palette", // Palette name from original palettes file
-            "count": 12, // How many textures are included in the palette
-            "includes": [
+            "textures": [
                 "cool_block_top.png", // List of all blocks included in the palette;
                                       // every block not in the palette will be ignored.
                 ...
-            ]
+            ],
+            "count": 12 // How many textures are included in the palette
         ]
         ```
 

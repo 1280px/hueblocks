@@ -9,9 +9,10 @@ palettes:
     includes:
       - acacia_leaves.png
       - ancient_debris_$
-      - emerald_block.png
+      - emerald_$
       - copper_bulb.png
     excludes:
+      - emerald_block.png
 
   - name: 'Another epic palette!!111'
     includes:
@@ -23,6 +24,7 @@ palettes:
       - red_$
       - brown_$
     excludes:
+      - sandstone$
       - red_sandstone$
       - red_mushroom$
       - brown_mushroom$

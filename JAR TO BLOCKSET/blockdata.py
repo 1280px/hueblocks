@@ -8,39 +8,40 @@ from yaml import safe_load
 import filters
 
 
-def get_blacklisted_blocks(blacklist_path, blocks_path):
-    blocks_names = sorted(os.listdir(blocks_path))
+def get_blacklisted_blocks(blacklist_path, textures_path):
+    textures_names = sorted(os.listdir(textures_path))
 
     with open(blacklist_path, 'r') as blacklist_f:
         blacklist_raw = safe_load(blacklist_f)
 
-    print('blacklist')
-    blacklist = filters.compute_filter(blacklist_raw['filters'], blocks_names)
+    blacklist = filters.compute_filter(blacklist_raw['filters'], textures_names, 'blacklist')
 
     # We don't care about metadata in this case, so we just strip it out
     return list(blacklist.keys())
 
 
-def get_autoparser_rules(autoparser_path, blocks_path):
+def get_autoparser_rules(autoparser_path, textures_path):
     with open(autoparser_path, 'r') as autoparser_f:
         autoparser_raw = safe_load(autoparser_f)
 
+    textures_names = sorted(os.listdir(textures_path))
+    textures_names = list(filter(lambda file: file.endswith('.png'), textures_names))
+
+
     # First, get naming and colorcalc rules from file, no changes needed
-    naming_rules = autoparser_raw['naming'] 
+    naming_rules = autoparser_raw['naming']
     colorcalc_rule = autoparser_raw['colorcalc']
 
 
     # Second, compute facing filters! This will take MUCH longer...
     sides = ['top', 'bottom', 'north', 'south', 'east', 'west', 'sides', 'all']
-    blocks_names = sorted(os.listdir(blocks_path))
 
     # At first we compute filters for every facing option (bruh!!1)
     facing_filters = {
         side: {} for side in sides
     }
     for side in facing_filters.keys():
-        print(side)
-        facing_filters[side] = filters.compute_filter(autoparser_raw['facing'][side], blocks_names)
+        facing_filters[side] = filters.compute_filter(autoparser_raw['facing'][side], textures_names, side)
 
     # Now we need to convert this object of objects into a list of pairs
     # consisting out of a texture name and a tuple of its applicable sides.
@@ -48,7 +49,7 @@ def get_autoparser_rules(autoparser_path, blocks_path):
     # over wildcard filters and one-sided options over multi-sided options.
     textures_to_sides = dict()
 
-    for name in blocks_names:
+    for name in textures_names:
         name_present = {
             side: facing_filters[side].get(name, 'X') for side in sides
         }
@@ -160,7 +161,10 @@ def calc_avg_color(texture_path, colorcalc_rule):
 def generate_textures_data(textures_path, facing_filters, naming_rule, colorcalc_rule):
     textures_data = []
 
-    for texture_name in sorted(os.listdir(textures_path)):
+    textures_names = sorted(os.listdir(textures_path))
+    textures_names = list(filter(lambda file: file.endswith('.png'), textures_names))
+
+    for texture_name in textures_names:
         texture_sides = facing_filters.get(
             texture_name,
             # Fallback just in case (should never be used actually)

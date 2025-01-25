@@ -1,13 +1,18 @@
-def compute_filter(lines, names):
+def compute_filter(lines, names, title = ''):
     if lines is None:
         print('Warning -- This filter doesn\'t have any lines specified!\n')
         return {}
+
+    # If "title" is provided, show all the debug info
+    if title:
+        print(f'Filter "{title}":')
 
     # Sequentially computes a filter; returns LIST OF PAIRS of filtered
     # block names and filter type metadata, which will be used later for
     # prioritization of regular filter rules over wildcard filter rules.
     rules = {}
-    print(f'Computing filter from {len(lines)} lines...')
+    if title:
+        print(f'  - Computing filter from {len(lines)} lines...')
 
     for line in lines:
         # Exclude wildcard-only filter, just in case
@@ -34,5 +39,6 @@ def compute_filter(lines, names):
                     if name not in rules or rules[name] != 'R':
                         rules[name] = 'W'
 
-    print(f'Finished computation into {len(rules)} rules.\n')
+    if title:
+        print(f'  - Finished computation into {len(rules)} rules.\n')
     return rules
