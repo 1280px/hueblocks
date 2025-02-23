@@ -1,4 +1,8 @@
-JAR\ TO\ BLOCKSET/examples/
+/jar2blockset/examples/
 regen-examples.sh
 *.jar
 *.pyc
+
+/vueblocks/data/
+node_modules/
+*.log

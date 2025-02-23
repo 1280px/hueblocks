@@ -26,11 +26,11 @@ A modular Python script to extract assets from MCJE .jar file, filter only neede
 
 ## Output
 
-1. `blocksets.json` — a JSON file containing path, description, and metadata for each blockset:
+1. `_blocksets.json` — a JSON file containing path, description, and metadata for each blockset:
     ```js
     {
         "name": "My Blockset", // Blockset name, generated automatically
-        "dir": "./blocksets/my-blockset", // Directory where data & textures are stored
+        "dir": "./blocksets/my-blockset", // Relative path to where data & textures are stored
         "count": 42 // How many textures are in the blockset
     }
     ```
@@ -47,8 +47,8 @@ A modular Python script to extract assets from MCJE .jar file, filter only neede
                 "name": "Cool Block Top", // Block texture name, generated automatically
                 "texture": "cool_block_top.png", // Name of block texture with .png extension
                 "color": [123, 45, 67], // Mean texture color, computed automatically
-                "sides": ["top"] // List of block texture sides in OptiFine CTM faces notation,
-                                // excluding "all" and "sides" options for simplicity.
+                "sides": ["top"] // List of applicable block texture sides in OptiFine CTM
+                                 // faces notation, excluding "all" and "sides" options.
             },
             ...
         ]

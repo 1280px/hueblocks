@@ -5,7 +5,7 @@ import numpy as np
 from PIL import Image
 from shutil import rmtree
 import zipfile
-from json import dump
+from json import load, dump
 from datetime import datetime, timezone
 
 import blockdata
@@ -36,8 +36,11 @@ if __name__ == "__main__":
         print('\nNot enough arguments! See README for help.')
         sys.exit(1)
     JAR_PATH = sys.argv[1]
+    OUTPUT_PATH = os.path.splitext(JAR_PATH)[0]
+
     EXCLUDE_ALPHA = (sys.argv[2] == '1') if len(sys.argv) >= 3 else True
     EXCLUDE_ANIMATED = (sys.argv[3] == '1') if len(sys.argv) >= 4 else True
+
     AUTOPARSER_PATH = (
         (sys.argv[4] if (len(sys.argv) >= 5) and (sys.argv[4] != 'None') else 'autoparser-default.yml')
     )
@@ -49,20 +52,14 @@ if __name__ == "__main__":
         (sys.argv[6] if (sys.argv[6] != 'None') else None)
         if len(sys.argv) >= 6 else 'palettes-default.yml'
     )
-    # print(JAR_PATH, EXCLUDE_ALPHA, EXCLUDE_ANIMATED, BLACKLIST_PATH, AUTOPARSER_PATH, PALETTES_PATH)
-    OUTPUT_PATH = os.path.splitext(JAR_PATH)[0]
-
+    BLOCKSETS_PATH = os.path.dirname(JAR_PATH)
+    
 
     # Ask what to do if generated blockset files already exist
     if os.path.isdir(OUTPUT_PATH):
-        if input(f'\nOutput dir "{OUTPUT_PATH}" already exists! Type Y to replace: ').upper() == 'Y':
+        if input(f'\nOutput dir "{OUTPUT_PATH}" already exists! Type Y to overwrite: ').upper() == 'Y':
             rmtree(OUTPUT_PATH)
     os.mkdir(OUTPUT_PATH)
-
-    if os.path.isfile(OUTPUT_PATH + '.json'):
-        if input(f'\nBlockset data "{OUTPUT_PATH + ".json"}" already exists! Type Y to delete: ').upper() == 'Y':
-            os.remove(OUTPUT_PATH + '.json')
-
 
     # Extract block texture assets from jar
     extract_blocks_from_jar(JAR_PATH, OUTPUT_PATH)
@@ -152,11 +149,10 @@ if __name__ == "__main__":
     blockdata_res.insert(0,
         'Generated at: ' + str(datetime.now(timezone.utc)).split('.')[0] + ' UTC'
     )
-    print('Blockdata generation finished.')
 
     with open(os.path.join(OUTPUT_PATH, '_blockdata.json'), 'w') as blockdata_f:
         dump(blockdata_res, blockdata_f, indent=2, ensure_ascii=True)
-    print(f'Blockdata saved as {os.path.join(OUTPUT_PATH, "_blockdata.json")}\n')
+    print(f'Blockdata generation finished, saved as {os.path.join(OUTPUT_PATH, "_blockdata.json")}\n')
 
 
     # (E) Compute palettes for the blockset, save as JSON
@@ -164,14 +160,23 @@ if __name__ == "__main__":
         palettes_res = palettes.get_palettes_data(
             PALETTES_PATH, OUTPUT_PATH
         )
-        print('Blockset palettes computation finished.')
 
         with open(os.path.join(OUTPUT_PATH, '_palettes.json'), 'w') as palettes_f:
             dump(palettes_res, palettes_f, indent=2, ensure_ascii=True)
-        print(f'Palettes saved as {os.path.join(OUTPUT_PATH, "_palettes.json")}\n')
+        print(f'Palettes computation finished, saved as {os.path.join(OUTPUT_PATH, "_palettes.json")}\n')
 
 
-    # TODO: Finally, generate blockset description, write/append as JSON
+    # Finally, generate blockset description, write/append as JSON
+    descriptions = []
+    if os.path.isfile(os.path.join(BLOCKSETS_PATH, '_blocksets.json')):
+        with open(os.path.join(BLOCKSETS_PATH, '_blocksets.json'), 'r') as blocksets_f:
+            descriptions = load(blocksets_f)
+        print('Found existing blocksets data file! ')
+
+        # Make sure we don't have multiple entries with the same dir
+        # (also helps easily update data if existing JAR file was changed)
+        descriptions = [desc for desc in descriptions if desc['dir'] != OUTPUT_PATH]
+
     description_res = {
         'name': blockdata.generate_naming(
             os.path.split(JAR_PATH)[-1],
@@ -180,9 +185,12 @@ if __name__ == "__main__":
         'dir': OUTPUT_PATH,
         'count': len(os.listdir(OUTPUT_PATH))
     }
+    descriptions.append(description_res)
 
-    print(description_res)
-    raise NotImplementedError
+    with open(os.path.join(BLOCKSETS_PATH, '_blocksets.json'), 'w') as blocksets_f:
+        dump(descriptions, blocksets_f, indent=2, ensure_ascii=True)
+    print(f'Blocksets data saved as {os.path.join(OUTPUT_PATH, "_palettes.json")}\n')
 
 
+    print('Done!!!1 :DDD')
     sys.exit(0)
