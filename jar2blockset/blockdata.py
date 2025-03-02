@@ -1,11 +1,10 @@
 import os
 import sys
 
-import numpy as np
-from PIL import Image
 from yaml import safe_load
 
 import filters
+import colorcalc
 
 
 def get_blacklisted_blocks(blacklist_path, textures_path):
@@ -110,52 +109,6 @@ def generate_naming(string, naming_rule):
     else:
         print(f'Incorrect naming rule "{naming_rule}"!')
         sys.exit(1)
-    
-
-def calc_avg_color(texture_path, colorcalc_rule):
-    img = Image.open(texture_path)
-
-    # Modern method -- instead of calculating avg color as literal averages
-    # of each RGB channel (+- resampling artefacts), find sqrts of mean of
-    # each channel squared. This results in result color being more vibrant,
-    # closer to original image brightness! Check this amazing article and
-    # video in it: https://sighack.com/post/averaging-rgb-colors-the-right-way
-    if colorcalc_rule == 'modern':
-        img_np = np.asarray(
-            img.convert("RGB"),
-            dtype=np.float64 # Otherwise will almost certainly overflow 
-        )
-        img_np = img_np ** 2
-
-        mean_of_squares = np.mean(img_np, axis=(0, 1))
-        sqrts_of_mean_of_squares = np.floor(
-            np.sqrt(mean_of_squares)
-        ).astype(np.uint8) # Prevent color being out of 0-255 range
-
-        # Compare results!
-        # img_proc = img.resize((1, 1), Image.Resampling.LANCZOS)
-        # img_proc_np = np.asarray(img_proc.convert("RGB"))
-        # img_color = img_proc_np[0][0]
-        # print(texture_path, '\nlegacy:', list(img_color), 'modern:', list(sqrts_of_mean_of_squares), '\n')
-
-        img.close()
-        return [int(c) for c in sqrts_of_mean_of_squares]
-
-    # Legacy method -- just like it worked in older versions of HueBlocks:
-    # using PIL antialias, shrink image to a single pixel and take its color
-    elif colorcalc_rule == 'legacy':
-        # Image.LANCZOS gives almost the same colors as long-deprecated Image.ANTIALIAS
-        img_proc = img.resize((1, 1), Image.Resampling.LANCZOS)
-        img_proc_np = np.asarray(img_proc.convert("RGB"))
-        img_color = img_proc_np[0][0]
-
-        img.close()
-        return [int(c) for c in img_color]
-
-    else:
-        print(f'Incorrect colorcalc rule "{colorcalc_rule}"!')
-        img.close()
-        sys.exit(1)
 
 
 def generate_textures_data(textures_path, facing_filters, naming_rule, colorcalc_rule):
@@ -170,13 +123,18 @@ def generate_textures_data(textures_path, facing_filters, naming_rule, colorcalc
             # Fallback just in case (should never be used actually)
             ['top', 'bottom', 'north', 'south', 'east', 'west']
         )
+
         texture_path = os.path.join(textures_path, texture_name)
+
+        texture_rgb = colorcalc.img2rgb(texture_path, colorcalc_rule)
+        texture_lab = colorcalc.img2lab(texture_path, texture_rgb)
 
         texture_data = {
             'name': generate_naming(texture_name, naming_rule),
             # Full path can later be computed using blockset's dir property
             'texture': texture_name,
-            'color': calc_avg_color(texture_path, colorcalc_rule),
+            'rgb': texture_rgb,
+            'lab': texture_lab,
             'sides': texture_sides
         }
         textures_data.append(texture_data)

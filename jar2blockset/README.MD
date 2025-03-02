@@ -46,7 +46,8 @@ A modular Python script to extract assets from MCJE .jar file, filter only neede
             {
                 "name": "Cool Block Top", // Block texture name, generated automatically
                 "texture": "cool_block_top.png", // Name of block texture with .png extension
-                "color": [123, 45, 67], // Mean texture color, computed automatically
+                "rgb": [123, 45, 67], // Mean texture color in RGB colorpsace (no alpha)
+                "lab": [30.63, 36.01, 4.16], // Mean texture color in CIELAB colorspace
                 "sides": ["top"] // List of applicable block texture sides in OptiFine CTM
                                  // faces notation, excluding "all" and "sides" options.
             },

@@ -122,7 +122,7 @@
 
     async function visualizeTextureData(data, path) {
         texturePath = path + '/' + data.texture
-        textureColor = `rgb(${data.color[0]}, ${data.color[1]}, ${data.color[2]})`
+        textureColor = `rgb(${data.rgb[0]}, ${data.rgb[1]}, ${data.rgb[2]})`
 
         const blockVizImage = document.createElement('img')
         blockVizImage.classList.add(['blockVizImage'])
