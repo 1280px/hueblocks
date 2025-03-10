@@ -35,7 +35,7 @@ export const useGlobalStore = defineStore('GlobalStore', () => {
     // })
 
 
-    const blocksetsPath = '../data/_blocksets.json'
+    const blocksetsPath = '/_blocksets.json'
     const blocksetsData = ref(null)
 
     const loadBlocksetsData = async () => {

@@ -10,9 +10,10 @@ export default defineConfig({
     vueDevTools(),
   ],
   base: "/hueblocks-new",
+  publicDir: "data",
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
-  },
+  }
 })

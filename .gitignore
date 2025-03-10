@@ -3,6 +3,6 @@ regen-examples.sh
 *.jar
 *.pyc
 
-/vueblocks/data/
+/vueblocks/data_OLD/
 node_modules/
 *.log
