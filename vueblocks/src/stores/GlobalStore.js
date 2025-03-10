@@ -35,12 +35,20 @@ export const useGlobalStore = defineStore('GlobalStore', () => {
     // })
 
 
-    const blocksetsPath = '/_blocksets.json'
+    // https://vite.dev/guide/env-and-mode
+    const _baseUrl = import.meta.env.BASE_URL !== '/' ? import.meta.env.BASE_URL : '.'
+
+    const blocksetsPath = _baseUrl + '/' + '_blocksets.json'
     const blocksetsData = ref(null)
 
     const loadBlocksetsData = async () => {
         const res = await fetch(blocksetsPath)
-        blocksetsData.value = await res.json()
+        const json = await res.json()
+
+        // If blocksets data not found, we are really really screwed
+        blocksetsData.value = json.length ? json : [{
+            name: 'Error!!! No data found'
+        }]
     }
 
     let _currBlocksetIdx = 0
@@ -57,19 +65,22 @@ export const useGlobalStore = defineStore('GlobalStore', () => {
         if (!blocksetsData.value) {
             return undefined
         }
-        return blocksetsData?.value[_currBlocksetIdx]?.dir
+        return _baseUrl + '/' + blocksetsData?.value[_currBlocksetIdx]?.dir
     })
 
 
     const currBlocksetBlockdata = ref(null)
     const loadBlocksetBlockdata = async () => {
-        const res = await fetch(currBlocksetDir.value + '/_blockdata.json')
+        const res = await fetch(currBlocksetDir.value + '/' + '_blockdata.json')
         currBlocksetBlockdata.value = await res.json()
     }
     const currBlocksetPalettes = ref(null)
     const loadBlocksetPalettes = async () => {
-        const res = await fetch(currBlocksetDir.value + '/_palettes.json')
-        currBlocksetPalettes.value = await res.json()
+        const res = await fetch(currBlocksetDir.value + '/' + '_palettes.json')
+        const json = await res.json()
+
+        // If no palettes found, we're okay, just don't add anything
+        currBlocksetPalettes.value = json.keys().length ? json : []
 
         // Also add default pseudo-palette
         currBlocksetPalettes.value.unshift({

@@ -1,5 +1,23 @@
 [
+    "Timestamp string (will be stripped away — maybe I should consider logging it at least)",
     {
-
+      "name": "Test Texture",
+      "texture": "test.png",
+      "rgb": [
+        255,
+        255,
+        255
+      ],
+      "lab": [
+        100.00,
+        0.00,
+        0.00
+      ],
+      "sides": [
+        "north",
+        "south",
+        "east",
+        "west"
+      ]
     }
 ]
