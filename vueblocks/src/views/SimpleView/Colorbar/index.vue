@@ -8,15 +8,18 @@
     import ColorSegment from './ColorSegment.vue'
     import SlottedButton from '@/components/SlottedButton.vue'
 
-    const AddItemPopoverContent = defineAsyncComponent(
-        () => import('./popovers/AddItemPopoverContent.vue')
-    )
-    const ColorPopoverContent = defineAsyncComponent(
-        () => import('./popovers/ColorPopoverContent.vue')
-    )
-    const StepsPopoverContent = defineAsyncComponent(
-        () => import('./popovers/StepsPopoverContent.vue')
-    )
+    const AddItemPopoverContent = defineAsyncComponent({
+        loader: () => import('./popovers/AddItemPopoverContent.vue'),
+        loadingComponent: { template: `<span>Loading…</span>` }
+    })
+    const ColorPopoverContent = defineAsyncComponent({
+        loader: () => import('./popovers/ColorPopoverContent.vue'),
+        loadingComponent: { template: `<span>Loading…</span>` }
+    })
+    const StepsPopoverContent = defineAsyncComponent({
+        loader: () => import('./popovers/StepsPopoverContent.vue'),
+        loadingComponent: { template: `<span>Loading…</span>` }
+    })
     
     const SimpleViewStore = useSimpleViewStore()
 
