@@ -1,9 +1,9 @@
 # https://vite.dev/guide/static-deploy.html#github-pages
-name: Deploy static content to Pages
+name: Build & deploy to Pages
 
 on:
   push:
-    branches: ['main']
+    branches: ['master']
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -33,12 +33,16 @@ jobs:
         with:
           node-version: 20
           cache: 'npm'
+          # https://stackoverflow.com/questions/68639588/github-actions-dependencies-lock-file-is-not-found-in-runners-path
+          cache-dependency-path: 'vueblocks/package-lock.json'
 
       - name: Install dependencies
         run: npm ci
+        working-directory: 'vueblocks'
 
       - name: Build
         run: npm run build
+        working-directory: 'vueblocks'
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -46,7 +50,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './dist'
+          path: 'vueblocks/dist'
 
       - name: Deploy to GitHub Pages
         id: deployment
