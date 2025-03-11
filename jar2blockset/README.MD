@@ -2,7 +2,7 @@
 
 A modular Python script to extract assets from MCJE .jar file, filter only needed block textures, and then generate blockset description and palettes for them. Successor of blox2rgb.py from legacy HueBlocks versions.
 
-**Only MCJE 1.5+ versions are supproted, and I have no plans to add support for other editions!**
+**Only MCJE 1.5+ versions are supported, and I have no plans to add support for other editions!**
 
 
 ## Usage
@@ -69,3 +69,10 @@ A modular Python script to extract assets from MCJE .jar file, filter only neede
         ```
 
 Note that automatically parsed data, especially for older versions, might not be 100% correct, so it is recommended to re-check the blockset before using it in production. You also should NOT rely on default blacklist and autoparse rules if you're changing default parameters or/and using a blockset containing non-vanilla blocks — rather, use them as an example on how these config files work.
+
+
+## jarfetcher
+
+A small helper Python script that is used by CI/CD for getting two exact JAR files from Mojang's Piston Meta servers — the latest stable(!) version and 1.13.2 (the latest version to come with Programmer's Art textures as default). **You don't need to run it if you have obtained JAR files already**, but it can be helpful if you wish to automate MCJE versions fetching for your own needs as well.
+
+Usage: `python3 _jarfetcher.py OUTPUT_DIR` (if $OUTPUT\_DIR$ is omitted, current dir will be used).
