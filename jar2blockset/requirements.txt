@@ -1,0 +1,5 @@
+# Generated using 'pipreqs' module
+numpy==1.21.5
+Pillow==11.1.0
+PyYAML==6.0.2
+Requests==2.32.3
