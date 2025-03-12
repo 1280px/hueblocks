@@ -28,7 +28,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Node
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Pip Dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install -r 'jar2blockset/requirements.txt'
+
+      - name: Run Jarfetcher
+        run: |
+          python3 'jar2blockset/_jarfetcher.py jar2blockset'
+
+
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -36,15 +52,18 @@ jobs:
           # https://stackoverflow.com/questions/68639588/github-actions-dependencies-lock-file-is-not-found-in-runners-path
           cache-dependency-path: 'vueblocks/package-lock.json'
 
-      - name: Install dependencies
+      - name: Install NPM dependencies
         run: npm ci
         working-directory: 'vueblocks'
 
-      - name: Build
+      # TODO: Here we need to move data dir to Vueblocks
+
+      - name: Build Vueblocks
         run: npm run build
         working-directory: 'vueblocks'
 
-      - name: Setup Pages
+
+      - name: Setup GH Pages
         uses: actions/configure-pages@v4
 
       - name: Upload artifact
@@ -52,6 +71,6 @@ jobs:
         with:
           path: 'vueblocks/dist'
 
-      - name: Deploy to GitHub Pages
+      - name: Deploy to GH Pages
         id: deployment
         uses: actions/deploy-pages@v4
