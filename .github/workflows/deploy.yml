@@ -36,12 +36,12 @@ jobs:
 
       - name: Install Pip Dependencies
         run: |
-          python3 -m pip install --upgrade pip
+          python -m pip install --upgrade pip
           pip install -r 'jar2blockset/requirements.txt'
 
       - name: Run Jarfetcher
         run: |
-          python3 'jar2blockset/_jarfetcher.py' 'jar2blockset'
+          python -u 'jar2blockset/_jarfetcher.py' 'jar2blockset'
 
 
       - name: Setup Node
