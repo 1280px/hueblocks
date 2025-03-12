@@ -41,7 +41,7 @@ jobs:
 
       - name: Run Jarfetcher
         run: |
-          python3 'jar2blockset/_jarfetcher.py jar2blockset'
+          python3 'jar2blockset/_jarfetcher.py' 'jar2blockset'
 
 
       - name: Setup Node
