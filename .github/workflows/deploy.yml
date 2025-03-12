@@ -1,5 +1,5 @@
 # https://vite.dev/guide/static-deploy.html#github-pages
-name: Get & Process blocksets, then Build & Deploy
+name: Get & Process data, Build & Deploy app
 
 on:
   push:
@@ -49,7 +49,6 @@ jobs:
       - name: Run Jar2BlockSet
         # https://superuser.com/questions/31464/looping-through-ls-results-in-bash-shell-script
         run: |
-          shopt -s nullglob  
           for f in *.jar; do
             echo "data/$f"
             python -u '_main.py' "data/$f"
