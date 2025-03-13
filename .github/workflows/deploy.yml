@@ -58,7 +58,7 @@ jobs:
           for f in "${fss[@]}"; do
             python -u '_main.py' "$f"
             rm "$f"
-            sed -i 's|/data/\([^/]\+\)/|/\1/|' 'data/_blocksets.json'
+            sed -i 's|data/||' 'data/_blocksets.json'
           done
         working-directory: 'jar2blockset'
 
