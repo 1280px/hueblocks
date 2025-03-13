@@ -52,7 +52,10 @@ jobs:
         # For now we also fix the pathes to point to the actual data
         # dirs, though later I'll move this functionality to j2bs.
         run: |
-          for f in $(ls -vr data/*.jar); do
+          fs=(data/*.jar)
+          IFS=$'\n' fss=($(printf "%s\n" "${fs[@]}" | sort -r))
+          unset IFS
+          for f in "${fss[@]}"; do
             python -u '_main.py' "$f"
             rm "$f"
             sed -i 's|/data/\([^/]\+\)/|/\1/|' 'data/_blocksets.json'
