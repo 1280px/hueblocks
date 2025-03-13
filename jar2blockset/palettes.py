@@ -14,6 +14,10 @@ def generate_palette(palette_raw, textures_names, title='palette'):
     palette_ex = filters.compute_filter(palette_raw['excludes'], textures_names, f'{title} excludes')
     palette = [rule for rule in (palette_in).keys() if rule not in (palette_ex).keys()]
 
+    # Finally, don't forget to exclude textures that aren't in the blockset in the first place
+    # (otherwise, the count will be inaccurate, resulting in empty palettes appearing non-empty)
+    palette = [rule for rule in palette if rule in textures_names]
+
     return sorted(palette)
 
 

@@ -9,10 +9,10 @@ palettes:
     includes:
       - acacia_leaves.png
       - ancient_debris_$
-      - emerald_$
-      - copper_bulb.png
+      - copper_$
     excludes:
-      - emerald_block.png
+      - $copper_bulb.png
+      - $copper_bulb_lit.png
 
   - name: 'Another epic palette!!111'
     includes:

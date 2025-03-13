@@ -22,7 +22,7 @@
             <div v-if="blockRef"
                 class="colorbar__color-segment__tag-inner"
                 :style="{
-                    'background-image': GlobalStore.getBlockTexturePath(blockRef?.texture),
+                    'background-image': GlobalStore.getTexturePath(blockRef?.texture),
                     'background-color': color
                 }"
                 :title="`${blockRef?.name} \n${color}` || color"

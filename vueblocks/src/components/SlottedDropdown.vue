@@ -14,6 +14,7 @@
 
     const value = defineModel()
     value.value = (props?.default || 0)
+    // TODO: reset value to .default if out of bounds (use computed?)
 
     const id = useId()
 </script>

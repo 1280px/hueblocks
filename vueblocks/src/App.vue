@@ -39,8 +39,8 @@
     }
     #app {
         background: linear-gradient(#000628 20px, #282b58 420px);
-        background: linear-gradient(#000628 20px, #5a3a6e 420px);
-        background: linear-gradient(#000628 20px, #9c4848 420px);
+        background: linear-gradient(#080018, #704070 420px);
+        background: linear-gradient(#100418, #9c4848 400px);
         color: $white;
         font-size: 16px; font-family: $FONTS;
     }
@@ -84,7 +84,7 @@
         }
     }
 
-    // TODO -- Move popover styling to separate file
+    // TODO: Move popover styling to separate file
     .popover {
         margin-top: 12px; padding: 8px;
         background-color: $white; color: $black;

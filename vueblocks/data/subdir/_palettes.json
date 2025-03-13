@@ -1,5 +1,11 @@
 [
     {
-
+        "name": "Empty and broken palettes will be skipped automatically!",
+        "count": 4
+    },
+    {
+        "name": "bebra",
+        "textures": [],
+        "count": 0
     }
 ]

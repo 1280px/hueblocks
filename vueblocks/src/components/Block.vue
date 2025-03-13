@@ -17,7 +17,7 @@
 </script>
 
 <template>
-    <img class="block" :src="GlobalStore.getBlockTexturePath(texture)" :alt="name"
+    <img class="block" :src="GlobalStore.getTexturePath(texture)" :alt="name"
         :style="{'width': GlobalStore.blockSize, 'height': GlobalStore.blockSize}"
     >
 </template>

@@ -9,7 +9,7 @@
     <main>
         <!-- <h1>HueBlocks</h1>
         <h3>Create beautiful block gradients in a few clicks!</h3> -->
-        <h1>hbve public ci/cd test</h1>
+        <h1>hbve public test</h1>
 
         <small>
             <!-- <a href="" @click="">language: en</a> •  -->
