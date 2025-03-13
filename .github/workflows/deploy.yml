@@ -47,12 +47,15 @@ jobs:
         working-directory: 'jar2blockset'
 
       - name: Run Jar2BlockSet
-        # https://superuser.com/questions/31464/looping-through-ls-results-in-bash-shell-script
+        # We want to process the files in reverse order, so the older
+        # MCJE versions will appear in the _blocksets.json the latest;
+        # For now we also fix the pathes to point to the actual data
+        # dirs, though later I'll move this functionality to j2bs.
         run: |
-          for f in data/*.jar; do
-            echo "$f"
+          for f in $(ls -vr data/*.jar); do
             python -u '_main.py' "$f"
             rm "$f"
+            sed -i 's|/data/\([^/]\+\)/|/\1/|' 'data/_blocksets.json'
           done
         working-directory: 'jar2blockset'
 
