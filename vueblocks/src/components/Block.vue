@@ -21,11 +21,13 @@
 </script>
 
 <template>
-    <div :class="{'loading': !isLoaded}">
+    <div :class="{'loading': !isLoaded}"
+        :style="{'width': GlobalStore?.blockSize || '64px', 'height': GlobalStore?.blockSize || '64px'}"
+    >
         <img v-show="isLoaded" @load="isLoaded = true" @error="isLoaded = false"
             :src="GlobalStore.getTexturePath(texture)" :alt="name"
-            :style="{'width': GlobalStore?.blockSize || '64px', 'height': GlobalStore?.blockSize || '64px'}"
         >
+        <small v-show="!isLoaded">{{ name || texture || 'missingNo' }}</small>
     </div>
 </template>
 
@@ -34,9 +36,15 @@
 
     div {
         image-rendering: pixelated;
+        overflow: clip; line-break: anywhere;
+        text-align: left;
 
         &.loading {
             background-color: $accent-light_25;
         }
+    }
+
+    img {
+        height: 100%;
     }
 </style>

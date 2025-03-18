@@ -152,6 +152,11 @@
 
         &.one-row {
             flex-wrap: nowrap !important;
+
+            // That's a dumb solution but I think it'll work for now...
+            & *:last-child {
+                padding-right: 16px;
+            }
         }
     }
 </style>
