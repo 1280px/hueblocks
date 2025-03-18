@@ -1,0 +1,32 @@
+@use '@/assets/variables' as *;
+
+.popover {
+    margin-top: 12px; padding: 8px;
+    background-color: $white; color: $black;
+    border-radius: $BR_regular;
+    box-shadow: $SH_smooth, $SH_subtle;
+    font-size: 1em; font-family: $FONTS;
+    animation: $TR_slow popover-pop;
+}
+.popover-inner {
+    @include flex-center;
+}
+.popover-arrow {
+    z-index: -1;
+    top: -12px;
+    width: 24px; height: 24px;
+    margin-left: -0.5px;
+    transform: rotate(45deg);
+    background-color: $white;
+    border-radius: calc($BR_regular / 2);
+}
+@keyframes popover-pop {
+    0% {
+        transform: translateY(8px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

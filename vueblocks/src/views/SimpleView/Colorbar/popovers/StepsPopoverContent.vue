@@ -1,7 +1,6 @@
 <script setup>
     import {ref, computed, defineProps, defineEmits} from 'vue'
     import { useSimpleViewStore } from '@/stores/SimpleViewStore'
-    import { hex2rgb, rgb2hex } from '@/colors'
 
     const SimpleViewStore = useSimpleViewStore()
     const {cbIdx} = defineProps({
@@ -23,3 +22,7 @@
         <button type="submit" @click.prevent="emit('done')">OK</button>
     </div>
 </template>
+
+<style lang="sass">
+    @use '@/assets/popovers' as *;
+</style>

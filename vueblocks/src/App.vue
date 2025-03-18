@@ -1,9 +1,13 @@
 <script setup>
-    import {ref, onMounted} from 'vue'
+    import {ref, onMounted, defineAsyncComponent} from 'vue'
     import { useGlobalStore } from './stores/GlobalStore'
 
     import Header from './views/Header/index.vue'
-    import SimpleView from './views/SimpleView/index.vue'
+
+    const SimpleView = defineAsyncComponent({
+        loader: () => import('./views/SimpleView/index.vue'),
+        loadingComponent: () => 'Loading SimpleView…', delay: 0, suspensible: false
+    })
 
     const GlobalStore = useGlobalStore()
 
@@ -17,9 +21,7 @@
 <template>
     <Header />
 
-    <SimpleView />
-    <!-- <AdvancedView v-if="viewMode==='advanced'" />
-    <SimpleView v-else /> -->
+    <SimpleView v-if="GlobalStore.viewMode === 'simple'" />
 
     <footer></footer>
 </template>
@@ -36,6 +38,7 @@
         flex: 1;
         display: flex; flex-direction: column;
         width: 100%; min-height: 100%;
+        text-align: center;
     }
     #app {
         background: linear-gradient(#000628 20px, #282b58 420px);
@@ -67,13 +70,12 @@
     a:hover {
         color: $white_80;
     }
+    abbr {
+        text-decoration: underline dotted 1px;
+    }
     small {
         color: $white_30;
         font-size: .86em;
-    }
-    icon {
-        background: $trans;
-        margin: 0;
     }
 
     button, input[type=checkbox], input[type=radio], label, a, select, option {
@@ -81,38 +83,6 @@
 
         & :disabled {
             cursor: not-allowed;
-        }
-    }
-
-    // TODO: Move popover styling to separate file
-    .popover {
-        margin-top: 12px; padding: 8px;
-        background-color: $white; color: $black;
-        border-radius: $BR_regular;
-        box-shadow: $SH_smooth, $SH_subtle;
-        font-size: 1em; font-family: $FONTS;
-        animation: $TR_slow popover-pop;
-    }
-    .popover-inner {
-        @include flex-center;
-    }
-    .popover-arrow {
-        z-index: -1;
-        top: -12px;
-        width: 24px; height: 24px;
-        margin-left: -0.5px;
-        transform: rotate(45deg);
-        background-color: $white;
-        border-radius: calc($BR_regular / 2);
-    }
-    @keyframes popover-pop {
-        0% {
-            transform: translateY(8px);
-            opacity: 0;
-        }
-        100% {
-            transform: translateY(0);
-            opacity: 1;
         }
     }
 </style>

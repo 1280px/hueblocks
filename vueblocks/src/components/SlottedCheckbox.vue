@@ -54,7 +54,6 @@
 
     label {
         @include flex-center;
-        // margin: 0 8px 8px;
         font-weight: 700;
         user-select: none;
     }

@@ -17,7 +17,6 @@
     const cbItemColor = computed({
         get: () => {
             const rgb = SimpleViewStore.colorbarData[cbIdx].color
-            console.log(rgb2hex(rgb))
             return rgb2hex(rgb)
         },
         set: (hex) => {
@@ -46,3 +45,7 @@
         <button type="submit" @click.prevent="emit('done')">OK</button>
     </div>
 </template>
+
+<style lang="sass">
+    @use '@/assets/popovers' as *;
+</style>

@@ -16,15 +16,21 @@
 
         <section class="blockviz-options--viz">
             <small>
-                left click on a color mark to change it, right click to copy its hex;<br>
-                click on a number between color marks to change length between them.
+                left click on a color tag to change it, right click to copy its hex;<br>
+                click on a number between color tags to change length between them.
             </small>
             
-            <SlottedCheckbox v-model="SimpleViewStore.blockVizCfg.hideDuplicates">Hide duplicates</SlottedCheckbox>
+            <SlottedCheckbox v-model="SimpleViewStore.blockVizCfg.hideDuplicates">
+                Hide duplicates
+            </SlottedCheckbox>
     
-            <SlottedCheckbox v-model="SimpleViewStore.blockVizCfg.resultsInOneRow">Results in one row</SlottedCheckbox>
+            <SlottedCheckbox v-model="SimpleViewStore.blockVizCfg.resultsInOneRow">
+                Results in one row
+            </SlottedCheckbox>
     
-            <SlottedCheckbox v-model="SimpleViewStore.blockVizCfg.keepPrevResults">Keep previous results</SlottedCheckbox>
+            <SlottedCheckbox v-model="SimpleViewStore.blockVizCfg.keepPrevResults">
+                Keep previous results
+            </SlottedCheckbox>
         </section>
     </header>
 

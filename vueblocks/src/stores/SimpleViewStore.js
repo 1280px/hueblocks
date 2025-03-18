@@ -11,9 +11,8 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
     })
 
     const blockDataCfg = ref({
-        // Note that blockdata and palettes are in global store!
+        // Note that blockdata and palettes are stored in GlobalStore!
         useCIELAB: true,
-        // See names in corersponding DD in BlockViz.vue for context
         noiseThresholdMin: 0,
         noiseThresholdMax: 4,
     })
@@ -21,17 +20,11 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
 
     const colorbarData = ref([
         {
-            // type: 'color',
             color: [12, 34, 56], 
             blockRef: null,
             steps: 6 // Length between CURRENT and NEXT color segments,
                      // will be ignored if this is the last color segment
         },
-        // {
-        //     type: 'length', <-- No longer used; now length is stored next to color
-        //     value: 6,
-        //     // bg: [[18, 52, 86], [131, 86, 35]] <-- Calculated at runtime instead
-        // },
         {
             color: [200, 100, 20],
             blockRef: null,

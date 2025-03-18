@@ -50,3 +50,7 @@
         <button type="submit" @click.prevent="addCbItem()">Add!</button>
     </div>
 </template>
+
+<style lang="sass">
+    @use '@/assets/popovers' as *;
+</style>

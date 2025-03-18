@@ -14,9 +14,6 @@
         <slot v-if="!props.isReady" name="normal"></slot>
         <slot v-else name="disabled"></slot>
     </button>
-    <!-- <small>
-        tip: left click on a block to temporarily hide it
-    </small> -->
 </template>
 
 <style lang="scss" scoped>

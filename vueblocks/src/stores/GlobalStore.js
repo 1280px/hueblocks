@@ -3,12 +3,13 @@ import {defineStore} from 'pinia'
 
 
 export const useGlobalStore = defineStore('GlobalStore', () => {
-    // const locale = ref('en')
+    const locale = ref('en')
+    const viewMode = ref('simple')
     
     const blockSize = ref('64px')
     const changeBlockSize = (scale) => {
         const newBlockSize = parseInt(blockSize.value) * scale
-        console.log(newBlockSize)
+
         if (newBlockSize >= 16 && newBlockSize <= 256) {
             blockSize.value = newBlockSize + 'px'
         }
@@ -79,7 +80,7 @@ export const useGlobalStore = defineStore('GlobalStore', () => {
     const currPaletteIdx = ref(null)
 
     return {
-        // locale,
+        locale, viewMode,
         blockSize, changeBlockSize,
         blockFacing,
         blocksetsPath,

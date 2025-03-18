@@ -25,11 +25,11 @@
 
         &.left {
             border-radius: $BR_big 0 0 $BR_big;
-            // border-right-color: $trans !important;
+            border-right-color: $trans !important;
         }
         &.right {
             border-radius: 0 $BR_big $BR_big 0;
-            // border-left-color: $trans !important;
+            border-left-color: $trans !important;
         }
 
         & > * {

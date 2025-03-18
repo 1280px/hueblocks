@@ -25,7 +25,6 @@
             return ['Loading...']
         }
         return GlobalStore.currBlocksetPalettes.map((pal) => pal.name)
-        // return ['Not Currently Impleneted!']
     })
 </script>
 

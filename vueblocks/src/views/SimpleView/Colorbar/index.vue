@@ -10,15 +10,15 @@
 
     const AddItemPopoverContent = defineAsyncComponent({
         loader: () => import('./popovers/AddItemPopoverContent.vue'),
-        loadingComponent: { template: `<span>Loading…</span>` }
+        loadingComponent: () => 'Loading…', delay: 0, suspensible: false
     })
     const ColorPopoverContent = defineAsyncComponent({
         loader: () => import('./popovers/ColorPopoverContent.vue'),
-        loadingComponent: { template: `<span>Loading…</span>` }
+        loadingComponent: () => 'Loading…', delay: 0, suspensible: false
     })
     const StepsPopoverContent = defineAsyncComponent({
         loader: () => import('./popovers/StepsPopoverContent.vue'),
-        loadingComponent: { template: `<span>Loading…</span>` }
+        loadingComponent: () => 'Loading…', delay: 0, suspensible: false
     })
     
     const SimpleViewStore = useSimpleViewStore()
@@ -35,7 +35,6 @@
             )
         }
     }
-
     function colorbarRandom() {
         // We only want to randomize colors, not lengths
         for (const cbItem of SimpleViewStore.colorbarData) {
@@ -57,7 +56,7 @@
                     + (Math.random() * 96)
                 )
             ]
-            console.log(cbItem.color[0], cbItem.color[1], cbItem.color[2])
+            // console.log(cbItem.color[0], cbItem.color[1], cbItem.color[2])
         }
     }
 
@@ -85,9 +84,6 @@
 
 <template>
     <section class="colorbar">
-        <!-- <SlottedButton class="trans" @click="colorbarSort" title="Sort by brightness">
-            <icon>📶</icon>
-        </SlottedButton> -->
         <SlottedButton class="trans" @click="colorbarSwap" title="Swap left to right">
             <icon>🔁</icon>
         </SlottedButton>
@@ -124,9 +120,6 @@
         <SlottedButton class="trans" @click="colorbarRandom" title="Randomize colours">
             <icon>💥</icon>
         </SlottedButton>
-        <!-- <SlottedButton class="trans" @click="colorbarWipe" title="Clear all">
-            <icon>🗑️</icon>
-        </SlottedButton> -->
     </section>
 
     <Wowerlay

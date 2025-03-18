@@ -8,7 +8,7 @@
 
     const facing = [
         // According to Optifine CTM, first two options should be the last;
-        // however, I suppose they'll actually end up being the most used
+        // however, I suppose they'll actually end up being used the most
         { all: 'Any' },
         { sides: 'Sides' },
         { top: 'Top' },
