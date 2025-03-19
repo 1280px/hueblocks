@@ -39,7 +39,7 @@ if __name__ == "__main__":
     OUTPUT_PATH = os.path.splitext(JAR_PATH)[0]
 
     EXCLUDE_ALPHA = (sys.argv[2] == '1') if len(sys.argv) >= 3 else True
-    EXCLUDE_ANIMATED = (sys.argv[3] == '1') if len(sys.argv) >= 4 else True
+    EXCLUDE_ANIMATED = (sys.argv[3] == '1') if len(sys.argv) >= 4 else False
 
     AUTOPARSER_PATH = (
         (sys.argv[4] if (len(sys.argv) >= 5) and (sys.argv[4] != 'None') else 'autoparser-default.yml')
