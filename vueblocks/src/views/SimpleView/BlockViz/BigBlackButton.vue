@@ -2,7 +2,7 @@
     import {ref, defineProps} from 'vue'
 
     const props = defineProps({
-        isReady: {
+        isLoaded: {
             type: Boolean,
             required: true
         }
@@ -10,8 +10,8 @@
 </script>
 
 <template>
-    <button type="submit" :isReady="props.isReady">
-        <slot v-if="!props.isReady" name="normal"></slot>
+    <button type="submit" :disabled="props.isLoaded">
+        <slot v-if="!props.isLoaded" name="normal"></slot>
         <slot v-else name="disabled"></slot>
     </button>
 </template>

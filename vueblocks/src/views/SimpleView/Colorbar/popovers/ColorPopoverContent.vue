@@ -30,6 +30,7 @@
             SimpleViewStore.colorbarData[cbIdx-1].steps += SimpleViewStore.colorbarData[cbIdx].steps
         }
         SimpleViewStore.colorbarData.splice(cbIdx, 1)
+
         emit('done')
     }
 </script>

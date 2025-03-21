@@ -11,6 +11,8 @@
         appearance: none;
         height: 32px; min-width: 32px;
         border: 2px solid $accent-light_50; border-radius: $BR_regular;
+        background-color: $dark_20; color: $white;
+        transition: $TR_regular;
 
         &.round {
             height: 40px; min-width: 40px;
@@ -21,9 +23,6 @@
             background-color: $trans;
             border: 0 solid $trans;
         }
-
-        background-color: $dark_20; color: $white;
-        transition: $TR_regular;
 
         &:hover {
         	border-color: $accent-light;

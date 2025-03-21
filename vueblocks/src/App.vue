@@ -51,17 +51,17 @@
     h1 {
         margin: 0;
         font-size: 3.0em;
-        font-weight: 700;
+        font-weight: $FW_bold;
     }
     h2 {
         margin: 0;
         font-size: 1.6em;
-        font-weight: 300;
+        font-weight: $FW_thin;
     }
     h3 {
         margin: 0;
         font-size: 1.2em;
-        font-weight: 300;
+        font-weight: $FW_thin;
     }
     a {
         color: inherit;
@@ -70,9 +70,9 @@
     a:hover {
         color: $white_80;
     }
-    abbr {
-        text-decoration: underline dotted 1px;
-    }
+    // abbr {
+    //     text-decoration: underline dotted 1px;
+    // }
     small {
         color: $white_30;
         font-size: .86em;

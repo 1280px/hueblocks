@@ -54,7 +54,7 @@
 
     label {
         @include flex-center;
-        font-weight: 700;
+        font-weight: $FW_bold;
         user-select: none;
     }
 </style>

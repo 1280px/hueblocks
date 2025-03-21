@@ -26,6 +26,10 @@
 
 $FONTS: system-ui, sans-serif;
 
+$FW_bold: 700;
+$FW_normal: 500; // 400?
+$FW_thin: 300;
+
 $BR_regular: 4px;
 $BR_big: 8px;
 $BR_section: 12px;
@@ -46,7 +50,6 @@ $black: #000;
 $dark_bg: #111;
 $dark_bg-blur: #0004;
 $dark_border: #666;
-
 $dark: #333;
 $dark_60: color.change($dark, $alpha: 60%);
 $dark_20: color.change($dark, $alpha: 20%);

@@ -27,7 +27,7 @@
         <img v-show="isLoaded" @load="isLoaded = true" @error="isLoaded = false"
             :src="GlobalStore.getTexturePath(texture)" :alt="name"
         >
-        <small v-show="!isLoaded">{{ name || texture || 'missingNo' }}</small>
+        <span v-show="!isLoaded">{{ name || texture || 'missingNo' }}</span>
     </div>
 </template>
 

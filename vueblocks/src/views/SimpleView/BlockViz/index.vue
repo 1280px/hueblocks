@@ -32,7 +32,6 @@
     <section class="blockviz-controls__wrap">
         <div class="blockviz-controls">
             <div class="blockviz-controls__blob">
-                Side: 
                 <SidePicker v-model="GlobalStore.blockFacing" />
             </div>
 
@@ -40,9 +39,9 @@
                 GlobalStore.currBlocksetBlockdata,
                 GlobalStore.currBlocksetPalettes[GlobalStore.currPaletteIdx],
                 GlobalStore.blockFacing
-            )" :isReady="!GlobalStore.blocksetsData">
+            )" :isLoaded="!GlobalStore.currBlocksetBlockdata">
                 <template #normal>GENERATE BLOCK GRAIDENT</template>
-                <template #disabled>Loading data, please wait…</template>
+                <template #disabled>Loading blockdata, please wait…</template>
             </BigBlackButton>
 
             <div class="blockviz-controls__blob">

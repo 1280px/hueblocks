@@ -36,7 +36,7 @@
 
     .tumbler__text {
         color: $white;
-        font-weight: 700;
+        font-weight: $FW_bold;
         transition: $TR_regular;
 
         &.active {

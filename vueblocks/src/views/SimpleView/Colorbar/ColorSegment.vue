@@ -15,7 +15,7 @@
     const GlobalStore = useGlobalStore()
 </script>
 
-<!-- As if in "tea bag tag" -->
+<!-- As if in "tea bag tag" :) -->
 <template>
     <button class="colorbar__color-segment">
         <div class="colorbar__color-segment__tag">

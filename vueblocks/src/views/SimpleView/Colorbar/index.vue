@@ -92,8 +92,7 @@
             @click="(e) => showPopover(e, 'addItem', 'left')"
             :disabled="SimpleViewStore.colorbarData.length > 21"
         />
-
-        <div v-if="SimpleViewStore?.colorbarData" class="colorbar__inner">
+        <div class="colorbar__inner">
             <template v-for="(cbItem, cbIdx) in SimpleViewStore.colorbarData" :key="cbIdx">
                 <ColorSegment
                     :color="getCssRgb(cbItem.color)" :blockRef="cbItem.blockRef"
@@ -108,10 +107,6 @@
                 />
             </template>
         </div>
-        <span v-else class="colorbar__inner">
-            — Loading, please wait… —
-        </span>
-
         <AddItemButton side="right" title="Add new color to the right"
             @click="(e) => showPopover(e, 'addItem', 'right')"
             :disabled="SimpleViewStore.colorbarData.length > 21"
