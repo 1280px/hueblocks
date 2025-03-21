@@ -26,13 +26,12 @@ facing:
     - podzol.png
     - crimson_nylium.png
     - warped_nylium.png
-    # Melon, pumpkin and beehive use their top textures for bottom as well
+    # Beehive, melon, netherite ore and pumpkin use their top textures for bottom as well
     - pumpkin_top.png
     - melon_top.png
     - beehive_end.png
-    # Same do creaking heart (wtf is wrong with new Minecraft?) and netherite
-    - creaking_heart_top$
     - netherite_top.png
+
     # Chiseled bookshelf top (to override wildcard filter)
     - chiseled_bookshelf_top.png
     # Crafter top (to override wildcard filter)
@@ -47,13 +46,12 @@ facing:
     # and its height is way too small to be used for building
     - daylightDetector_side.png
     - daylight_detector_side.png
-    # Melon, pumpkin and beehive use their top textures for bottom as well
-    - pumpkin_top.png
-    - melon_top.png
+    # Beehive, melon, netherite ore and pumpkin use their top textures for bottom as well
     - beehive_end.png
-    # Same do creaking heart (wtf is wrong with new Minecraft?) and netherite
-    - creaking_heart_top$
+    - melon_top.png
     - netherite_top.png
+    - pumpkin_top.png
+
     # Chiseled bookshelf top (to override wildcard filter)
     - chiseled_bookshelf_top.png
     # Crafter bottom (to override wildcard filter)
@@ -126,8 +124,6 @@ facing:
     - chiseled_red_sandstone.png
     - cut_sandstone.png
     - cut_red_sandstone.png
-    # Creaking heart
-    - creaking_heart$
     # Chiseled tuff
     - chiseled_tuff.png
 
@@ -137,6 +133,7 @@ facing:
     # Furnace top texture is actually used for much more blocks than
     # the name implies, including ones allowing freeform rotation.
     - furnace_top.png
+
     # Pistons can be rotated in any direction, so are their textures
     - piston$
     # Same is true for ALMOST all column-like blocks...
@@ -150,6 +147,8 @@ facing:
     - hay_block$
     # ...barrels...
     - barrel_$
+    # ...creaking hearts (wth is wrong with new Minecraft?)...
+    - creaking_heart$
     # ...and, of course, for logs and stems
     - tree_top.png
     - log_acacia_top.png
@@ -160,6 +159,7 @@ facing:
     - log_spruce_top.png
     - $_log_top.png
     - $_stem_top.png
+
     # Smooth sandstone and smooth stone (both inobtainable block
     # from older versions and obtainable block from newer versions)
     - sandstone_top.png
