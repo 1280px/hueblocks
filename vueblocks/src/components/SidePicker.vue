@@ -1,6 +1,8 @@
 <script setup>
     import {ref, defineModel, defineProps, useId} from 'vue'
 
+    import Icon from '@/components/Icon.vue'
+
     const value = defineModel()
     value.value = !value.value ? 'all' : value.value
 
@@ -25,8 +27,9 @@
         Side:
         <div class="side-picker__wrap">
             <div class="side-picker__image">
-                <icon>{{ value }}</icon>
-                <!-- <icon>🔻</icon> -->
+                <!-- TODO: Use actual icons (i.e. a block with selected sides filled) instead of labels -->
+                {{ value }}
+                <Icon name="dd-arrow" />
             </div>
             <select class="side-picker__btn" v-model="value" :id="id">
                 <option v-for="(face, i) in facing" :key="i"
@@ -53,7 +56,7 @@
         border: 2px solid $accent-light_50; border-radius: $BR_round;
         transition: $TR_regular;
 
-        width: 64px; // TODO: Remove this temporary override after implementing actual icons
+        width: 72px; // TODO: Remove this temporary override after implementing actual icons
 
         &:hover {
         	border-color: $accent-light;
@@ -72,7 +75,7 @@
         pointer-events: none;
         top: 0; left: 0;
         width: calc(100% - 5px); height: 100%;
-        // background-color: #f008;
+        // background-color: #f008; // For debugging
         margin-left: 5px;
         border-radius: $BR_round;
     }

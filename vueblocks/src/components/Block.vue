@@ -21,7 +21,7 @@
 </script>
 
 <template>
-    <div :class="{'loading': !isLoaded}"
+    <div :class="{ 'loading': !isLoaded }"
         :style="{'width': GlobalStore?.blockSize || '64px', 'height': GlobalStore?.blockSize || '64px'}"
     >
         <img v-show="isLoaded" @load="isLoaded = true" @error="isLoaded = false"

@@ -9,6 +9,7 @@
     import SlottedDropdown from '@/components/SlottedDropdown.vue'
     import SlottedCheckbox from '@/components/SlottedCheckbox.vue'
     import Block from '@/components/Block.vue'
+    import Icon from '@/components/Icon.vue'
 
     const GlobalStore = useGlobalStore()
     const SimpleViewStore = useSimpleViewStore()
@@ -45,8 +46,12 @@
             </BigBlackButton>
 
             <div class="blockviz-controls__blob">
-                <SlottedButton class="round" @click="GlobalStore.changeBlockSize(0.5)">➖</SlottedButton>
-                <SlottedButton class="round" @click="GlobalStore.changeBlockSize(2.0)">➕</SlottedButton>
+                <SlottedButton class="round" @click="GlobalStore.changeBlockSize(0.5)">
+                    <Icon name="zoom-out" />
+                </SlottedButton>
+                <SlottedButton class="round" @click="GlobalStore.changeBlockSize(2.0)">
+                    <Icon name="zoom-in" />
+                </SlottedButton>
             </div>
         </div>
     </section>
@@ -92,7 +97,7 @@
 
     <section class="blockviz-data__wrap">
         <div class="blockviz-data"
-            :class="{'one-row': SimpleViewStore.blockVizCfg.resultsInOneRow}"
+            :class="{ 'one-row': SimpleViewStore.blockVizCfg.resultsInOneRow }"
         >
             <Block v-for="(block, i) in SimpleViewStore.blockVizData"
                 :key="i" :name="block.name" :texture="block.texture"
@@ -152,7 +157,7 @@
         &.one-row {
             flex-wrap: nowrap !important;
 
-            // That's a dumb solution but I think it'll work for now...
+            // That's probably a dumb solution but it'll work for now...
             & *:last-child {
                 padding-right: 16px;
             }

@@ -10,7 +10,7 @@
 <template>
     <label :for="id">
     <input type="checkbox" v-model="value" :id="id">
-    <Icon name="check" v-show="value === true" />
+    <Icon name="check" class="checkbox-check" :class="{ 'active': value }" />
         <slot></slot>
     </label>
 </template>
@@ -55,8 +55,21 @@
         }
     }
 
+    .checkbox-check {
+        position: absolute;
+        left: 2px;
+        color: $trans;
+        transition: $TR_regular;
+        opacity: .8;
+
+        &.active {
+            color: $accent-dark;
+        }
+    }
+
     label {
         @include flex-center;
+        position: relative;
         font-weight: $FW_bold;
         user-select: none;
     }

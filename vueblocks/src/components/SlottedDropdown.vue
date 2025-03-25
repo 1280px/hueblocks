@@ -27,7 +27,7 @@
         <select v-model="value" :id="id" :disabled="names.length < 2">
             <option v-for="(name, i) in names" :key="i" :value="i">{{ name }}</option>
         </select>
-        <div class="select__arrow" :class="{ 'select__arrow-disabled': names.length < 2 }">
+        <div class="select__arrow" :class="{ 'inactive': names.length < 2 }">
             <Icon name="dd-arrow" />
         </div>
     </label>
@@ -71,7 +71,7 @@
         border-radius: 0 $BR_round $BR_round 0;
         pointer-events: none;
 
-        &.select__arrow-disabled {
+        &.inactive {
             color: $white_50 !important;
         }
     }

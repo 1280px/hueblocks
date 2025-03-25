@@ -9,15 +9,15 @@
         <input type="checkbox" v-model="value" :id="id">
 
         <label class="tumbler__wrap" :for="id">
-            <span class="tumbler__text" :class="{ active: value }">
+            <span class="tumbler__text" :class="{ 'active': value }">
                 <slot name="left"></slot>
             </span>
 
-            <label :for="id" class="tumbler" :class="{ active: value }">
+            <label :for="id" class="tumbler" :class="{ 'active': value }">
                 <!-- "tumblers are essentially just a little fancier checkboxes" -- Me, 2020. -->
             </label>
 
-            <span class="tumbler__text" :class="{ active: !value }">
+            <span class="tumbler__text" :class="{ 'active': !value }">
                 <slot name="right"></slot>
             </span>
         </label>
