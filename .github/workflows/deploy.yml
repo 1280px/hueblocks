@@ -48,9 +48,9 @@ jobs:
 
       - name: Run Jar2BlockSet
         # We want to process the files in reverse order, so the older
-        # MCJE versions will appear in the _blocksets.json the latest;
-        # For now we also fix the pathes to point to the actual data
-        # dirs, though later I'll move this functionality to j2bs.
+        # MCJE versions will appear in the _blocksets.json the latest.
+        # TODO: For now we also have to fix the pathes to be relative to provided JARs
+        # instead of script itself, which is how j2bs should probably behave by default.
         run: |
           fs=(data/*.jar)
           IFS=$'\n' fss=($(printf "%s\n" "${fs[@]}" | sort -r))
@@ -75,14 +75,14 @@ jobs:
         run: npm ci
         working-directory: 'vueblocks'
 
-      - name: Move j2bs results to Vueblocks data
+      - name: Move j2bs results to vb blocksets data
         run: |
-          rm -rf '../../vueblocks/data'
-          mkdir -p '../../vueblocks/data'
-          mv -v * '../../vueblocks/data'
+          rm -rf '../../vueblocks/data/blocksets'
+          mkdir -p '../../vueblocks/data/blocksets'
+          mv -v * '../../vueblocks/data/blocksets'
         working-directory: 'jar2blockset/data'
 
-      - name: Build Vueblocks
+      - name: Build VueBlocks
         run: npm run build
         working-directory: 'vueblocks'
 
