@@ -1,6 +1,6 @@
 <script setup>
     import {ref, onMounted, defineAsyncComponent} from 'vue'
-    import { useGlobalStore } from './stores/GlobalStore'
+    import { useGlobalStore } from '@/stores/GlobalStore'
 
     import Header from './views/Header/index.vue'
 

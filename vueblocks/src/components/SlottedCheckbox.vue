@@ -1,6 +1,8 @@
 <script setup>
     import {ref, defineModel, useId} from 'vue'
 
+    import Icon from '@/components/Icon.vue'
+
     const value = defineModel()
     const id = useId()
 </script>
@@ -8,6 +10,7 @@
 <template>
     <label :for="id">
     <input type="checkbox" v-model="value" :id="id">
+    <Icon name="check" v-show="value === true" />
         <slot></slot>
     </label>
 </template>

@@ -7,6 +7,7 @@
     import StepsSegment from './StepsSegment.vue'
     import ColorSegment from './ColorSegment.vue'
     import SlottedButton from '@/components/SlottedButton.vue'
+    import Icon from '@/components/Icon.vue'
 
     const AddItemPopoverContent = defineAsyncComponent({
         loader: () => import('./popovers/AddItemPopoverContent.vue'),
@@ -85,7 +86,7 @@
 <template>
     <section class="colorbar">
         <SlottedButton class="trans" @click="colorbarSwap" title="Swap left to right">
-            <icon>🔁</icon>
+            <Icon name="swap" />
         </SlottedButton>
 
         <AddItemButton side="left" title="Add new color to the left"
@@ -113,7 +114,7 @@
         />
         
         <SlottedButton class="trans" @click="colorbarRandom" title="Randomize colours">
-            <icon>💥</icon>
+            <Icon name="random" />
         </SlottedButton>
     </section>
 
@@ -148,6 +149,7 @@
         border-radius: $BR_big;
         
         & button.trans {
+            width: 32px;
             margin: 0 8px;
             align-self: center;
         }

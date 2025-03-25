@@ -1,6 +1,8 @@
 <script setup>
     import {ref, computed, defineProps} from 'vue'
 
+    import Icon from '@/components/Icon.vue'
+
     const {side} = defineProps({
         side: {
             type: String,
@@ -11,7 +13,7 @@
 
 <template>
     <button class="colorbar__add-btn" :class="side">
-        <icon>➕</icon>
+        <Icon name="zoom-in" />
     </button>
 </template>
 

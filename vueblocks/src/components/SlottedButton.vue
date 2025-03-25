@@ -10,6 +10,7 @@
     button {
         appearance: none;
         height: 32px; min-width: 32px;
+        padding: 2px;
         border: 2px solid $accent-light_50; border-radius: $BR_regular;
         background-color: $dark_20; color: $white;
         transition: $TR_regular;
@@ -33,6 +34,7 @@
             }
 
             &:active {
+                padding: 0;
                 border: 4px solid $accent-light_50;
                 background-color: $dark_60;
                 transition: $TR_fast;
@@ -40,6 +42,7 @@
                 &.trans {
                     background-color: $white_30;
                     border: 2px solid $white_20;
+                    transition: $TR_fast;
                 }
             }
         }

@@ -1,6 +1,8 @@
 <script setup>
     import {ref, defineModel, defineProps, useId} from 'vue'
 
+    import Icon from '@/components/Icon.vue'
+
     const props = defineProps({
         names: {
             type: Array,
@@ -25,8 +27,8 @@
         <select v-model="value" :id="id" :disabled="names.length < 2">
             <option v-for="(name, i) in names" :key="i" :value="i">{{ name }}</option>
         </select>
-        <div class="select__arrow">
-            <icon>🔻</icon>
+        <div class="select__arrow" :class="{ 'select__arrow-disabled': names.length < 2 }">
+            <Icon name="dd-arrow" />
         </div>
     </label>
 </template>
@@ -65,9 +67,13 @@
         @include flex-center;
         margin-left: -44px; padding-left: 20px;
         width: 20px; height: 20px;
-        background: linear-gradient(90deg, $trans, $dark_bg 50%);
+        background: linear-gradient(90deg, $trans, $dark_bg 50%); // color: $white_80;
         border-radius: 0 $BR_round $BR_round 0;
         pointer-events: none;
+
+        &.select__arrow-disabled {
+            color: $white_50 !important;
+        }
     }
 
     label {

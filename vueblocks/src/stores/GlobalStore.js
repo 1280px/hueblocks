@@ -5,7 +5,13 @@ import {defineStore} from 'pinia'
 export const useGlobalStore = defineStore('GlobalStore', () => {
     const locale = ref('en')
     const viewMode = ref('simple')
-    
+
+    // https://vite.dev/guide/env-and-mode
+    const _baseUrl = import.meta.env.BASE_URL !== '/' ? import.meta.env.BASE_URL : '.'
+
+    const getIconPath = (icon) => _baseUrl + '/icons/' + icon + '.svg'
+
+
     const blockSize = ref('64px')
     const changeBlockSize = (scale) => {
         const newBlockSize = parseInt(blockSize.value) * scale
@@ -18,10 +24,7 @@ export const useGlobalStore = defineStore('GlobalStore', () => {
     const blockFacing = ref('all')
 
 
-    // https://vite.dev/guide/env-and-mode
-    const _baseUrl = import.meta.env.BASE_URL !== '/' ? import.meta.env.BASE_URL : '.'
-
-    const blocksetsPath = _baseUrl + '/' + '_blocksets.json'
+    const blocksetsPath = _baseUrl + '/blocksets/' + '_blocksets.json'
     const blocksetsData = ref(null)
 
     const loadBlocksetsData = async () => {
@@ -49,10 +52,10 @@ export const useGlobalStore = defineStore('GlobalStore', () => {
         if (!blocksetsData.value) {
             return 'missingNo'
         }
-        _lastBlocksetPath = _baseUrl + '/' + blocksetsData?.value[currBlocksetIdx.value]?.dir
+        _lastBlocksetPath = _baseUrl + '/blocksets/' + blocksetsData?.value[currBlocksetIdx.value]?.dir
         return _lastBlocksetPath
     })
-    
+
     const getTexturePath = (texture) => _lastBlocksetPath + '/' + texture
 
 
@@ -79,8 +82,9 @@ export const useGlobalStore = defineStore('GlobalStore', () => {
 
     const currPaletteIdx = ref(null)
 
+
     return {
-        locale, viewMode,
+        locale, viewMode, getIconPath,
         blockSize, changeBlockSize,
         blockFacing,
         blocksetsPath,
