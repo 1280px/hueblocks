@@ -51,6 +51,8 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
     // Uses exactly the same algorithm as original HueBlocks;
     // results in faster but more "inaccurate" graident generation
     function blockVizCalcRGB(blockdata, startRGB, endRGB, steps) {
+        const newBlockVizStep = []
+
         for (let step = 0; step < steps; step++) {
             // Calculate step color as linear mixture of start and end colors
             const stepRGB = [
@@ -84,8 +86,10 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
                 (closestBlock.texture === blockVizData.value.at(-1).texture)) {
                 continue
             }
-            blockVizData.value.push(closestBlock)
+            
+            newBlockVizStep.push(closestBlock)
         }
+        blockVizData.value.push(newBlockVizStep)
     }
 
     // Uses CIELAB transformations and sqrt of mean of squares;
@@ -95,7 +99,9 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
         // https://github.com/antimatter15/rgb-lab/blob/master/color.js
         const startLAB = rgb2lab(startRGB)
         const endLAB = rgb2lab(endRGB)
-    
+
+        const newBlockVizStep = []
+
         for (let step = 0; step < steps; step++) {
             // Just like in RGB, in CIELAB "step" color can be found linearly
             const stepLAB = [
@@ -124,8 +130,10 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
                 (closestBlock.texture === blockVizData.value.at(-1).texture)) {
                 continue
             }
-            blockVizData.value.push(closestBlock)
+            
+            newBlockVizStep.push(closestBlock)
         }
+        blockVizData.value.push(newBlockVizStep)
     }
 
     const blockVizGenerate = (blockdata, palette, facing) => {

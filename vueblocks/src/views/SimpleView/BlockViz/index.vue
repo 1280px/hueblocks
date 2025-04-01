@@ -99,9 +99,11 @@
         <div class="blockviz-data"
             :class="{ 'one-row': SimpleViewStore.blockVizCfg.resultsInOneRow }"
         >
-            <Block v-for="(block, i) in SimpleViewStore.blockVizData"
-                :key="i" :name="block.name" :texture="block.texture"
-            />
+            <div v-for="(step, i) in SimpleViewStore.blockVizData">
+                <Block v-for="(block, i) in step"
+                    :key="i" :name="block.name" :texture="block.texture"
+                />
+            </div>
         </div>
     </section>
 </template>
