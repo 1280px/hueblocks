@@ -153,7 +153,6 @@
     }
     .blockviz-data {
         display: flex;
-        flex-wrap: wrap;
         margin: 16px;
 
         &.one-row {
@@ -164,5 +163,11 @@
                 padding-right: 16px;
             }
         }
+    }
+
+    .blockviz-data div {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
     }
 </style>
