@@ -63,6 +63,9 @@ palettes:
       - wool$
 
     excludes:
+      - blue_ice.png
+      - red_sand$
+      - test_block$
 
   - name: 'Grayscale blocks'
     includes:
@@ -74,7 +77,6 @@ palettes:
       - $basalt_side.png
       - $basalt_top.png
       - $diorite.png
-      - $snow.png
       - acacia_log.png
       - bedrock.png
       - birch_log.png
@@ -94,7 +96,11 @@ palettes:
       - crafter_bottom.png
       - cyan_terracotta.png
       - dead_$
-      - deepslate$
+      - deepslate.png
+      - deepslate_bricks.png
+      - deepslate_tiles.png
+      - deepslate_top.png
+      - deepslate_coal$
       - dispenser_$
       - furnace$
       - gravel.png
@@ -117,14 +123,15 @@ palettes:
       - polished_blackstone$
       - polished_deepslate.png
       - polished_tuff.png
+      - powdered_snow.png
       - quartz_$
-      - raw_iron_block.png
       - reinforced_deepslate$
       - smithing_table_top.png
       - smoker_bottom.png
       - smoker_top.png
       - smooth_basalt.png
       - smooth_stone$
+      - snow.png
       - stone_andesite$
       - stone_bricks.png
       - stone_diorite$
@@ -135,6 +142,7 @@ palettes:
       - white_$
 
     excludes:
+      - black_glazed_terracotta.png
       - black_terracotta.png
       - furnace_top_lit.png
       - gray_terracotta.png
@@ -142,9 +150,11 @@ palettes:
       - hardened_clay_stained_gray.png
       - hardened_clay_stained_silver.png
       - hardened_clay_stained_white.png
+      - light_gray_glazed_terracotta.png
       - light_gray_terracotta.png
       - quartz_ore.png
       - stonebrick_mossy.png
+      - white_glazed_terracotta.png
       - white_terracotta.png
 
   - name: 'Overworld natural blocks'
@@ -213,10 +223,13 @@ palettes:
       - yellow_terracotta.png
 
     excludes:
-      - warped_$
       - crimson_$
+      - deepslate_bricks.png
+      - deepslate_tiles.png
       - nether_gold_ore.png
       - quartz_ore.png
+      - test_block$
+      - warped_$
 
   - name: 'Nether + End blocks'
     includes:
@@ -260,5 +273,6 @@ palettes:
       - stripped_warped_$
 
     excludes:
-      - warped_stem_top.png
       - crimson_step_top.png
+      - test_block$
+      - warped_stem_top.png
