@@ -4,27 +4,261 @@
 # include every "red_$" block from the blockset EXCEPT for "red_sandstone$".
 # If a computed pallete happens to contain zero blocks, it won't be added to the list.
 
-palettes:
-  - name: 'Supah Cool Blocks!!1'
-    includes:
-      - acacia_leaves.png
-      - ancient_debris_$
-      - copper_$
-    excludes:
-      - $copper_bulb.png
-      - $copper_bulb_lit.png
+# Please note that the current palettes were straight up copied from HB-legacy,
+# revamped to works with filtering system, and will be changed in the future!
 
-  - name: 'Another epic palette!!111'
+palettes:
+  - name: 'Colorful blocks'
     includes:
-      - resin_block.png
-      - sand$
-      - $shulker_box.png
-      - obsidian.png
-      - respawn_anchor_top_on.png
-      - red_$
+      - $_log_top.png
+      - $_log.png
+      - $_planks.png
+      - $_stem_top.png
+      - $_stem.png
+      - $copper.png
+      - $froglight_side.png
+      - $nether_wart_block.png
+      - $sponge.png
+      - amethyst_block.png
+      - bamboo_block.png
+      - black_$
+      - blue_$
       - brown_$
+      - coal_block.png
+      - concrete_$
+      - copper_block.png
+      - cyan_$
+      - diamond_block.png
+      - emerald_block.png
+      - glazed_terracotta_$
+      - gold_block.png
+      - gray_$
+      - green_$
+      - hardened_clay$
+      - honeycomb_block.png
+      - iron_block.png
+      - lapis_block.png
+      - light_blue_$
+      - light_gray_$
+      - lime_$
+      - log_$
+      - magenta_$
+      - melon$
+      - netherite_block.png
+      - orange_$
+      - pink_$
+      - planks_$
+      - pumpkin$
+      - purple_$
+      - quartz_block_side.png
+      - raw_$
+      - red_$
+      - redstone_block.png
+      - redstone_block.png
+      - resin_block.png
+      - shroomlight.png
+      - shulker_box.png
+      - shulker$
+      - terracotta.png
+      - wool$
+
     excludes:
-      - sandstone$
-      - red_sandstone$
-      - red_mushroom$
-      - brown_mushroom$
+
+  - name: 'Grayscale blocks'
+    includes:
+      - $_black.png
+      - $_gray.png
+      - $_silver.png
+      - $_white.png
+      - $andesite.png
+      - $basalt_side.png
+      - $basalt_top.png
+      - $diorite.png
+      - $snow.png
+      - acacia_log.png
+      - bedrock.png
+      - birch_log.png
+      - black_$
+      - blackstone$
+      - blast_furnace_$
+      - bone_block$
+      - calcite.png
+      - chiseled_deepslate.png
+      - chiseled_polished_blackstone.png
+      - chiseled_stone_bricks.png
+      - chiseled_tuff$
+      - clay.png
+      - coal$
+      - cobbled_deepslate.png
+      - cobblestone.png
+      - crafter_bottom.png
+      - cyan_terracotta.png
+      - dead_$
+      - deepslate$
+      - dispenser_$
+      - furnace$
+      - gravel.png
+      - gray_$
+      - hardened_clay_stained_cyan.png
+      - iron_block.png
+      - light_gray_$
+      - lodestone$
+      - log_acacia.png
+      - log_birch.png
+      - mud.png
+      - mushroom_block_skin_stem.png
+      - mushroom_stem.png
+      - netherite_block.png
+      - observer$
+      - obsidian.png
+      - pale_moss_block.png
+      - pale_oak_trapdoor.png
+      - piston_bottom.png
+      - polished_blackstone$
+      - polished_deepslate.png
+      - polished_tuff.png
+      - quartz_$
+      - raw_iron_block.png
+      - reinforced_deepslate$
+      - smithing_table_top.png
+      - smoker_bottom.png
+      - smoker_top.png
+      - smooth_basalt.png
+      - smooth_stone$
+      - stone_andesite$
+      - stone_bricks.png
+      - stone_diorite$
+      - stone_slab$
+      - stone.png
+      - stonebrick$
+      - tuff$
+      - white_$
+
+    excludes:
+      - black_terracotta.png
+      - furnace_top_lit.png
+      - gray_terracotta.png
+      - hardened_clay_stained_black.png
+      - hardened_clay_stained_gray.png
+      - hardened_clay_stained_silver.png
+      - hardened_clay_stained_white.png
+      - light_gray_terracotta.png
+      - quartz_ore.png
+      - stonebrick_mossy.png
+      - white_terracotta.png
+
+  - name: 'Overworld natural blocks'
+    includes:
+      - $_coral_block.png
+      - $_ice.png
+      - $_log_top.png
+      - $_log.png
+      - $_ore.png
+      - $dirt.png
+      - $moss_block.png
+      - $snow.png
+      - amethyst_block.png
+      - andesite.png
+      - azalea_top.png
+      - bedrock.png
+      - bee_nest_$
+      - bone_block_$
+      - brown_mushroom_block.png
+      - brown_terracotta.png
+      - buddying_amethyst.png
+      - calcite.png
+      - carved_pumpkin.png
+      - clay.png
+      - cobblestone_mossy.png
+      - cobblestone.png
+      - creaking_heart$
+      - dead_$
+      - deepslate$
+      - diorite.png
+      - dirt$
+      - dripstone_block.png
+      - granite.png
+      - grass_block_snow.png
+      - gravel.png
+      - hardened_clay_stained_brown.png
+      - hardened_clay_stained_orange.png
+      - hardened_clay_stained_red.png
+      - hardened_clay_stained_silver.png
+      - hardened_clay_stained_white.png
+      - hardened_clay_stained_yellow.png
+      - hardened_clay.png
+      - ice_packed.png
+      - light_gray_terracotta.png
+      - log_$
+      - magma.png
+      - melon$
+      - mossy_cobblestone.png
+      - mud.png
+      - muddy_mangrove_roots_side.png
+      - mushroom_block$
+      - mycelium$
+      - orange_terracotta.png
+      - podzol$
+      - pumpkin$
+      - raw_$
+      - red_mushroom_block.png
+      - red_sand$
+      - red_terracotta.png
+      - sand$
+      - sculk$
+      - stone.png
+      - terracotta.png
+      - tuff.png
+      - white_terracotta.png
+      - yellow_terracotta.png
+
+    excludes:
+      - warped_$
+      - crimson_$
+      - nether_gold_ore.png
+      - quartz_ore.png
+
+  - name: 'Nether + End blocks'
+    includes:
+      - ancient_debris_$
+      - basalt_$
+      - polished_basalt_$
+      - $nether_brick.png
+      - $nether_bricks.png
+      - $obsidian.png
+      - bedrock.png
+      - bone_block_$
+      - blackstone$
+      - chiseled_nether_bricks.png
+      - chiseled_polished_blackstone.png
+      - crimson_$
+      - warped_$
+      - $_wart_block.png
+      - crying_obsidian.png
+      - end_stone$
+      - gilded_blackstone.png
+      - glowstone.png
+      - lodestone$
+      - nether$
+      - netherite$
+      - polished_blackstone$
+      - purpur_$
+      - end_$
+      - gravel.png
+      - magma.png
+      - nether_wart_block.png
+      - netherrack.png
+      - purpur$
+      - quartz$
+      - shulker_top_purple.png
+      - soul$
+      - respawn_anchor$
+      - shroomlight.png
+      - shulker_box.png
+      - smooth_basalt.png
+      - stripped_crimson_$
+      - stripped_warped_$
+
+    excludes:
+      - warped_stem_top.png
+      - crimson_step_top.png
