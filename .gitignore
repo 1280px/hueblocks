@@ -1,5 +1,5 @@
+/jar2blockset/.venv/
 /jar2blockset/examples/
-regen-examples.sh
 *.jar
 *.pyc
 
