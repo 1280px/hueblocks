@@ -153,9 +153,16 @@
     }
     .blockviz-data {
         display: flex;
+        flex-direction: column;
         margin: 16px;
 
-        &.one-row {
+        & > div {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+
+        &.one-row, &.one-row > div {
             flex-wrap: nowrap !important;
 
             // That's probably a dumb solution but it'll work for now...
@@ -163,11 +170,5 @@
                 padding-right: 16px;
             }
         }
-    }
-
-    .blockviz-data div {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
     }
 </style>

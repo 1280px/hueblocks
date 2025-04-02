@@ -44,15 +44,13 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
             steps: 3
         }
     ])
-
-
-    const blockVizData = ref([])
+    
+    
+    const blockVizData = ref([[]])
     
     // Uses exactly the same algorithm as original HueBlocks;
     // results in faster but more "inaccurate" graident generation
     function blockVizCalcRGB(blockdata, startRGB, endRGB, steps) {
-        const newBlockVizStep = []
-
         for (let step = 0; step < steps; step++) {
             // Calculate step color as linear mixture of start and end colors
             const stepRGB = [
@@ -82,14 +80,13 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
             }
 
             if ((blockVizCfg.value.hideDuplicates) &&
-                (blockVizData.value.length > 0) &&
-                (closestBlock.texture === blockVizData.value.at(-1).texture)) {
+                (blockVizData.value.at(-1).length > 1) &&
+                (closestBlock.texture === blockVizData.value.at(-1).at(-1).texture)) {
                 continue
             }
             
-            newBlockVizStep.push(closestBlock)
+            blockVizData.value.at(-1).push(closestBlock)
         }
-        blockVizData.value.push(newBlockVizStep)
     }
 
     // Uses CIELAB transformations and sqrt of mean of squares;
@@ -99,8 +96,6 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
         // https://github.com/antimatter15/rgb-lab/blob/master/color.js
         const startLAB = rgb2lab(startRGB)
         const endLAB = rgb2lab(endRGB)
-
-        const newBlockVizStep = []
 
         for (let step = 0; step < steps; step++) {
             // Just like in RGB, in CIELAB "step" color can be found linearly
@@ -126,14 +121,13 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
             }
 
             if ((blockVizCfg.value.hideDuplicates) &&
-                (blockVizData.value.length > 0) &&
-                (closestBlock.texture === blockVizData.value.at(-1).texture)) {
+                (blockVizData.value.at(-1).length > 1) &&
+                (closestBlock.texture === blockVizData.value.at(-1).at(-1).texture)) {
                 continue
             }
-            
-            newBlockVizStep.push(closestBlock)
+
+            blockVizData.value.at(-1).push(closestBlock)
         }
-        blockVizData.value.push(newBlockVizStep)
     }
 
     const blockVizGenerate = (blockdata, palette, facing) => {
@@ -170,8 +164,13 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
         )
         // console.log(blockdata, blockdataFiltered)
     
-        if (!blockVizCfg.value.keepPrevResults) {
-            blockVizData.value = []
+        if (blockVizCfg.value.keepPrevResults) {
+            // Create array for new results, don't touch prev arrays
+            blockVizData.value.push([])
+        }
+        else {
+            // Remove all arrays except the very first one
+            blockVizData.value = [[]]
         }
         
         // And then, render the whole colorbar data, segment by segment!
