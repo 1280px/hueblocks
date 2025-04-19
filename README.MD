@@ -39,4 +39,4 @@ For each of these parts, there is a separate README with more details and docume
 
 All the textures data provided by the Github Pages version are live extracted and processed from client JAR files 
 live downloaded from Mojang's [Piston Meta servers API](https://gist.github.com/skyrising/95a8e6a7287634e097ecafa2f21c240f) using HTTP calls, and NOT provided in the repository itself. 
-All rights on both the JAR files and the textures belong to Mojang Studios, and are used for demonstration purposes only!
+All rights on both the JAR files and the textures belong to Mojang Studios, and used for demonstration purposes only!

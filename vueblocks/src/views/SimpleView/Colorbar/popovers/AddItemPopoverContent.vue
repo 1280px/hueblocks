@@ -40,14 +40,22 @@
 </script>
 
 <template>
-    <div class="popover-inner">
-        <input type="number" min=3 max=999
-            v-model="cbRefSteps"
-        >
-        <input type="color"
-            v-model="cbRefColor" placeholder="cbRefColor"
-        >
-        <button type="submit" @click.prevent="addCbItem()">Add!</button>
+    <div class="popover-content">
+        <div class="popover-item">
+            <label for="i1">Length: </label>
+            <input type="number" id="i1"
+                v-model="cbRefSteps" min=3 max=999
+            >
+        </div>
+        <div class="popover-item">
+            <label for="i2">Color: </label>
+            <input type="color" id="i2"
+                v-model="cbRefColor" placeholder="cbRefColor"
+            >
+        </div>
+        <div class="popover-item">
+            <button type="submit" @click.prevent="addCbItem()">Add!</button>
+        </div>
     </div>
 </template>
 

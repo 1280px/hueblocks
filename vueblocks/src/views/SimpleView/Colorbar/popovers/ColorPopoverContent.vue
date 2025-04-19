@@ -36,14 +36,18 @@
 </script>
 
 <template>
-    <div class="popover-inner">
-        <button @click="deleteCbItem()"
-            :disabled="SimpleViewStore.colorbarData.length <= 2"
-        >Delete</button>
-        <input type="color"
-            v-model="cbItemColor" placeholder="cbItemColor"
-        >
-        <button type="submit" @click.prevent="emit('done')">OK</button>
+    <div class="popover-content">
+        <div class="popover-item">
+            <button @click="deleteCbItem()"
+                :disabled="SimpleViewStore.colorbarData.length <= 2"
+            >Delete</button>
+            <hr>
+            <label for="i">Color: </label>
+            <input type="color" id="i"
+                v-model="cbItemColor" placeholder="cbItemColor"
+            >
+            <button type="submit" @click.prevent="emit('done')">OK</button>
+        </div>
     </div>
 </template>
 

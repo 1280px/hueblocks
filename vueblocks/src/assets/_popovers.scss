@@ -8,9 +8,6 @@
     font-size: 1em; font-family: $FONTS;
     animation: $TR_slow popover-pop;
 }
-.popover-inner {
-    @include flex-center;
-}
 .popover-arrow {
     z-index: -1;
     top: -12px;
@@ -28,5 +25,34 @@
     100% {
         transform: translateY(0);
         opacity: 1;
+    }
+}
+
+.popover-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.popover-item {
+    @include flex-center;
+    gap: 4px;
+    align-items: stretch;
+    min-height: 32px;
+
+    & > label {
+        text-align: left;
+    }
+
+    & > input, button, label {
+        align-content: center;
+        flex: 1;
+    }
+
+    & > hr {
+        margin: 0 4px;
+        border: none;
+        width: 2px; height: auto;
+        background-color: $accent-light;
     }
 }
