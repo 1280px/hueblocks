@@ -2,6 +2,8 @@
     import {ref, computed, defineProps, defineEmits} from 'vue'
     import { useSimpleViewStore } from '@/stores/SimpleViewStore'
 
+    import Icon from '@/components/Icon.vue'
+
     const SimpleViewStore = useSimpleViewStore()
     const {cbIdx} = defineProps({
         cbIdx: {
@@ -36,7 +38,9 @@
         <div class="popover-item">
             <button @click="splitCbItem()"
                 :disabled="SimpleViewStore.colorbarData[cbIdx].steps <= 5"
-            >Split</button>
+            title="Add color tag in between">
+                <Icon name="insert-here" />
+            </button>
             <hr>
             <label for="i">Length: </label>
             <input type="number" min=3 max=999 id="i"
@@ -47,6 +51,6 @@
     </div>
 </template>
 
-<style lang="sass">
+<style lang="sсss">
     @use '@/assets/popovers' as *;
 </style>

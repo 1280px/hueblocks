@@ -3,6 +3,8 @@
     import { useSimpleViewStore } from '@/stores/SimpleViewStore'
     import { hex2rgb, rgb2hex } from '@/colors'
 
+    import Icon from '@/components/Icon.vue'
+
     const SimpleViewStore = useSimpleViewStore()
     const {side} = defineProps({
         side: {
@@ -49,9 +51,14 @@
         </div>
         <div class="popover-item">
             <label for="i2">Color: </label>
-            <input type="color" id="i2"
-                v-model="cbRefColor" placeholder="cbRefColor"
-            >
+            <div class="color-controls">
+                <input type="color" id="i2"
+                    v-model="cbItemColor" placeholder="cbItemColor"
+                >
+                <button title="Pick colour from a block…">
+                    <Icon name="block" />
+                </button>
+            </div>
         </div>
         <div class="popover-item">
             <button type="submit" @click.prevent="addCbItem()">Add!</button>
@@ -59,6 +66,11 @@
     </div>
 </template>
 
-<style lang="sass">
+<style lang="sсss">
     @use '@/assets/popovers' as *;
+
+    .color-controls {
+        display: flex;
+        flex-direction: row;
+    }
 </style>

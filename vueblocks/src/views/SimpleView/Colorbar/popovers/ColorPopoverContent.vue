@@ -3,6 +3,8 @@
     import { useSimpleViewStore } from '@/stores/SimpleViewStore'
     import { hex2rgb, rgb2hex } from '@/colors'
 
+    import Icon from '@/components/Icon.vue'
+
     const SimpleViewStore = useSimpleViewStore()
     const {cbIdx} = defineProps({
         cbIdx: {
@@ -38,19 +40,31 @@
 <template>
     <div class="popover-content">
         <div class="popover-item">
-            <button @click="deleteCbItem()"
+            <button @click="deleteCbItem"
                 :disabled="SimpleViewStore.colorbarData.length <= 2"
-            >Delete</button>
+            title="Delete this color tag">
+                <Icon name="colortag-del" />
+            </button>
             <hr>
             <label for="i">Color: </label>
-            <input type="color" id="i"
-                v-model="cbItemColor" placeholder="cbItemColor"
-            >
+            <div class="color-controls">
+                <input type="color" id="i"
+                    v-model="cbItemColor" placeholder="cbItemColor"
+                >
+                <button title="Pick colour from a block…">
+                    <Icon name="block" />
+                </button>
+            </div>
             <button type="submit" @click.prevent="emit('done')">OK</button>
         </div>
     </div>
 </template>
 
-<style lang="sass">
+<style lang="scss">
     @use '@/assets/popovers' as *;
+
+    .color-controls {
+        display: flex;
+        flex-direction: row;
+    }
 </style>

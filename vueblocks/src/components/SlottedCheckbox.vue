@@ -10,7 +10,7 @@
 <template>
     <label :for="id">
     <input type="checkbox" v-model="value" :id="id">
-    <Icon name="check" class="checkbox-check" :class="{ 'active': value }" />
+        <Icon name="check" class="checkbox-check" :class="{ 'active': value }" />
         <slot></slot>
     </label>
 </template>
