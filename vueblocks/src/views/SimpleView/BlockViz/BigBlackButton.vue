@@ -17,7 +17,11 @@
 </template>
 
 <style lang="scss" scoped>
+    @use '@/assets/variables' as *;
+
     button {
-        height: 64px;
+        height: 60px;
+        padding: 0 20px;
+        border-radius: $BR_big;
     }
 </style>

@@ -32,20 +32,22 @@
 <template>
     <section class="blockviz-controls__wrap">
         <div class="blockviz-controls">
-            <div class="blockviz-controls__blob">
+            <div class="blockviz-controls__blob round">
                 <SidePicker v-model="GlobalStore.blockFacing" />
             </div>
 
-            <BigBlackButton @click="SimpleViewStore.blockVizGenerate(
-                GlobalStore.currBlocksetBlockdata,
-                GlobalStore.currBlocksetPalettes[GlobalStore.currPaletteIdx],
-                GlobalStore.blockFacing
-            )" :isLoaded="!GlobalStore.currBlocksetBlockdata">
-                <template #normal>GENERATE BLOCK GRAIDENT</template>
-                <template #disabled>Loading blockdata, please wait…</template>
-            </BigBlackButton>
-
             <div class="blockviz-controls__blob">
+                <BigBlackButton @click="SimpleViewStore.blockVizGenerate(
+                    GlobalStore.currBlocksetBlockdata,
+                    GlobalStore.currBlocksetPalettes[GlobalStore.currPaletteIdx],
+                    GlobalStore.blockFacing
+                )" :isLoaded="!GlobalStore.currBlocksetBlockdata">
+                    <template #normal>GENERATE BLOCK GRAIDENT</template>
+                    <template #disabled>Loading blockdata, please wait…</template>
+                </BigBlackButton>
+            </div>
+
+            <div class="blockviz-controls__blob round">
                 <SlottedButton class="round" @click="GlobalStore.changeBlockSize(0.5)">
                     <Icon name="zoom-out" />
                 </SlottedButton>
@@ -125,11 +127,15 @@
     }
     .blockviz-controls__blob {
         @include flex-center;
-        height: 40px;
+        // height: 40px;
         gap: 4px;
-        border-radius: $BR_round;
+        border-radius: calc($BR_big + $BR_regular);
         padding: 4px;
         background: linear-gradient(#181818bb 50%, $trans 51%);
+
+        &.round {
+            border-radius: $BR_round;
+        }
     }
 
     .blockviz-options--blockset__wrap {

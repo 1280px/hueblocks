@@ -1,8 +1,10 @@
 <script setup>
     import {ref, defineProps} from 'vue'
+    import { useSimpleViewStore } from '@/stores/SimpleViewStore'
 
     import SlottedButton from '@/components/SlottedButton.vue'
 
+    const SimpleViewStore = useSimpleViewStore()
     const {value, bg} = defineProps({
         value: {
             type: Number,
@@ -18,7 +20,9 @@
 <template>  
     <section class="colorbar__len-segment" :style="{
         'flex': value,
-        'background': `linear-gradient(90deg, ${bg[0]}, ${bg[1]})`
+        'background': (`linear-gradient( 
+        ${SimpleViewStore.blockDataCfg.useCIELAB ? 'in lab' : ''}
+        90deg, ${bg[0]}, ${bg[1]})`)
     }">
         <SlottedButton class="trans">
             <span class="colorbar__len-segment__count">

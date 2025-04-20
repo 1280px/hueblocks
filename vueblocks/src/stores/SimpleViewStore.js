@@ -80,7 +80,7 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
             }
 
             if ((blockVizCfg.value.hideDuplicates) &&
-                (blockVizData.value.at(-1).length > 1) &&
+                (blockVizData.value.at(-1).length >= 1) &&
                 (closestBlock.texture === blockVizData.value.at(-1).at(-1).texture)) {
                 continue
             }
@@ -121,7 +121,7 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
             }
 
             if ((blockVizCfg.value.hideDuplicates) &&
-                (blockVizData.value.at(-1).length > 1) &&
+                (blockVizData.value.at(-1).length >= 1) &&
                 (closestBlock.texture === blockVizData.value.at(-1).at(-1).texture)) {
                 continue
             }
