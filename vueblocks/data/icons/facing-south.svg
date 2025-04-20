@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 96 96" xmlns:bx="https://boxy-svg.com">
+  <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal; transform-origin: 40px 40px 0px;" transform="matrix(1, 0, 0, 1, -38, -40)">
+    <path d="M0,172v-172h172v172z" fill="none"/>
+    <g fill="currentColor">
+      <path d="M 85.983 40 C 83.915 40.002 81.84 40.465 79.945 41.396 C 79.938 41.4 79.933 41.405 79.929 41.41 L 41.248 60.517 C 39.253 61.506 37.998 63.483 37.998 65.639 L 37.998 110.341 C 37.998 112.498 39.253 114.474 41.248 115.462 L 79.968 134.601 C 79.968 134.601 79.972 134.601 79.974 134.601 C 83.778 136.475 88.252 136.463 92.062 134.585 C 92.064 134.582 92.067 134.58 92.067 134.578 L 130.749 115.47 C 132.744 114.481 133.998 112.505 133.998 110.349 L 133.998 65.639 C 133.998 63.483 132.744 61.506 130.749 60.517 L 92.053 41.403 C 92.046 41.398 92.037 41.391 92.028 41.387 C 90.129 40.459 88.053 39.998 85.983 40 Z M 85.999 48 C 86.207 48.001 125.996 68 125.996 68 L 125.996 108 C 125.996 108 86.275 128.136 85.999 128 L 85.999 96 C 85.999 96 86.079 91.341 84.04 88.555 C 82.002 85.769 77.874 83.938 77.874 83.938 L 45.999 68 C 45.999 68 85.791 47.999 85.999 48 Z" style="transform-origin: 85.999px 88px 0px;" transform="matrix(-1, 0, 0, -1, 0, 0)"/>
+    </g>
+  </g>
+  <defs>
+    <bx:grid x="0" y="0" width="4" height="4"/>
+    <bx:export>
+      <bx:file format="svg"/>
+    </bx:export>
+  </defs>
+</svg>

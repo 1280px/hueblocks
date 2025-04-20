@@ -36,10 +36,10 @@
 <template>
     <div class="popover-content">
         <div class="popover-item">
-            <button @click="splitCbItem()"
+            <button @click="splitCbItem"
                 :disabled="SimpleViewStore.colorbarData[cbIdx].steps <= 5"
             title="Add color tag in between">
-                <Icon name="insert-here" />
+                <Icon name="colortag" />
             </button>
             <hr>
             <label for="i">Length: </label>
@@ -51,6 +51,6 @@
     </div>
 </template>
 
-<style lang="sсss">
+<style lang="scss">
     @use '@/assets/popovers' as *;
 </style>

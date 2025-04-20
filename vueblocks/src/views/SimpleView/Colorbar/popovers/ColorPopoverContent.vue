@@ -62,9 +62,4 @@
 
 <style lang="scss">
     @use '@/assets/popovers' as *;
-
-    .color-controls {
-        display: flex;
-        flex-direction: row;
-    }
 </style>

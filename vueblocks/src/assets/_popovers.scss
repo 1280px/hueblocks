@@ -3,7 +3,7 @@
 .popover {
     margin-top: 12px; padding: 8px;
     background-color: $white; color: $black;
-    border-radius: $BR_regular;
+    border-radius: $BR_big;
     box-shadow: $SH_smooth, $SH_subtle;
     font-size: 1em; font-family: $FONTS;
     animation: $TR_slow popover-pop;
@@ -55,4 +55,9 @@
         width: 2px; height: auto;
         background-color: $accent-light;
     }
+}
+
+.color-controls {
+    display: flex;
+    flex-direction: row;
 }

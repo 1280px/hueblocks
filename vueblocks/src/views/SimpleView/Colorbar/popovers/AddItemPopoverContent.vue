@@ -61,16 +61,11 @@
             </div>
         </div>
         <div class="popover-item">
-            <button type="submit" @click.prevent="addCbItem()">Add!</button>
+            <button type="submit" @click.prevent="addCbItem">Add!</button>
         </div>
     </div>
 </template>
 
-<style lang="sсss">
+<style lang="scss">
     @use '@/assets/popovers' as *;
-
-    .color-controls {
-        display: flex;
-        flex-direction: row;
-    }
 </style>

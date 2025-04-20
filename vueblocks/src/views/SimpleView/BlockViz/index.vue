@@ -48,10 +48,14 @@
             </div>
 
             <div class="blockviz-controls__blob round">
-                <SlottedButton class="round" @click="GlobalStore.changeBlockSize(0.5)">
+                <SlottedButton class="round"
+                    @click="GlobalStore.changeBlockSize(0.5)"
+                title="Zoom out (0.5x)">
                     <Icon name="zoom-out" />
                 </SlottedButton>
-                <SlottedButton class="round" @click="GlobalStore.changeBlockSize(2.0)">
+                <SlottedButton class="round"
+                    @click="GlobalStore.changeBlockSize(2.0)"
+                title="Zoom in (2.0x)">
                     <Icon name="zoom-in" />
                 </SlottedButton>
             </div>
@@ -121,7 +125,7 @@
     }
     .blockviz-controls {
         @include flex-center;
-        gap: 4vw;
+        gap: 2vw; // 4vw;
         height: 64px;
         transform: translateY(-32px);
     }
