@@ -42,11 +42,11 @@
         <div class="popover-item">
             <button @click="deleteCbItem"
                 :disabled="SimpleViewStore.colorbarData.length <= 2"
-            title="Delete this color tag">
+            title="Delete this colour tag">
                 <Icon name="colortag-del" />
             </button>
             <hr>
-            <label for="i">Color: </label>
+            <label for="i">Colour: </label>
             <div class="color-controls">
                 <input type="color" id="i"
                     v-model="cbItemColor" placeholder="cbItemColor"

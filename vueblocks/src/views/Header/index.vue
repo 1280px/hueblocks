@@ -1,15 +1,20 @@
 <script setup>
     import {ref} from 'vue'
+    import { overlayShow } from '@/overlay'
 
     import MessageBox from '@/components/MessageBox.vue'
-    // import ModeSwitcher from '@/components/ModeSwitcher.vue'
+    // import ModeSwitcher from './ModeSwitcher.vue'
+
+    import A from '@/components/Icon.vue'
 </script>
 
 <template>
-    <main>
+    <header>
         <!-- <h1>HueBlocks</h1>
         <h3>Create beautiful block gradients in a few clicks!</h3> -->
         <h1>hbve public test</h1>
+
+        <button @click="overlayShow(A, {'name': 'facing-all'})">TEST</button>
 
         <small>
             <!-- <a href="" @click="">language: en</a> •  -->
@@ -24,13 +29,13 @@
         </MessageBox>
 
         <!-- <ModeSwitcher /> -->
-    </main>
+    </header>
 </template>
 
 <style lang="scss" scoped>
     @use '@/assets/variables' as *;
 
-    main {
+    header {
         display: flex; flex-direction: column;
         text-align: center;
         margin: 80px 0 40px;

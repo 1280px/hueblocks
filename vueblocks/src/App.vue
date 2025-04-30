@@ -1,8 +1,10 @@
 <script setup>
     import {ref, onMounted, defineAsyncComponent} from 'vue'
+    import {overlayBind, overlayShow} from '@/overlay'
     import { useGlobalStore } from '@/stores/GlobalStore'
 
     import Header from './views/Header/index.vue'
+    import GlobalOverlay from './views/GlobalOverlay/index.vue'
 
     const SimpleView = defineAsyncComponent({
         loader: () => import('./views/SimpleView/index.vue'),
@@ -11,10 +13,14 @@
 
     const GlobalStore = useGlobalStore()
 
+    // We use this ref to mount overlay component in it:
+    const overlayRef = ref()
+
     onMounted(async () => {
         await GlobalStore.loadBlocksetsData()
         await GlobalStore.loadBlocksetBlockdata()
         await GlobalStore.loadBlocksetPalettes()
+        await overlayBind(overlayRef.value)
     })
 </script>
 
@@ -23,7 +29,7 @@
 
     <SimpleView v-if="GlobalStore.viewMode === 'simple'" />
 
-    <footer></footer>
+    <GlobalOverlay ref="overlayRef" />
 </template>
 
 <style lang="scss">
@@ -41,6 +47,7 @@
         text-align: center;
     }
     #app {
+        position: relative;
         background: linear-gradient(#000628 20px, #282b58 420px);
         background: linear-gradient(#080018, #704070 420px);
         background: linear-gradient(#100418, #9c4848 400px);
@@ -70,9 +77,6 @@
     a:hover {
         color: $white_80;
     }
-    // abbr {
-    //     text-decoration: underline dotted 1px;
-    // }
     small {
         color: $white_30;
         font-size: .86em;

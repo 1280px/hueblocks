@@ -50,7 +50,7 @@
             >
         </div>
         <div class="popover-item">
-            <label for="i2">Color: </label>
+            <label for="i2">Colour: </label>
             <div class="color-controls">
                 <input type="color" id="i2"
                     v-model="cbItemColor" placeholder="cbItemColor"

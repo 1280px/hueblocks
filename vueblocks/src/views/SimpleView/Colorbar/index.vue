@@ -119,8 +119,7 @@
     </section>
 
     <Wowerlay
-        :target="popoverTarget" v-model:visible="popoverTarget"
-        class="popover" :transition="popoverTransition"
+        class="popover" :target="popoverTarget" v-model:visible="popoverTarget"
     >
         <template #arrow>
             <div class="popover-arrow"></div>

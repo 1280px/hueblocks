@@ -9,15 +9,15 @@
 </script>
 
 <template>
-    <header>
+    <main>
         <section class="colorbar__wrap">
             <Colorbar />
         </section>
 
         <section class="blockviz-options--viz">
             <small>
-                left click on a color tag to change it, right click to copy its hex;<br>
-                click on a number between color tags to change length between them.
+                left click on a colour tag to change it, right click to copy its hex;<br>
+                click on a number between colour tags to change length between them.
             </small>
             
             <SlottedCheckbox v-model="SimpleViewStore.blockVizCfg.hideDuplicates">
@@ -32,7 +32,7 @@
                 Keep previous results
             </SlottedCheckbox>
         </section>
-    </header>
+    </main>
 
     <footer>
         <section class="blockviz__wrap">
@@ -44,7 +44,7 @@
 <style lang="scss" scoped>
     @use '@/assets/variables' as *;
 
-    header {
+    main {
         @include responsive-width;
         display: flex; flex-direction: column;
         margin: 0 auto;

@@ -38,7 +38,7 @@
         <div class="popover-item">
             <button @click="splitCbItem"
                 :disabled="SimpleViewStore.colorbarData[cbIdx].steps <= 5"
-            title="Add color tag in between">
+            title="Insert colour tag in between">
                 <Icon name="colortag" />
             </button>
             <hr>

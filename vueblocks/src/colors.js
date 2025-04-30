@@ -73,6 +73,7 @@ function rgb2hex(rgb) {
     return"#"+((1<<24)+(rgb[0]<<16)+(rgb[1]<<8)+ rgb[2]).toString(16).slice(1)
 }
 
+
 export {
     lab2rgb, rgb2lab, deltaE,
     hex2rgb, rgb2hex
