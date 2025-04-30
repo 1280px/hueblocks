@@ -3,6 +3,7 @@
     import { useSimpleViewStore } from '@/stores/SimpleViewStore'
     import { hex2rgb, rgb2hex } from '@/colors'
 
+    import ColorControls from '@/components/ColorControls.vue'
     import Icon from '@/components/Icon.vue'
 
     const SimpleViewStore = useSimpleViewStore()
@@ -43,25 +44,18 @@
 
 <template>
     <div class="popover-content">
-        <div class="popover-item">
-            <label for="i1">Length: </label>
-            <input type="number" id="i1"
+        <label class="popover-item">Length:&nbsp;
+            <input type="number"
                 v-model="cbRefSteps" min=3 max=999
             >
-        </div>
+        </label>
+        <label class="popover-item">Colour:&nbsp;
+            <ColorControls />
+        </label>
         <div class="popover-item">
-            <label for="i2">Colour: </label>
-            <div class="color-controls">
-                <input type="color" id="i2"
-                    v-model="cbItemColor" placeholder="cbItemColor"
-                >
-                <button title="Pick colour from a block…">
-                    <Icon name="block" />
-                </button>
-            </div>
-        </div>
-        <div class="popover-item">
-            <button type="submit" @click.prevent="addCbItem">Add!</button>
+            <button type="submit" @click.prevent="addCbItem">
+                Add!
+            </button>
         </div>
     </div>
 </template>

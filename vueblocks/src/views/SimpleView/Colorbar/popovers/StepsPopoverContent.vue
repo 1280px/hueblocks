@@ -36,16 +36,17 @@
 <template>
     <div class="popover-content">
         <div class="popover-item">
-            <button @click="splitCbItem"
+            <button @click="splitCbItem" title="Insert colour tag in between"
                 :disabled="SimpleViewStore.colorbarData[cbIdx].steps <= 5"
-            title="Insert colour tag in between">
+            >
                 <Icon name="colortag" />
             </button>
             <hr>
-            <label for="i">Length: </label>
-            <input type="number" min=3 max=999 id="i"
-                v-model="SimpleViewStore.colorbarData[cbIdx].steps"
-            >
+            <label class="popover-item">Length:
+                <input type="number" min=3 max=999
+                    v-model="SimpleViewStore.colorbarData[cbIdx].steps"
+                >
+            </label>
             <button type="submit" @click.prevent="emit('done')">OK</button>
         </div>
     </div>

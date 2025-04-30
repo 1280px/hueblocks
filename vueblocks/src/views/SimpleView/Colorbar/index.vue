@@ -9,18 +9,9 @@
     import SlottedButton from '@/components/SlottedButton.vue'
     import Icon from '@/components/Icon.vue'
 
-    const AddItemPopoverContent = defineAsyncComponent({
-        loader: () => import('./popovers/AddItemPopoverContent.vue'),
-        loadingComponent: () => 'Loading…', delay: 0, suspensible: false
-    })
-    const ColorPopoverContent = defineAsyncComponent({
-        loader: () => import('./popovers/ColorPopoverContent.vue'),
-        loadingComponent: () => 'Loading…', delay: 0, suspensible: false
-    })
-    const StepsPopoverContent = defineAsyncComponent({
-        loader: () => import('./popovers/StepsPopoverContent.vue'),
-        loadingComponent: () => 'Loading…', delay: 0, suspensible: false
-    })
+    import AddItemPopoverContent from './popovers/AddItemPopoverContent.vue'
+    import ColorPopoverContent from './popovers/ColorPopoverContent.vue'
+    import StepsPopoverContent from './popovers/StepsPopoverContent.vue'
     
     const SimpleViewStore = useSimpleViewStore()
 
@@ -32,7 +23,8 @@
         // we need to shift the unused last length back to the end:
         for (const cbIdx in SimpleViewStore.colorbarData) {
             SimpleViewStore.colorbarData[cbIdx].steps = (
-                SimpleViewStore.colorbarData[+cbIdx+1] ? SimpleViewStore.colorbarData[+cbIdx+1].steps : 5
+                SimpleViewStore.colorbarData[+cbIdx+1]
+                ? SimpleViewStore.colorbarData[+cbIdx+1].steps : 5
             )
         }
     }
@@ -119,10 +111,10 @@
     </section>
 
     <Wowerlay
-        class="popover" :target="popoverTarget" v-model:visible="popoverTarget"
+        class="popover" :target="popoverTarget" v-model:visible="popoverTarget" :gap="12"
     >
-        <template #arrow>
-            <div class="popover-arrow"></div>
+        <template #arrow="{ side, placement }">
+            <div class="popover-arrow" :class="`${side}`"></div>
         </template>
 
         <ColorPopoverContent v-if="popoverMode === 'color'"

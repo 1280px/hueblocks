@@ -17,8 +17,6 @@
 
     const done = (data) => {
         visible.value = false
-        innerComponent.value = null
-        innerProps.value = {}
 
         res?.(data ?? null)
     }
@@ -29,6 +27,11 @@
         if (v) {
             // Apparently setImmediate() is not supported in Vue?
             setTimeout(() => d.value?.showModal(), 1)
+
+            document.body.classList.add('clip')
+        }
+        else {
+            document.body.classList.remove('clip')
         }
     })
 
@@ -37,7 +40,7 @@
 
 <template>
     <Transition name="overlay">
-        <dialog v-if="visible" ref="d" @cancel.prevent>
+        <dialog class="overlay" v-if="visible" ref="d" @cancel.prevent>
             {{ innerComponent }}
             {{ innerProps }}
             <component :is="innerComponent" v-bind="innerProps" @done="done" />
@@ -48,13 +51,24 @@
 <style lang="scss" scoped>
     @use '@/assets/variables' as *;
 
-    dialog {
-        margin: 32px 32px auto;
-        background: none;
-        border: none;
-    }
-    dialog::backdrop {
-        background-color: $accent-dark_25;
+    // Unfortunately Vue doesn't know how to process ::backdrop
+    // in <Transition>, so we'll have to tape some crutches...
+    .overlay {
+        display: flex; flex-direction: column;
+        width: 100%; max-width: 100vw;
+        height: 100%; max-height: 100vh;
+        margin: 0; padding: 32px;
+        inset: 0; box-sizing: border-box;
+        overflow-y: scroll;
+        background-color: $accent-dark_25; border-color: transparent;
         backdrop-filter: blur(4px);
+    }
+
+    .overlay-enter-active, .overlay-leave-active {
+        opacity: 1;
+        transition: opacity $TR_slow cubic-bezier(.48, .3, .15, .86);
+    }
+    .overlay-enter-from, .overlay-leave-to {
+        opacity: 0;
     }
 </style>

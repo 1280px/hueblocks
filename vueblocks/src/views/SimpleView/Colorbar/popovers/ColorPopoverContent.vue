@@ -3,6 +3,7 @@
     import { useSimpleViewStore } from '@/stores/SimpleViewStore'
     import { hex2rgb, rgb2hex } from '@/colors'
 
+    import ColorControls from '@/components/ColorControls.vue'
     import Icon from '@/components/Icon.vue'
 
     const SimpleViewStore = useSimpleViewStore()
@@ -29,7 +30,8 @@
 
     const deleteCbItem = () => {
         if (cbIdx > 0) {
-            SimpleViewStore.colorbarData[cbIdx-1].steps += SimpleViewStore.colorbarData[cbIdx].steps
+            SimpleViewStore.colorbarData[cbIdx-1].steps
+            += SimpleViewStore.colorbarData[cbIdx].steps
         }
         SimpleViewStore.colorbarData.splice(cbIdx, 1)
 
@@ -40,21 +42,15 @@
 <template>
     <div class="popover-content">
         <div class="popover-item">
-            <button @click="deleteCbItem"
+            <button @click="deleteCbItem" title="Delete this colour tag"
                 :disabled="SimpleViewStore.colorbarData.length <= 2"
-            title="Delete this colour tag">
+            >
                 <Icon name="colortag-del" />
             </button>
             <hr>
-            <label for="i">Colour: </label>
-            <div class="color-controls">
-                <input type="color" id="i"
-                    v-model="cbItemColor" placeholder="cbItemColor"
-                >
-                <button title="Pick colour from a block…">
-                    <Icon name="block" />
-                </button>
-            </div>
+            <label class="popover-item">Colour:
+                <ColorControls />
+            </label>
             <button type="submit" @click.prevent="emit('done')">OK</button>
         </div>
     </div>

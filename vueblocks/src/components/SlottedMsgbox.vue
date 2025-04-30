@@ -1,28 +1,26 @@
 <script setup>
     import {ref, defineProps, onMounted} from 'vue'
 
-    const props = defineProps({
+    const {duration} = defineProps({
         duration: {
             type: Number,
-            required: true
+            required: false
         }
     })
 
-    const showMsgBox = ref(true)
+    const showMsgbox = ref(true)
 
     onMounted(() => {
-        if (+props.duration > 0) {
-            setTimeout(
-                () => { showMsgBox.value = false },
-                (+props.duration) * 1000
-            )
-        }
+        setTimeout(
+            () => { showMsgbox.value = false },
+            (Math.max(+duration || 0, 1)) * 1000
+        )
     })
 </script>
 
 <template>
     <Transition name="msgbox">
-        <blockquote v-if="showMsgBox">
+        <blockquote v-if="showMsgbox">
             <slot></slot>
         </blockquote>
     </Transition>
@@ -35,13 +33,13 @@
         display: block;
         margin: auto; padding: 8px;
         border: 2px solid moccasin; border-radius: $TR_regular;
+        animation: $TR_slow overlay-fade;
     }
 
     .msgbox-enter-active, .msgbox-leave-active {
         opacity: 1;
-        transition: opacity $TR_message cubic-bezier(.22, .61, .36, 1);
+        transition: opacity $TR_fancy cubic-bezier(.02, .04, .92, .98);
     }
-
     .msgbox-enter-from, .msgbox-leave-to {
         opacity: 0;
     }
