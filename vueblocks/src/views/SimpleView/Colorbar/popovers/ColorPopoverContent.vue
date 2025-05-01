@@ -37,7 +37,9 @@
             </button>
             <hr>
             <label class="popover-item">Colour:
-                <ColorControls v-model="SimpleViewStore.colorbarData[cbIdx]" />
+                <ColorControls v-model="SimpleViewStore.colorbarData[cbIdx]"
+                    @change="SimpleViewStore.colorbarData[cbIdx].blockRef = null"
+                />
             </label>
             <button type="submit" @click.prevent="emit('done')">OK</button>
         </div>

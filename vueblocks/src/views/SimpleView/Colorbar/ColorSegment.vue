@@ -2,6 +2,7 @@
     import {ref, defineProps} from 'vue'
     import { useGlobalStore } from '@/stores/GlobalStore'
 
+    const GlobalStore = useGlobalStore()
     const {colorCss, blockRef} = defineProps({
         colorCss: {
             type: String,
@@ -12,7 +13,10 @@
             required: true
         },
     })
-    const GlobalStore = useGlobalStore()
+
+    // We only want to show background when image is not loaded,
+    // so textrues with alpha channel will show up normally:
+    const isLoaded = ref(false)
 </script>
 
 <!-- As if in "tea bag tag" :) -->
@@ -22,11 +26,14 @@
             <div
                 class="colorbar__color-segment__tag-inner"
                 :style="{
-                    'background-image': `url(${GlobalStore.getTexturePath(blockRef?.texture)})`,
-                    'background-color': blockRef ? 'revert-layer' : colorCss
+                    'background-color': blockRef && isLoaded ? 'revert-layer' : colorCss
                 }"
                 :title="blockRef ? `${blockRef?.name} \n${colorCss}` : colorCss"
-            ></div>
+            >
+                <img v-if="blockRef" @load="isLoaded = true" @error="isLoaded = false"
+                    :src="GlobalStore.getTexturePath(blockRef.texture)"
+                >
+            </div>
         </div>
     </button>
 </template>
@@ -68,8 +75,6 @@
         position: relative;
         top: calc(-100% + 8px); left: 2px;
         background-color: $accent-light_50;
-        background-position: center;
-        background-size: contain;
         transition: $TR_regular;
 
         .colorbar__color-segment__tag:hover & {
@@ -79,6 +84,11 @@
         .colorbar__color-segment__tag:active & {
             transition: $TR_fast;
             opacity: .7;
+        }
+
+        & img {
+            width: 16px; height: 100%;
+            image-rendering: pixelated;
         }
     }
 </style>

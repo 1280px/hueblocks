@@ -1,5 +1,5 @@
 [
-    "Timestamp string (will be stripped away — maybe I should consider logging it at least)",
+    "generation timestamp string goes here",
     {
       "name": "Test Texture",
       "texture": "test.png",

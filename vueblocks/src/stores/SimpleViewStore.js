@@ -32,7 +32,7 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
         },
         {
             color: [122, 43, 172],
-            blockRef: { // Currently unused because BlockPick is not a thing yet
+            blockRef: {
                 name: "Purple Wool",
                 texture: "purple_wool.png"
             },
@@ -131,6 +131,9 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
     }
 
     const blockVizGenerate = (blockdata, palette, facing) => {
+        // Blockdata timestamp is not used -- let's log it at least
+        console.info(`Blockdata ${blockdata[0]}`)
+
         // First, fulter out blockdata to exclude blocks with
         // undesired side facing, palette, or noise coefficients:
         const blockdataFiltered = blockdata.slice(1).filter(
