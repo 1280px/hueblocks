@@ -26,12 +26,14 @@
             <div
                 class="colorbar__color-segment__tag-inner"
                 :style="{
-                    'background-color': blockRef && isLoaded ? 'revert-layer' : colorCss
+                    'background-color': blockRef ? 'revert-layer' : colorCss
                 }"
                 :title="blockRef ? `${blockRef?.name} \n${colorCss}` : colorCss"
             >
                 <img v-if="blockRef" @load="isLoaded = true" @error="isLoaded = false"
-                    :src="GlobalStore.getTexturePath(blockRef.texture)"
+                    :src="GlobalStore.getTexturePath(
+                        blockRef.blocksetIdx, blockRef.texture
+                    )"
                 >
             </div>
         </div>

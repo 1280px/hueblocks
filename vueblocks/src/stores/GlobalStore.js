@@ -47,26 +47,30 @@ export const useGlobalStore = defineStore('GlobalStore', () => {
         }
     })
     
-    let _lastBlocksetPath = '' // We use this INTENTIONALLY to break reactivity in existing texture pathes
-    const currBlocksetPath = computed(() => {
-        if (!blocksetsData.value) {
+    const getBlocksetPath = (blocksetIdx) => {
+        console.info(blocksetIdx)
+        if (!blocksetsData.value || !blocksetsData?.value[blocksetIdx]) {
             return 'missingNo'
         }
-        _lastBlocksetPath = _baseUrl + '/blocksets/' + blocksetsData?.value[currBlocksetIdx.value]?.dir
-        return _lastBlocksetPath
-    })
+        return _baseUrl + '/blocksets/' + blocksetsData?.value[blocksetIdx]?.dir
+    }
 
-    const getTexturePath = (texture) => _lastBlocksetPath + '/' + texture
+    const getTexturePath = (blocksetIdx, texture) => {
+        const blocksetPath = getBlocksetPath(blocksetIdx)
+        return blocksetPath + '/' + texture
+    }
 
 
     const currBlocksetBlockdata = ref(null)
     const loadBlocksetBlockdata = async () => {
-        const res = await fetch(currBlocksetPath.value + '/' + '_blockdata.json')
+        const blocksetPath = getBlocksetPath(currBlocksetIdx.value)
+        const res = await fetch(blocksetPath + '/' + '_blockdata.json')
         currBlocksetBlockdata.value = await res.json()
     }
     const currBlocksetPalettes = ref(null)
     const loadBlocksetPalettes = async () => {
-        const res = await fetch(currBlocksetPath.value + '/' + '_palettes.json')
+        const blocksetPath = getBlocksetPath(currBlocksetIdx.value)
+        const res = await fetch(blocksetPath + '/' + '_palettes.json')
         let data = await res.json()
         data = data.filter((p) => p.count && (p.count > 0) && p.textures)
 
@@ -90,7 +94,7 @@ export const useGlobalStore = defineStore('GlobalStore', () => {
         blocksetsPath,
         blocksetsData, loadBlocksetsData,
         currBlocksetIdx,
-        currBlocksetPath, getTexturePath,
+        getBlocksetPath, getTexturePath,
         currBlocksetBlockdata, loadBlocksetBlockdata,
         currBlocksetPalettes, loadBlocksetPalettes,
         currPaletteIdx

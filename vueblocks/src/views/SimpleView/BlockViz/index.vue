@@ -38,6 +38,7 @@
 
             <div class="blockviz-controls__blob">
                 <BigBlackButton @click="SimpleViewStore.blockVizGenerate(
+                    GlobalStore.currBlocksetIdx,
                     GlobalStore.currBlocksetBlockdata,
                     GlobalStore.currBlocksetPalettes[GlobalStore.currPaletteIdx],
                     GlobalStore.blockFacing
@@ -105,9 +106,9 @@
         <div class="blockviz-data"
             :class="{ 'one-row': SimpleViewStore.blockVizCfg.resultsInOneRow }"
         >
-            <div v-for="(step, i) in SimpleViewStore.blockVizData">
-                <Block v-for="(block, i) in step"
-                    :key="i" :name="block.name" :texture="block.texture"
+            <div v-for="(row, i) in SimpleViewStore.blockVizData">
+                <Block v-for="(block, i) in row.textures" :key="i"
+                :name="block.name" :blocksetIdx="row.blocksetIdx" :texture="block.texture"
                 />
             </div>
         </div>

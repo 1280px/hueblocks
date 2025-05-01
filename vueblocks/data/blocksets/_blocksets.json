@@ -1,12 +1,12 @@
 [
     {
       "name": "It works!",
-      "dir": "subdir",
+      "dir": "subdir1",
       "count": 1
     },
     {
       "name": "Wrong count",
-      "dir": "subdir",
+      "dir": "subdir2",
       "count": 999
     }
 ]

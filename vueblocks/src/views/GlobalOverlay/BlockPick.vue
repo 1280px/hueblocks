@@ -13,7 +13,8 @@
         color: [123, 145, 189],
         blockRef: {
             name: 'Tuff (fr though)',
-            texture: 'tuff.png'
+            blocksetIdx: 0,
+            texture: 'test.png'
         }
     })">done</button>
     <button @click="emit('done')">cancel</button>

@@ -1,0 +1,25 @@
+[
+    "generation timestamp string goes here",
+    {
+      "name": "Purple Wool",
+      "texture": "purple_wool.png",
+      "rgb": [
+        0,
+        0,
+        0
+      ],
+      "lab": [
+        0.00,
+        0.00,
+        0.00
+      ],
+      "sides": [
+        "top",
+        "bottom",
+        "north",
+        "south",
+        "east",
+        "west"
+      ]
+    }
+]

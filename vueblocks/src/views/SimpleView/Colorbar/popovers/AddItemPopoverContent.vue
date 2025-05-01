@@ -32,7 +32,7 @@
         else {
             // Since last steps segment is defined by not the latest but
             // second to last cbItem, we need to change its steps as well:
-            SimpleViewStore.colorbarData[cbRefIdx].steps = cbRefItem.value.steps
+            SimpleViewStore.colorbarData[cbRefIdx].steps = cbRefItem.steps
             SimpleViewStore.colorbarData.push(cbNewItem)
         }
 
@@ -44,7 +44,7 @@
     <div class="popover-content">
         <label class="popover-item">Length:&nbsp;
             <input type="number"
-                v-model="cbRefItem.steps" min=3 max=999
+                v-model="cbNewItem.steps" min=3 max=999
             >
         </label>
         <label class="popover-item">Colour:&nbsp;

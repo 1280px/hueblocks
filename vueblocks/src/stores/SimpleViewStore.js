@@ -34,6 +34,7 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
             color: [122, 43, 172],
             blockRef: {
                 name: "Purple Wool",
+                blocksetIdx: 1,
                 texture: "purple_wool.png"
             },
             steps: 3
@@ -46,11 +47,13 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
     ])
     
     
-    const blockVizData = ref([[]])
+    const blockVizData = ref([])
     
     // Uses exactly the same algorithm as original HueBlocks;
     // results in faster but more "inaccurate" graident generation
     function blockVizCalcRGB(blockdata, startRGB, endRGB, steps) {
+        const newSegData = []
+        
         for (let step = 0; step < steps; step++) {
             // Calculate step color as linear mixture of start and end colors
             const stepRGB = [
@@ -78,20 +81,16 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
                 }
                 // console.log(closestBlock, closestBlockScore)
             }
-
-            if ((blockVizCfg.value.hideDuplicates) &&
-                (blockVizData.value.at(-1).length >= 1) &&
-                (closestBlock.texture === blockVizData.value.at(-1).at(-1).texture)) {
-                continue
-            }
-            
-            blockVizData.value.at(-1).push(closestBlock)
+            newSegData.push(closestBlock)
         }
+        return newSegData
     }
 
     // Uses CIELAB transformations and sqrt of mean of squares;
     // results in better but noticeably slower gradient generation
     function blockVizCalcCIELAB(blockdata, startRGB, endRGB, steps) {
+        const newSegData = []
+
         // Here I'm using antimatter15's RGB<->LAB convertors implementation:
         // https://github.com/antimatter15/rgb-lab/blob/master/color.js
         const startLAB = rgb2lab(startRGB)
@@ -119,18 +118,12 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
                 }
                 // console.log(closestBlock, closestBlockDelta)
             }
-
-            if ((blockVizCfg.value.hideDuplicates) &&
-                (blockVizData.value.at(-1).length >= 1) &&
-                (closestBlock.texture === blockVizData.value.at(-1).at(-1).texture)) {
-                continue
-            }
-
-            blockVizData.value.at(-1).push(closestBlock)
+            newSegData.push(closestBlock)
         }
+        return newSegData
     }
 
-    const blockVizGenerate = (blockdata, palette, facing) => {
+    const blockVizGenerate = (blocksetIdx, blockdata, palette, facing) => {
         // Blockdata timestamp is not used -- let's log it at least
         console.info(`Blockdata ${blockdata[0]}`)
 
@@ -166,28 +159,42 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
             }
         )
         // console.log(blockdata, blockdataFiltered)
-    
-        if (blockVizCfg.value.keepPrevResults) {
-            // Create array for new results, don't touch prev arrays
-            blockVizData.value.push([])
-        }
-        else {
-            // Remove all arrays except the very first one
-            blockVizData.value = [[]]
+
+        // Create a blockviz row objecy for new render results...
+        const newBlockVizRow = {
+            blocksetIdx: blocksetIdx,
+            textures: []
         }
         
         // And then, render the whole colorbar data, segment by segment!
-        for (let cbIdx = 0; cbIdx < colorbarData.value.length-1; cbIdx++) {            
+        for (let cbIdx = 0; cbIdx < colorbarData.value.length-1; cbIdx++) { 
             const segStart = colorbarData.value[cbIdx].color
             const segEnd = colorbarData.value[cbIdx+1].color
             const segSteps = colorbarData.value[cbIdx].steps
 
+            let seg;
             if (blockDataCfg.value.useCIELAB) {
-                blockVizCalcCIELAB(blockdataFiltered, segStart, segEnd, segSteps)
+                seg = blockVizCalcCIELAB(blockdataFiltered, segStart, segEnd, segSteps)
             }
             else {
-                blockVizCalcRGB(blockdataFiltered, segStart, segEnd, segSteps)
+                seg = blockVizCalcRGB(blockdataFiltered, segStart, segEnd, segSteps)
             }
+
+            newBlockVizRow.textures.push(...seg)
+        }
+
+        // Finally, check the row's texture data for duplicates
+        if (blockVizCfg.value.hideDuplicates) {
+            newBlockVizRow.textures = newBlockVizRow.textures.filter((td, i) => {
+                return i <= 0 || td.texture !== newBlockVizRow.textures[i-1].texture
+            })
+        }
+    
+        if (blockVizCfg.value.keepPrevResults) {
+            blockVizData.value.push(newBlockVizRow)
+        }
+        else {
+            blockVizData.value = [newBlockVizRow]
         }
     }
 
