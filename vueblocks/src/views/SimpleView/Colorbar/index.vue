@@ -88,7 +88,7 @@
         <div class="colorbar__inner">
             <template v-for="(cbItem, cbIdx) in SimpleViewStore.colorbarData" :key="cbIdx">
                 <ColorSegment
-                    :color="getCssRgb(cbItem.color)" :blockRef="cbItem.blockRef"
+                    :colorCss="getCssRgb(cbItem.color)" :blockRef="cbItem.blockRef"
                     @click="(e) => showPopover(e, 'color', cbIdx)"
                 />
                 <StepsSegment v-if="cbIdx !== SimpleViewStore.colorbarData.length-1"

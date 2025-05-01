@@ -18,31 +18,27 @@
     const done = (data) => {
         visible.value = false
 
-        res?.(data ?? null)
+        res?.(data || null)
     }
 
     const d = ref()
 
     watch(visible, async (v) => {
-        if (v) {
+        if (v === true) {
             // Apparently setImmediate() is not supported in Vue?
             setTimeout(() => d.value?.showModal(), 1)
-
-            document.body.classList.add('clip')
-        }
-        else {
-            document.body.classList.remove('clip')
         }
     })
 
-    defineExpose({ show })
+    defineExpose({
+        show, // --> overlayShow()
+        visible // --> overlayIsShown()
+    })
 </script>
 
 <template>
     <Transition name="overlay">
         <dialog class="overlay" v-if="visible" ref="d" @cancel.prevent>
-            {{ innerComponent }}
-            {{ innerProps }}
             <component :is="innerComponent" v-bind="innerProps" @done="done" />
         </dialog>
     </Transition>

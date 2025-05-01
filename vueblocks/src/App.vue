@@ -1,6 +1,6 @@
 <script setup>
-    import {ref, onMounted, defineAsyncComponent} from 'vue'
-    import {overlayBind, overlayShow} from '@/overlay'
+    import {ref, onMounted, defineAsyncComponent, computed, watch} from 'vue'
+    import {overlayBind, overlayIsShown} from '@/overlay'
     import { useGlobalStore } from '@/stores/GlobalStore'
 
     import Header from './views/Header/index.vue'
@@ -15,6 +15,16 @@
 
     // We use this ref to mount overlay component in it:
     const overlayRef = ref()
+
+    watch(overlayIsShown, (v) => {
+        console.log("overlayIsShown:", v)
+        if (v === true) {
+            document.body.classList.add('clip')
+        }
+        else {
+            document.body.classList.remove('clip')
+        }
+    })
 
     onMounted(async () => {
         await GlobalStore.loadBlocksetsData()

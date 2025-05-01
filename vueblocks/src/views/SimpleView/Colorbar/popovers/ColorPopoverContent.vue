@@ -1,7 +1,6 @@
 <script setup>
     import {ref, computed, defineProps, defineEmits} from 'vue'
     import { useSimpleViewStore } from '@/stores/SimpleViewStore'
-    import { hex2rgb, rgb2hex } from '@/colors'
 
     import ColorControls from '@/components/ColorControls.vue'
     import Icon from '@/components/Icon.vue'
@@ -16,17 +15,6 @@
     const emit = defineEmits([
         'done'
     ])
-
-    const cbItemColor = computed({
-        get: () => {
-            const rgb = SimpleViewStore.colorbarData[cbIdx].color
-            return rgb2hex(rgb)
-        },
-        set: (hex) => {
-            const rgb = hex2rgb(hex)
-            SimpleViewStore.colorbarData[cbIdx].color = rgb
-        }
-    })
 
     const deleteCbItem = () => {
         if (cbIdx > 0) {
@@ -49,7 +37,7 @@
             </button>
             <hr>
             <label class="popover-item">Colour:
-                <ColorControls />
+                <ColorControls v-model="SimpleViewStore.colorbarData[cbIdx]" />
             </label>
             <button type="submit" @click.prevent="emit('done')">OK</button>
         </div>

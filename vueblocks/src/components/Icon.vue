@@ -1,5 +1,5 @@
 <script setup>
-    import {ref, defineProps, defineAsyncComponent, onMounted} from 'vue'
+    import {ref, defineProps, onMounted} from 'vue'
     import { useGlobalStore } from '@/stores/GlobalStore'
 
     const {name} = defineProps({
@@ -32,5 +32,7 @@
 
     .icon {
         @include flex-center;
+
+        font-size: 0pt; // Don't show text when SVG isn't loaded
     }
 </style>

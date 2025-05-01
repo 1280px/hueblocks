@@ -2,8 +2,8 @@
     import {ref, defineProps} from 'vue'
     import { useGlobalStore } from '@/stores/GlobalStore'
 
-    const {color, blockRef} = defineProps({
-        color: {
+    const {colorCss, blockRef} = defineProps({
+        colorCss: {
             type: String,
             required: true
         },
@@ -19,18 +19,13 @@
 <template>
     <button class="colorbar__color-segment">
         <div class="colorbar__color-segment__tag">
-            <div v-if="blockRef"
+            <div
                 class="colorbar__color-segment__tag-inner"
                 :style="{
-                    'background-image': GlobalStore.getTexturePath(blockRef?.texture),
-                    'background-color': color
+                    'background-image': `url(${GlobalStore.getTexturePath(blockRef?.texture)})`,
+                    'background-color': blockRef ? 'revert-layer' : colorCss
                 }"
-                :title="`${blockRef?.name} \n${color}` || color"
-            ></div>
-            <div v-else
-                class="colorbar__color-segment__tag-inner"
-                :style="{'background-color': color}"
-                :title="color"
+                :title="blockRef ? `${blockRef?.name} \n${colorCss}` : colorCss"
             ></div>
         </div>
     </button>
@@ -73,6 +68,8 @@
         position: relative;
         top: calc(-100% + 8px); left: 2px;
         background-color: $accent-light_50;
+        background-position: center;
+        background-size: contain;
         transition: $TR_regular;
 
         .colorbar__color-segment__tag:hover & {

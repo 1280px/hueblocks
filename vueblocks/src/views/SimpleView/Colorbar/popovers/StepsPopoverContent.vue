@@ -22,7 +22,6 @@
 
         const newItem = {
             color: (SimpleViewStore.colorbarData[cbIdx].color).map(
-                // (c, i) => Math.sqrt((c / 2)**2 + (SimpleViewStore.colorbarData[cbIdx+1].color[i] / 2)**2)
                 (c, i) => Math.floor((c / 2) + (SimpleViewStore.colorbarData[cbIdx+1].color[i] / 2))
             ),
             blockRef: null,
