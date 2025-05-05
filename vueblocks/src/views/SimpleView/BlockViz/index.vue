@@ -54,6 +54,7 @@
                 title="Zoom out (0.5x)">
                     <Icon name="zoom-out" />
                 </SlottedButton>
+
                 <SlottedButton class="round"
                     @click="GlobalStore.changeBlockSize(2.0)"
                 title="Zoom in (2.0x)">
@@ -106,8 +107,8 @@
         <div class="blockviz-data"
             :class="{ 'one-row': SimpleViewStore.blockVizCfg.resultsInOneRow }"
         >
-            <div v-for="(row, i) in SimpleViewStore.blockVizData">
-                <Block v-for="(block, i) in row.textures" :key="i"
+            <div v-for="(row, i) in SimpleViewStore.blockVizData" :key="i">
+                <Block v-for="(block, j) in row.textures" :key="j"
                     :name="block.name" :blocksetIdx="row.blocksetIdx" :texture="block.texture"
                 />
             </div>
@@ -163,13 +164,11 @@
         overflow: auto;
     }
     .blockviz-data {
-        display: flex;
-        flex-direction: column;
+        display: flex; flex-direction: column;
         margin: 16px;
 
         & > div {
-            display: flex;
-            flex-direction: row;
+            display: flex; flex-direction: row;
             flex-wrap: wrap;
         }
 
@@ -181,5 +180,9 @@
                 padding-right: 16px;
             }
         }
+    }
+
+    .side-picker__wrap {
+        width: 84px; height: 40px;
     }
 </style>

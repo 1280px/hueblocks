@@ -50,8 +50,7 @@
     @use '@/assets/variables' as *;
 
     .color-controls {
-        display: flex;
-        flex-direction: row;
+        display: flex; flex-direction: row;
         width: 80px;
     }
     .color-controls > button {

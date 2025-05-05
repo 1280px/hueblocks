@@ -45,7 +45,7 @@
 <template>
     <Transition name="overlay">
         <dialog class="overlay" v-show="visible" ref="d"
-            @cancel="cancellable ? done : $event.preventDefault()"
+            @cancel="cancellable ? done() : $event.preventDefault()"
         >
             <component :is="innerComponent" v-bind="innerProps" @done="done" />
         </dialog>
@@ -66,6 +66,7 @@
         overflow-y: scroll;
         background-color: $accent-dark_25; border-color: transparent;
         backdrop-filter: blur(4px);
+        z-index: 99;
     }
     .overlay::backdrop {
         background: none !important;

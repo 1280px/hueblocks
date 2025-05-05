@@ -11,7 +11,7 @@
 }
 
 @mixin responsive-width {
-    width: 96vw;
+    width: 100%;
     @media (min-width: 800px) {
         width: 80vw;
     }

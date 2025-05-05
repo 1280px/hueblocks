@@ -123,10 +123,9 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
         return newSegData
     }
 
-    const blockVizGenerate = (blocksetIdx, blockdata, palette, facing) => {
-        // First, fulter out blockdata to exclude blocks with
-        // undesired side facing, palette, or noise coefficients:
-        const blockdataFiltered = blockdata.filter(
+
+    const getFilteredBlockdata = (blockdata, palette, facing) => {
+        const res = blockdata.filter(
             (block) => {
                 if (palette.count > 0) {
                     if (!palette.textures.includes(block.texture)) {
@@ -155,6 +154,13 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
                 }
             }
         )
+        return res
+    }
+
+    const blockVizGenerate = (blocksetIdx, blockdata, palette, facing) => {
+        // First, fulter out blockdata to exclude blocks with
+        // undesired side facing, palette, or noise coefficients:
+        const filteredBlockdata = getFilteredBlockdata(blockdata, palette, facing)
 
         // Create a blockviz row objecy for new render results...
         const newBlockVizRow = {
@@ -170,10 +176,10 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
 
             let seg;
             if (blockDataCfg.value.useCIELAB) {
-                seg = blockVizCalcCIELAB(blockdataFiltered, segStart, segEnd, segSteps)
+                seg = blockVizCalcCIELAB(filteredBlockdata, segStart, segEnd, segSteps)
             }
             else {
-                seg = blockVizCalcRGB(blockdataFiltered, segStart, segEnd, segSteps)
+                seg = blockVizCalcRGB(filteredBlockdata, segStart, segEnd, segSteps)
             }
 
             newBlockVizRow.textures.push(...seg)
@@ -198,6 +204,7 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
     return {
         blockVizCfg, blockDataCfg,
         colorbarData,
+        getFilteredBlockdata,
         blockVizData, blockVizGenerate
     }
 })

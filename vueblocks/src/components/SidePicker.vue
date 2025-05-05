@@ -16,25 +16,23 @@
 </script>
 
 <template>
-    <label :for="id">
-        <div class="side-picker__wrap">
-            <div class="side-picker__image">
-                <!-- We're doing this so the icons won't blink when changed -->
-                <template v-for="(face, i) in facing" :key="i">
-                    <Icon :name="'facing-' + face"
-                        v-show="currFace === face"
-                    />
-                </template>
-                <Icon name="dd-arrow" />
-            </div>
-            <select class="side-picker__btn" v-model="currFace" :id="id"
-                :title="`Filter by facing: ${currFace.charAt(0).toUpperCase() + currFace.slice(1)}`"
-            >
-                <option v-for="(face, i) in facing" :key="i"
-                    :value="face"
-                >{{ face.charAt(0).toUpperCase() + face.slice(1) }}</option>
-            </select>
+    <label :for="id" class="side-picker__wrap">
+        <div class="side-picker__image">
+            <!-- We're doing this so the icons won't blink when changed -->
+            <template v-for="(face, i) in facing" :key="i">
+                <Icon :name="'facing-' + face"
+                    v-show="currFace === face"
+                />
+            </template>
+            <Icon name="dd-arrow" />
         </div>
+        <select class="side-picker__btn" v-model="currFace" :id="id"
+            :title="`Filter by facing: ${currFace.charAt(0).toUpperCase() + currFace.slice(1)}`"
+        >
+            <option v-for="(face, i) in facing" :key="i"
+                :value="face"
+            >{{ face.charAt(0).toUpperCase() + face.slice(1) }}</option>
+        </select>
     </label>
 </template>
 
@@ -43,11 +41,12 @@
 
     .side-picker__wrap {
         position: relative;
+        border-radius: $BR_round;
     }
     
     .side-picker__btn {
+        width: 100%; height: 100%;
         appearance: none;
-        width: calc(40px*2 + 4px); height: 40px;
         background-color: $dark_20; color: $white; // We need to provide this to be used for DD menu background
         text-indent: -100%; // Remove selected text option from DD itself without affecting DD menu styles
         border: 2px solid $accent-light_50; border-radius: $BR_round;
@@ -71,7 +70,6 @@
         top: 0; left: 0;
         width: calc(100% - 4px); height: 100%;
         padding-left: 4px; gap: 4px;
-        // background-color: #f008; // For debugging
         border-radius: $BR_round;
     }
 

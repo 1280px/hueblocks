@@ -42,6 +42,7 @@ export const useGlobalStore = defineStore('GlobalStore', () => {
         get: () => _currBlocksetIdx.value,
         set: (value) => {
             _currBlocksetIdx.value = value
+            currPaletteIdx.value = 0
             loadBlocksetBlockdata()
             loadBlocksetPalettes()
         }
