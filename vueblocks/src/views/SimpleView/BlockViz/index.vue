@@ -108,7 +108,7 @@
         >
             <div v-for="(row, i) in SimpleViewStore.blockVizData">
                 <Block v-for="(block, i) in row.textures" :key="i"
-                :name="block.name" :blocksetIdx="row.blocksetIdx" :texture="block.texture"
+                    :name="block.name" :blocksetIdx="row.blocksetIdx" :texture="block.texture"
                 />
             </div>
         </div>

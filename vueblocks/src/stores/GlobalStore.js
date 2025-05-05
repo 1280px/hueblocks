@@ -53,6 +53,7 @@ export const useGlobalStore = defineStore('GlobalStore', () => {
         }
         return _baseUrl + '/blocksets/' + blocksetsData?.value[blocksetIdx]?.dir
     }
+
     const getTexturePath = (blocksetIdx, texture) => {
         const blocksetPath = getBlocksetPath(blocksetIdx)
         return blocksetPath + '/' + texture
@@ -63,8 +64,14 @@ export const useGlobalStore = defineStore('GlobalStore', () => {
     const loadBlocksetBlockdata = async () => {
         const blocksetPath = getBlocksetPath(currBlocksetIdx.value)
         const res = await fetch(blocksetPath + '/' + '_blockdata.json')
-        currBlocksetBlockdata.value = await res.json()
+        const data = await res.json()
+
+        // Blockdata timestamp isn't used -- let's log it here at least
+        console.info(`Loaded blockset #${currBlocksetIdx.value} -- ${data[0]}`)
+
+        currBlocksetBlockdata.value = await data.slice(1)
     }
+
     const currBlocksetPalettes = ref(null)
     const loadBlocksetPalettes = async () => {
         const blocksetPath = getBlocksetPath(currBlocksetIdx.value)

@@ -26,7 +26,7 @@
 </script>
 
 <template>
-    <div :class="{ 'loading': !isLoaded }"
+    <div :class="{ 'loading': !isLoaded }" class="block"
         :style="{'width': GlobalStore?.blockSize || '64px', 'height': GlobalStore?.blockSize || '64px'}"
     >
         <img v-show="isLoaded" @load="isLoaded = true" @error="isLoaded = false"
@@ -39,7 +39,7 @@
 <style lang="scss" scoped>
     @use '@/assets/variables' as *;
 
-    div {
+    .block {
         image-rendering: pixelated;
         overflow: clip; line-break: anywhere;
         text-align: left;
@@ -47,9 +47,9 @@
         &.loading {
             background-color: $accent-light_25;
         }
-    }
 
-    img {
-        height: 100%;
+        & img {
+            height: 100%;
+        }
     }
 </style>

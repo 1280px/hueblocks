@@ -3,6 +3,6 @@
 *.jar
 *.pyc
 
-/vueblocks/data_OLD/
+/vueblocks/data/blocksets_OLD*/
 node_modules/
 *.log

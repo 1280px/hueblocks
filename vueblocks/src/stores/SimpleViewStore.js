@@ -124,12 +124,9 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
     }
 
     const blockVizGenerate = (blocksetIdx, blockdata, palette, facing) => {
-        // Blockdata timestamp is not used -- let's log it at least
-        console.info(`Blockdata ${blockdata[0]}`)
-
         // First, fulter out blockdata to exclude blocks with
         // undesired side facing, palette, or noise coefficients:
-        const blockdataFiltered = blockdata.slice(1).filter(
+        const blockdataFiltered = blockdata.filter(
             (block) => {
                 if (palette.count > 0) {
                     if (!palette.textures.includes(block.texture)) {

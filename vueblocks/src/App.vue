@@ -13,7 +13,7 @@
 
     const GlobalStore = useGlobalStore()
 
-    const overlayRef = ref() // We use this ref to control overlay component
+    const overlayRef = ref() // We use this ref to bind overlay component
 
     watch(overlayIsShown, (v) => {
         if (v === true) {

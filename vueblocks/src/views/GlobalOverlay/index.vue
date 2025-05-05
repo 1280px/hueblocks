@@ -18,6 +18,10 @@
     const done = (data) => {
         visible.value = false
 
+        // Even though dialog is just a nested element, we still
+        // have to close it to unfreeze background interactions:
+        setTimeout(() => d.value?.close(), 1000)
+
         res?.(data || null)
     }
 
@@ -38,7 +42,7 @@
 
 <template>
     <Transition name="overlay">
-        <dialog class="overlay" v-if="visible" ref="d" @cancel.prevent>
+        <dialog class="overlay" v-show="visible" ref="d" @cancel="done">
             <component :is="innerComponent" v-bind="innerProps" @done="done" />
         </dialog>
     </Transition>
@@ -58,6 +62,9 @@
         overflow-y: scroll;
         background-color: $accent-dark_25; border-color: transparent;
         backdrop-filter: blur(4px);
+    }
+    .overlay::backdrop {
+        background: none !important;
     }
 
     .overlay-enter-active, .overlay-leave-active {
