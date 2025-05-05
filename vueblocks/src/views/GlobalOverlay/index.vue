@@ -2,12 +2,14 @@
     import {watch, ref} from 'vue'
 
     const visible = ref(false)
+    const cancellable = ref(true)
     const innerComponent = ref(null), innerProps = ref({})
     let res = null
 
-    const show = (newInnerComponent, newInnerProps = {}) => {
+    const show = (newInnerComponent, newInnerProps = {}, newCancellable = true) => {
         innerComponent.value = newInnerComponent
         innerProps.value = newInnerProps
+        cancellable.value = newCancellable
         visible.value = true
 
         return new Promise((resolve) => {
@@ -20,7 +22,7 @@
 
         // Even though dialog is just a nested element, we still
         // have to close it to unfreeze background interactions:
-        setTimeout(() => d.value?.close(), 1000)
+        setTimeout(() => d.value?.close(), 750)
 
         res?.(data || null)
     }
@@ -42,7 +44,9 @@
 
 <template>
     <Transition name="overlay">
-        <dialog class="overlay" v-show="visible" ref="d" @cancel="done">
+        <dialog class="overlay" v-show="visible" ref="d"
+            @cancel="cancellable ? done : $event.preventDefault()"
+        >
             <component :is="innerComponent" v-bind="innerProps" @done="done" />
         </dialog>
     </Transition>
