@@ -5,9 +5,8 @@
 
 <template>
     <header>
-        <!-- <h1>HueBlocks</h1>
-        <h3>Create beautiful block gradients in a few clicks!</h3> -->
-        <h1>hbve public test</h1>
+        <h1>HueBlocks<sup><sub><sup>NEW</sup></sub></sup></h1>
+        <h3>Create beautiful block gradients in a few clicks!</h3>
 
         <small>
             <!-- <a href="" @click="">language: en</a> •  -->
@@ -16,9 +15,9 @@
             <a href="https://1280px.github.io/hueblocks">legacy version</a>
         </small>
 
-        <SlottedMsgbox :duration="10">
-            This is a newer version of HueBlocks, still work in progress and missing some features! <br>
-            If you wish to go to original HueBlocks, click "legacy version" link above this message.
+        <SlottedMsgbox :duration="5">
+            This is a new version of HueBlocks, still work in progress and missing some OG features! <br>
+            If you wish to go to an older version of HB, click "legacy version" link above this message.
         </SlottedMsgbox>
 
         <!-- <ModeSwitcher /> -->

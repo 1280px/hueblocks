@@ -1,5 +1,5 @@
-> [!IMPORTANT]
-> This version is still in active development and, while it is already usable, it still might be not as stable and lacks some features from the previous version. If you wish to use legacy version of HueBlocks, [click here](https://1280px.github.io/hueblocks).
+> [!TIP]
+> This version is still in development and, while is already very usable, it still might be not as stable and lacks a few features from previous version. If you wish to use legacy version of HueBlocks, [click here](https://1280px.github.io/hueblocks).
 
 <p align=center>
   <a href="https://1280px.github.io/hueblocks-new/">
