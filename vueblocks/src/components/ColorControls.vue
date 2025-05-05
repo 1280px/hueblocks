@@ -19,8 +19,7 @@
 
     const getBlockPickColor = async () => {
         const res = await overlayShow(
-            BlockPick,
-            {'mode': 'single'}
+            BlockPick, {'mode': 'single'}
         )
 
         if (res) {

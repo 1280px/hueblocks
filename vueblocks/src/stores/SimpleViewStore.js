@@ -73,7 +73,7 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
                     255 - Math.abs(stepRGB[2] - block.rgb[2])
                 ) / (255*3)
                 // 0.0 means 'completely opposite colour', 1.0 means 'same colour';
-			    // values < 0.8 in 99% of cases are junk
+			    // "values < 0.8 in 99% of cases are junk" -- Me, 2020.
 
                 if (blockScore > closestBlockScore) {
                     closestBlock = block
@@ -158,7 +158,6 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
                 }
             }
         )
-        // console.log(blockdata, blockdataFiltered)
 
         // Create a blockviz row objecy for new render results...
         const newBlockVizRow = {

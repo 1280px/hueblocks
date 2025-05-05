@@ -1,7 +1,6 @@
 <script setup>
     import {ref, computed, defineProps, defineEmits} from 'vue'
     import { useSimpleViewStore } from '@/stores/SimpleViewStore'
-    import { hex2rgb, rgb2hex } from '@/colors'
 
     import ColorControls from '@/components/ColorControls.vue'
 
@@ -20,7 +19,7 @@
     const cbRefItem = SimpleViewStore.colorbarData[cbRefIdx]
 
     const cbNewItem = {
-        color: cbRefItem.color,
+        color: [...cbRefItem.color],
         blockRef: cbRefItem.blockRef,
         steps: cbRefItem.steps
     }

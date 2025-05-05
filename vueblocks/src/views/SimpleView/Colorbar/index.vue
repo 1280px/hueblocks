@@ -1,5 +1,6 @@
 <script setup>
     import {ref, computed, defineAsyncComponent} from 'vue'
+    import {overlayIsShown} from '@/overlay'
     import { Wowerlay } from 'wowerlay'
     import { useSimpleViewStore } from '@/stores/SimpleViewStore'
     
@@ -63,7 +64,7 @@
     const popoverMode = ref(null)
     const popoverData = ref(null)
 
-    const showPopover = (event, mode, data) => {
+    const popoverShow = (event, mode, data) => {
         if (popoverTarget.value === event.currentTarget) {
             popoverTarget.value = null
         }
@@ -73,6 +74,18 @@
             popoverTarget.value = event.currentTarget
         }
     }
+
+    const popoverIsShown = computed({
+        get: () => {
+            return !!popoverTarget.value
+        },
+        set: () => {
+            if (overlayIsShown.value) {
+                return
+            }
+            popoverTarget.value = null
+        }
+    })
 </script>
 
 <template>
@@ -82,27 +95,25 @@
         </SlottedButton>
 
         <AddItemButton side="left" title="Add new color to the left"
-            @click="(e) => showPopover(e, 'addItem', 'left')"
-            :disabled="SimpleViewStore.colorbarData.length > 21"
+            @click="(e) => popoverShow(e, 'addItem', 'left')"
         />
         <div class="colorbar__inner">
             <template v-for="(cbItem, cbIdx) in SimpleViewStore.colorbarData" :key="cbIdx">
                 <ColorSegment
                     :colorCss="getCssRgb(cbItem.color)" :blockRef="cbItem.blockRef"
-                    @click="(e) => showPopover(e, 'color', cbIdx)"
+                    @click="(e) => popoverShow(e, 'color', cbIdx)"
                 />
                 <StepsSegment v-if="cbIdx !== SimpleViewStore.colorbarData.length-1"
                     :value="cbItem.steps" :bg="[
                         getCssRgb(SimpleViewStore.colorbarData[cbIdx]?.color),
                         getCssRgb(SimpleViewStore.colorbarData[cbIdx+1]?.color)
                     ]"
-                    @click="(e) => showPopover(e, 'steps', cbIdx)"
+                    @click="(e) => popoverShow(e, 'steps', cbIdx)"
                 />
             </template>
         </div>
         <AddItemButton side="right" title="Add new color to the right"
-            @click="(e) => showPopover(e, 'addItem', 'right')"
-            :disabled="SimpleViewStore.colorbarData.length > 21"
+            @click="(e) => popoverShow(e, 'addItem', 'right')"
         />
         
         <SlottedButton class="trans" @click="colorbarRandom" title="Randomize colours">
@@ -111,7 +122,8 @@
     </section>
 
     <Wowerlay
-        class="popover" :target="popoverTarget" v-model:visible="popoverTarget" :gap="12"
+        class="popover" :target="popoverTarget" v-model:visible="popoverIsShown"
+        :gap="12"
     >
         <template #arrow="{ side, placement }">
             <div class="popover-arrow" :class="`${side}`"></div>

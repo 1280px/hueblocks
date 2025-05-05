@@ -13,11 +13,9 @@
 
     const GlobalStore = useGlobalStore()
 
-    // We use this ref to mount overlay component in it:
-    const overlayRef = ref()
+    const overlayRef = ref() // We use this ref to control overlay component
 
     watch(overlayIsShown, (v) => {
-        console.log("overlayIsShown:", v)
         if (v === true) {
             document.body.classList.add('clip')
         }

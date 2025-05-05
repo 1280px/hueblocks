@@ -48,13 +48,11 @@ export const useGlobalStore = defineStore('GlobalStore', () => {
     })
     
     const getBlocksetPath = (blocksetIdx) => {
-        console.info(blocksetIdx)
         if (!blocksetsData.value || !blocksetsData?.value[blocksetIdx]) {
             return 'missingNo'
         }
         return _baseUrl + '/blocksets/' + blocksetsData?.value[blocksetIdx]?.dir
     }
-
     const getTexturePath = (blocksetIdx, texture) => {
         const blocksetPath = getBlocksetPath(blocksetIdx)
         return blocksetPath + '/' + texture
