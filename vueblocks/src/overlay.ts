@@ -1,7 +1,7 @@
-import {ref, computed} from "vue"
+import { computed, ref } from 'vue'
 
 // Same ref data accessible from everywhere!
-let overlay = ref(null)
+let overlay = ref<HTMLDialogElement | null>(null)
 
 function overlayBind(ref) {
     overlay.value = ref
@@ -16,5 +16,7 @@ const overlayIsShown = computed(() => {
 })
 
 export {
-    overlayBind, overlayShow, overlayIsShown
+    overlayBind,
+    overlayIsShown,
+    overlayShow,
 }

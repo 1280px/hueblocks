@@ -1,27 +1,24 @@
-<script setup>
-    import {ref, defineProps, onMounted} from 'vue'
+<script setup lang="ts">
+import { defineProps, onMounted, ref } from 'vue'
 
-    const {duration} = defineProps({
-        duration: {
-            type: Number,
-            required: false
-        }
-    })
+const { duration } = defineProps<{
+    duration: number,
+}>()
 
-    const showMsgbox = ref(true)
+const showMsgbox = ref(true)
 
-    onMounted(() => {
-        setTimeout(
-            () => { showMsgbox.value = false },
-            (Math.max(+duration || 0, 1)) * 1000
-        )
-    })
+onMounted(() => {
+    setTimeout(
+        () => { showMsgbox.value = false },
+        (Math.max(+(duration || 0), 1)) * 1000,
+    )
+})
 </script>
 
 <template>
     <Transition name="msgbox">
         <blockquote v-if="showMsgbox">
-            <slot></slot>
+            <slot />
         </blockquote>
     </Transition>
 </template>

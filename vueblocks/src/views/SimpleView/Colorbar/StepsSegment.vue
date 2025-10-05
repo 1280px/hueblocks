@@ -1,29 +1,34 @@
 <script setup>
-    import {ref, defineProps} from 'vue'
-    import { useSimpleViewStore } from '@/stores/SimpleViewStore'
+import { defineProps } from 'vue'
 
-    import SlottedButton from '@/components/SlottedButton.vue'
+import SlottedButton from '@/components/SlottedButton.vue'
+import { useSimpleViewStore } from '@/stores/SimpleViewStore'
 
-    const SimpleViewStore = useSimpleViewStore()
-    const {value, bg} = defineProps({
-        value: {
-            type: Number,
-            required: true
-        },
-        bg: {
-            type: Array,
-            required: true
-        }
-    })
+const { value, bg } = defineProps({
+    value: {
+        type: Number,
+        required: true,
+    },
+    bg: {
+        type: Array,
+        required: true,
+    },
+})
+
+const SimpleViewStore = useSimpleViewStore()
 </script>
 
-<template>  
-    <section class="colorbar__len-segment" :style="{
-        'flex': value,
-        'background': (`linear-gradient( 
-        ${SimpleViewStore.blockDataCfg.useCIELAB ? 'in lab' : ''}
-        90deg, ${bg[0]}, ${bg[1]})`)
-    }">
+<template>
+    <section
+        class="colorbar__len-segment" :style="{
+            flex: value,
+            background: (
+                `linear-gradient(
+                ${SimpleViewStore.blockDataCfg.useCIELAB ? 'in lab' : ''}
+                90deg, ${bg[0]}, ${bg[1]})`
+            ),
+        }"
+    >
         <SlottedButton class="trans">
             <span class="colorbar__len-segment__count">
                 {{ value || 'missingNo' }}

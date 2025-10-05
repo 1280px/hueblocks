@@ -1,6 +1,6 @@
 # vueblocks
 
-Just like original HB, this is a frontend-only SPA, this time written in Vue 3 and with bigger modularity in mind.
+Just like original HB, this is a frontend-only SPA, this time written in Vue 3 + TS and with bigger modularity in mind.
 
 
 ## How to run

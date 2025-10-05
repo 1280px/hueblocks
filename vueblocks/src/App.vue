@@ -1,35 +1,33 @@
 <script setup>
-    import {ref, onMounted, defineAsyncComponent, computed, watch} from 'vue'
-    import {overlayBind, overlayIsShown} from '@/overlay'
-    import { useGlobalStore } from '@/stores/GlobalStore'
+import { defineAsyncComponent, onMounted, ref, watch } from 'vue'
 
-    import Header from './views/Header/index.vue'
-    import GlobalOverlay from './views/GlobalOverlay/index.vue'
+import { overlayBind, overlayIsShown } from '@/overlay'
+import { useGlobalStore } from '@/stores/GlobalStore'
 
-    const SimpleView = defineAsyncComponent({
-        loader: () => import('./views/SimpleView/index.vue'),
-        loadingComponent: () => 'Loading SimpleView…', delay: 0, suspensible: false
-    })
+import Header from './widgets/Header.vue'
+import Overlay from './widgets/Overlay/index.vue'
 
-    const GlobalStore = useGlobalStore()
+const SimpleView = defineAsyncComponent({
+    loader: () => import('./views/SimpleView/index.vue'),
+    loadingComponent: () => 'Loading SimpleView…',
+    delay: 0,
+    suspensible: false,
+})
 
-    const overlayRef = ref() // We use this ref to bind overlay component
+const GlobalStore = useGlobalStore()
 
-    watch(overlayIsShown, (v) => {
-        if (v === true) {
-            document.body.classList.add('clip')
-        }
-        else {
-            document.body.classList.remove('clip')
-        }
-    })
+const overlayRef = ref() // We use this ref to bind overlay component
 
-    onMounted(async () => {
-        await GlobalStore.loadBlocksetsData()
-        await GlobalStore.loadBlocksetBlockdata()
-        await GlobalStore.loadBlocksetPalettes()
-        await overlayBind(overlayRef.value)
-    })
+watch(overlayIsShown, (v) => {
+    (v === true) ? document.body.classList.add('clip') : document.body.classList.remove('clip')
+})
+
+onMounted(async () => {
+    await GlobalStore.loadBlocksetsData()
+    await GlobalStore.loadBlocksetBlockdata()
+    await GlobalStore.loadBlocksetPalettes()
+    await overlayBind(overlayRef.value)
+})
 </script>
 
 <template>
@@ -37,7 +35,7 @@
 
     <SimpleView v-if="GlobalStore.viewMode === 'simple'" />
 
-    <GlobalOverlay ref="overlayRef" />
+    <Overlay ref="overlayRef" />
 </template>
 
 <style lang="scss">
@@ -61,15 +59,15 @@
     #app {
         position: relative;
         background: linear-gradient(#000628 20px, #282b58 420px);
-        background: linear-gradient(#080018, #430998 420px);
+        background: linear-gradient(#080018 20px, #2d1e80 420px);
         background: linear-gradient(#001b1d 20px, #099862 420px);
         color: $white;
         font-size: 16px; font-family: $FONTS;
     }
 
     h1 {
-        margin: 0;
-        font-size: 3.0em;
+        margin: 0 !important;
+        font-size: 3.0em !important;
         font-weight: $FW_bold;
     }
     h2 {

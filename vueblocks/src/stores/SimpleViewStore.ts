@@ -1,7 +1,7 @@
-import {ref, computed} from 'vue'
-import {defineStore} from 'pinia'
-import {rgb2lab, deltaE} from '@/colors'
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
 
+import { deltaE, rgb2lab } from '@/colors'
 
 export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
     const blockVizCfg = ref({
@@ -17,63 +17,61 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
         noiseThresholdMax: 4,
     })
 
-
     const colorbarData = ref([
         {
-            color: [12, 34, 56], 
+            color: [12, 34, 56],
             blockRef: null,
-            steps: 6 // Length between CURRENT and NEXT color segments,
-                     // will be ignored if this is the last color segment
+            steps: 6, // Length between CURRENT and NEXT color segments,
+            // will be ignored if this is the last color segment
         },
         {
             color: [200, 100, 20],
             blockRef: null,
-            steps: 14
+            steps: 14,
         },
         {
             color: [122, 43, 172],
             blockRef: {
-                name: "Purple Wool",
+                name: 'Purple Wool',
                 blocksetIdx: 1,
-                texture: "purple_wool.png"
+                texture: 'purple_wool.png',
             },
-            steps: 3
+            steps: 3,
         },
         {
             color: [64, 0, 64],
             blockRef: null,
-            steps: 3
-        }
+            steps: 3,
+        },
     ])
-    
-    
+
     const blockVizData = ref([])
-    
+
     // Uses exactly the same algorithm as original HueBlocks;
     // results in faster but more "inaccurate" graident generation
     function blockVizCalcRGB(blockdata, startRGB, endRGB, steps) {
         const newSegData = []
-        
+
         for (let step = 0; step < steps; step++) {
             // Calculate step color as linear mixture of start and end colors
             const stepRGB = [
-                endRGB[0] * (step / (steps-1)) + startRGB[0] * (((steps-1) - step) / (steps-1)),
-                endRGB[1] * (step / (steps-1)) + startRGB[1] * (((steps-1) - step) / (steps-1)),
-                endRGB[2] * (step / (steps-1)) + startRGB[2] * (((steps-1) - step) / (steps-1))
+                endRGB[0] * (step / (steps - 1)) + startRGB[0] * (((steps - 1) - step) / (steps - 1)),
+                endRGB[1] * (step / (steps - 1)) + startRGB[1] * (((steps - 1) - step) / (steps - 1)),
+                endRGB[2] * (step / (steps - 1)) + startRGB[2] * (((steps - 1) - step) / (steps - 1)),
             ]
             // console.log(startRGB, endRGB, stepRGB)
 
             // Now go through all blockdata and find block with closest RGB
-            let [closestBlock, closestBlockScore] = [{name: 'missingNo'}, 0]
+            let [closestBlock, closestBlockScore] = [{ name: 'missingNo' }, 0]
 
             for (const block of blockdata) {
                 const blockScore = (
-                    255 - Math.abs(stepRGB[0] - block.rgb[0]) +
-                    255 - Math.abs(stepRGB[1] - block.rgb[1]) +
-                    255 - Math.abs(stepRGB[2] - block.rgb[2])
-                ) / (255*3)
+                    255 - Math.abs(stepRGB[0] - block.rgb[0])
+                    + 255 - Math.abs(stepRGB[1] - block.rgb[1])
+                    + 255 - Math.abs(stepRGB[2] - block.rgb[2])
+                ) / (255 * 3)
                 // 0.0 means 'completely opposite colour', 1.0 means 'same colour';
-			    // "values < 0.8 in 99% of cases are junk" -- Me, 2020.
+                // "values < 0.8 in 99% of cases are junk" -- Me, 2020.
 
                 if (blockScore > closestBlockScore) {
                     closestBlock = block
@@ -99,15 +97,15 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
         for (let step = 0; step < steps; step++) {
             // Just like in RGB, in CIELAB "step" color can be found linearly
             const stepLAB = [
-                endLAB[0] * (step / (steps-1)) + startLAB[0] * (((steps-1) - step) / (steps-1)),
-                endLAB[1] * (step / (steps-1)) + startLAB[1] * (((steps-1) - step) / (steps-1)),
-                endLAB[2] * (step / (steps-1)) + startLAB[2] * (((steps-1) - step) / (steps-1))
+                endLAB[0] * (step / (steps - 1)) + startLAB[0] * (((steps - 1) - step) / (steps - 1)),
+                endLAB[1] * (step / (steps - 1)) + startLAB[1] * (((steps - 1) - step) / (steps - 1)),
+                endLAB[2] * (step / (steps - 1)) + startLAB[2] * (((steps - 1) - step) / (steps - 1)),
             ]
             // console.log(startLAB, endLAB, stepLAB)
 
             // L*a*b deltas computed the same way as Euclidian distance
             // (the smaller <=> the closer), which I find very neat
-            let [closestBlock, closestBlockDelta] = [{name: 'missingNo'}, Infinity]
+            let [closestBlock, closestBlockDelta] = [{ name: 'missingNo' }, Infinity]
 
             for (const block of blockdata) {
                 const blockDelta = deltaE(stepLAB, block.lab)
@@ -122,7 +120,6 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
         }
         return newSegData
     }
-
 
     const getFilteredBlockdata = (blockdata, palette, facing) => {
         const res = blockdata.filter(
@@ -140,19 +137,17 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
 
                 if (facing !== 'all') {
                     if (facing === 'sides') {
-                        if (block.sides.every((s) => s === 'top' || s === 'bottom')) {
+                        if (block.sides.every(s => s === 'top' || s === 'bottom')) {
                             return false
                         }
                         return true
                     }
-                    else if (block.sides.includes(facing)) {
-                        return true
+                    else {
+                        return block.sides.includes(facing)
                     }
                 }
-                else {
-                    return true
-                }
-            }
+                return true
+            },
         )
         return res
     }
@@ -164,17 +159,17 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
 
         // Create a blockviz row objecy for new render results...
         const newBlockVizRow = {
-            blocksetIdx: blocksetIdx,
-            textures: []
+            blocksetIdx,
+            textures: [],
         }
-        
+
         // And then, render the whole colorbar data, segment by segment!
-        for (let cbIdx = 0; cbIdx < colorbarData.value.length-1; cbIdx++) { 
+        for (let cbIdx = 0; cbIdx < colorbarData.value.length - 1; cbIdx++) {
             const segStart = colorbarData.value[cbIdx].color
-            const segEnd = colorbarData.value[cbIdx+1].color
+            const segEnd = colorbarData.value[cbIdx + 1].color
             const segSteps = colorbarData.value[cbIdx].steps
 
-            let seg;
+            let seg
             if (blockDataCfg.value.useCIELAB) {
                 seg = blockVizCalcCIELAB(filteredBlockdata, segStart, segEnd, segSteps)
             }
@@ -188,10 +183,10 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
         // Finally, check the row's texture data for duplicates
         if (blockVizCfg.value.hideDuplicates) {
             newBlockVizRow.textures = newBlockVizRow.textures.filter((td, i) => {
-                return i <= 0 || td.texture !== newBlockVizRow.textures[i-1].texture
+                return i <= 0 || td.texture !== newBlockVizRow.textures[i - 1].texture
             })
         }
-    
+
         if (blockVizCfg.value.keepPrevResults) {
             blockVizData.value.push(newBlockVizRow)
         }
@@ -200,11 +195,10 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
         }
     }
 
-
     return {
         blockVizCfg, blockDataCfg,
         colorbarData,
         getFilteredBlockdata,
-        blockVizData, blockVizGenerate
+        blockVizData, blockVizGenerate,
     }
 })

@@ -1,43 +1,41 @@
-import {ref, computed} from 'vue'
-import {defineStore} from 'pinia'
-
+/* eslint-disable ts/no-use-before-define */
+import { defineStore } from 'pinia'
+import { computed, ref } from 'vue'
 
 export const useGlobalStore = defineStore('GlobalStore', () => {
-    const locale = ref('en')
-    const viewMode = ref('simple')
+    const locale = ref<string>('en')
+    const viewMode = ref<string>('simple')
 
     // https://vite.dev/guide/env-and-mode
     const _baseUrl = import.meta.env.BASE_URL !== '/' ? import.meta.env.BASE_URL : '.'
 
-    const getIconPath = (icon) => _baseUrl + '/icons/' + icon + '.svg'
+    const getIconPath = (icon: string) => `${_baseUrl}/icons/${icon}.svg`
 
-
-    const blockSize = ref('64px')
-    const changeBlockSize = (scale) => {
-        const newBlockSize = parseInt(blockSize.value) * scale
+    const blockSize = ref<string>('64px')
+    const changeBlockSize = (scale: number) => {
+        const newBlockSize = Number.parseInt(blockSize.value) * scale
 
         if (newBlockSize >= 16 && newBlockSize <= 256) {
-            blockSize.value = newBlockSize + 'px'
+            blockSize.value = `${newBlockSize}px`
         }
     }
 
-    const blockFacing = ref('all')
+    const blockFacing = ref<string>('all')
 
-
-    const blocksetsPath = _baseUrl + '/blocksets/' + '_blocksets.json'
-    const blocksetsData = ref(null)
+    const blocksetsPath = `${_baseUrl}/blocksets/` + `_blocksets.json`
+    const blocksetsData = ref<any>(null)
 
     const loadBlocksetsData = async () => {
         const res = await fetch(blocksetsPath)
         const data = await res.json()
 
         // If no blocksets data found, we are really really screwed
-        blocksetsData.value = data.length ? data : [{
-            name: 'Error!!! No data found'
-        }]
+        blocksetsData.value = data.length
+            ? data.reverse()
+            : [{ name: 'Error!!! No data found' }]
     }
 
-    let _currBlocksetIdx = ref(0) // We use this to store the actial value outside the computed property
+    const _currBlocksetIdx = ref(0) // We use this to store the actial value outside the computed property
     const currBlocksetIdx = computed({
         get: () => _currBlocksetIdx.value,
         set: (value) => {
@@ -45,26 +43,25 @@ export const useGlobalStore = defineStore('GlobalStore', () => {
             currPaletteIdx.value = 0
             loadBlocksetBlockdata()
             loadBlocksetPalettes()
-        }
+        },
     })
-    
-    const getBlocksetPath = (blocksetIdx) => {
+
+    const getBlocksetPath = (blocksetIdx: number) => {
         if (!blocksetsData.value || !blocksetsData?.value[blocksetIdx]) {
             return 'missingNo'
         }
-        return _baseUrl + '/blocksets/' + blocksetsData?.value[blocksetIdx]?.dir
+        return `${_baseUrl}/blocksets/${blocksetsData?.value[blocksetIdx]?.dir}`
     }
 
-    const getTexturePath = (blocksetIdx, texture) => {
+    const getTexturePath = (blocksetIdx: number, texture: string) => {
         const blocksetPath = getBlocksetPath(blocksetIdx)
-        return blocksetPath + '/' + texture
+        return `${blocksetPath}/${texture}`
     }
 
-
-    const currBlocksetBlockdata = ref(null)
+    const currBlocksetBlockdata = ref<any>(null)
     const loadBlocksetBlockdata = async () => {
         const blocksetPath = getBlocksetPath(currBlocksetIdx.value)
-        const res = await fetch(blocksetPath + '/' + '_blockdata.json')
+        const res = await fetch(`${blocksetPath}/` + `_blockdata.json`)
         const data = await res.json()
 
         // Blockdata timestamp isn't used -- let's log it here at least
@@ -73,25 +70,24 @@ export const useGlobalStore = defineStore('GlobalStore', () => {
         currBlocksetBlockdata.value = await data.slice(1)
     }
 
-    const currBlocksetPalettes = ref(null)
+    const currBlocksetPalettes = ref<any>(null)
     const loadBlocksetPalettes = async () => {
         const blocksetPath = getBlocksetPath(currBlocksetIdx.value)
-        const res = await fetch(blocksetPath + '/' + '_palettes.json')
+        const res = await fetch(`${blocksetPath}/` + `_palettes.json`)
         let data = await res.json()
-        data = data.filter((p) => p.count && (p.count > 0) && p.textures)
+        data = data.filter((p: any) => p.count && (p.count > 0) && p.textures)
 
         // If no valid palettes found, we're okay, just don't add anything
         currBlocksetPalettes.value = data.length ? data : []
-        
+
         // Add default pseudo-palette
         currBlocksetPalettes.value.unshift({
             name: 'Default (all blocks)',
-            count: -1
+            count: -1,
         })
     }
 
-    const currPaletteIdx = ref(null)
-
+    const currPaletteIdx = ref<number>(0)
 
     return {
         locale, viewMode, getIconPath,
@@ -103,6 +99,6 @@ export const useGlobalStore = defineStore('GlobalStore', () => {
         getBlocksetPath, getTexturePath,
         currBlocksetBlockdata, loadBlocksetBlockdata,
         currBlocksetPalettes, loadBlocksetPalettes,
-        currPaletteIdx
+        currPaletteIdx,
     }
 })

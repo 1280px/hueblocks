@@ -1,6 +1,6 @@
-<script setup>
-    import SlottedMsgbox from '@/components/SlottedMsgbox.vue'
-    // import ModeSwitcher from './ModeSwitcher.vue'
+<script setup lang="ts">
+import SlottedMsgbox from '@/components/SlottedMsgbox.vue'
+// import ModeSwitcher from './ModeSwitcher.vue'
 </script>
 
 <template>
@@ -10,8 +10,8 @@
 
         <small>
             <!-- <a href="" @click="">language: en</a> •  -->
-            <a href="https://github.com/1280px/hueblocks-new/">source code</a> • 
-            <a href="https://github.com/1280px/hueblocks-new/graphs/contributors/">contributors</a> • 
+            <a href="https://github.com/1280px/hueblocks-new/">source code</a> •
+            <a href="https://github.com/1280px/hueblocks-new/graphs/contributors/">contributors</a> •
             <a href="https://1280px.github.io/hueblocks">legacy version</a>
         </small>
 

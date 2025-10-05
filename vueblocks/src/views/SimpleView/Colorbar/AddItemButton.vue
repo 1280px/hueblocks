@@ -1,14 +1,14 @@
 <script setup>
-    import {ref, computed, defineProps} from 'vue'
+import { defineProps } from 'vue'
 
-    import Icon from '@/components/Icon.vue'
+import Icon from '@/components/Icon.vue'
 
-    const {side} = defineProps({
-        side: {
-            type: String,
-            required: true
-        }
-    })
+const { side } = defineProps({
+    side: {
+        type: String,
+        required: true,
+    },
+})
 </script>
 
 <template>

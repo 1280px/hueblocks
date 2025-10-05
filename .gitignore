@@ -5,4 +5,5 @@
 
 /vueblocks/data/blocksets_OLD*/
 node_modules/
+dist/
 *.log

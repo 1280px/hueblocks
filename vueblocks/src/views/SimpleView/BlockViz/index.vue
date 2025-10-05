@@ -1,32 +1,33 @@
 <script setup>
-    import {ref, computed} from 'vue'
-    import { useGlobalStore } from '@/stores/GlobalStore'
-    import { useSimpleViewStore } from '@/stores/SimpleViewStore'
+import { computed, ref } from 'vue'
 
-    import BigBlackButton from './BigBlackButton.vue'
-    import SidePicker from '@/components/SidePicker.vue'
-    import SlottedButton from '@/components/SlottedButton.vue'
-    import SlottedDropdown from '@/components/SlottedDropdown.vue'
-    import SlottedCheckbox from '@/components/SlottedCheckbox.vue'
-    import Block from '@/components/Block.vue'
-    import Icon from '@/components/Icon.vue'
+import Block from '@/components/Block.vue'
+import Icon from '@/components/Icon.vue'
+import SidePicker from '@/components/SidePicker.vue'
+import SlottedButton from '@/components/SlottedButton.vue'
+import SlottedCheckbox from '@/components/SlottedCheckbox.vue'
+import SlottedDropdown from '@/components/SlottedDropdown.vue'
+import { useGlobalStore } from '@/stores/GlobalStore'
+import { useSimpleViewStore } from '@/stores/SimpleViewStore'
 
-    const GlobalStore = useGlobalStore()
-    const SimpleViewStore = useSimpleViewStore()
+import BigBlackButton from './BigBlackButton.vue'
 
-    const blocksetsDataNames = computed(() => {
-        if (!GlobalStore.blocksetsData) {
-            return ['Loading...']
-        }
-        return GlobalStore.blocksetsData.map((bsd) => bsd.name)
-    })
+const GlobalStore = useGlobalStore()
+const SimpleViewStore = useSimpleViewStore()
 
-    const blockdataPaletteNames = computed(() => {
-        if (!GlobalStore.currBlocksetPalettes) {
-            return ['Loading...']
-        }
-        return GlobalStore.currBlocksetPalettes.map((pal) => pal.name)
-    })
+const blocksetsDataNames = computed(() => {
+    if (!GlobalStore.blocksetsData) {
+        return ['Loading...']
+    }
+    return GlobalStore.blocksetsData.map(bsd => bsd.name)
+})
+
+const blockdataPaletteNames = computed(() => {
+    if (!GlobalStore.currBlocksetPalettes) {
+        return ['Loading...']
+    }
+    return GlobalStore.currBlocksetPalettes.map(pal => pal.name)
+})
 </script>
 
 <template>
@@ -37,44 +38,60 @@
             </div>
 
             <div class="blockviz-controls__blob">
-                <BigBlackButton @click="SimpleViewStore.blockVizGenerate(
-                    GlobalStore.currBlocksetIdx,
-                    GlobalStore.currBlocksetBlockdata,
-                    GlobalStore.currBlocksetPalettes[GlobalStore.currPaletteIdx],
-                    GlobalStore.blockFacing
-                )" :isLoaded="!GlobalStore.currBlocksetBlockdata">
-                    <template #normal>GENERATE BLOCK GRAIDENT</template>
-                    <template #disabled>Loading blockdata, please wait…</template>
+                <BigBlackButton
+                    :is-loaded="!GlobalStore.currBlocksetBlockdata"
+                    @click="SimpleViewStore.blockVizGenerate(
+                        GlobalStore.currBlocksetIdx,
+                        GlobalStore.currBlocksetBlockdata,
+                        GlobalStore.currBlocksetPalettes[GlobalStore.currPaletteIdx],
+                        GlobalStore.blockFacing,
+                    )"
+                >
+                    <template #normal>
+                        GENERATE BLOCK GRAIDENT
+                    </template>
+                    <template #disabled>
+                        Loading blockdata, please wait…
+                    </template>
                 </BigBlackButton>
             </div>
 
             <div class="blockviz-controls__blob round">
-                <SlottedButton class="round"
+                <SlottedButton
+                    class="round"
+                    title="Zoom out (0.5x)"
                     @click="GlobalStore.changeBlockSize(0.5)"
-                title="Zoom out (0.5x)">
+                >
                     <Icon name="zoom-out" />
                 </SlottedButton>
 
-                <SlottedButton class="round"
+                <SlottedButton
+                    class="round"
+                    title="Zoom in (2.0x)"
                     @click="GlobalStore.changeBlockSize(2.0)"
-                title="Zoom in (2.0x)">
+                >
                     <Icon name="zoom-in" />
                 </SlottedButton>
             </div>
         </div>
     </section>
 
+    <!-- cbi: {{ JSON.stringify(GlobalStore.currBlocksetIdx) }}
+    cpi: {{ JSON.stringify(GlobalStore.currPaletteIdx) }} -->
+
     <section class="blockviz-options--blockset__wrap">
         <div class="blockviz-options--blockset">
             <div class="blockviz-options--blockset__inner">
-                <SlottedDropdown :names="blocksetsDataNames"
+                <SlottedDropdown
                     v-model="GlobalStore.currBlocksetIdx"
+                    :names="blocksetsDataNames"
                 >
                     Version:
                 </SlottedDropdown>
 
-                <SlottedDropdown :names="blockdataPaletteNames"
+                <SlottedDropdown
                     v-model="GlobalStore.currPaletteIdx"
+                    :names="blockdataPaletteNames"
                 >
                     Palette:
                 </SlottedDropdown>
@@ -96,20 +113,21 @@
                 </div> -->
 
                 <SlottedCheckbox v-model="SimpleViewStore.blockDataCfg.useCIELAB">
-                    <abbr title="Use colourspace closer to how human eyes percive colour. Results in more vibrant looking and accurate, but less dark and contrast gradients."
-                    >Use&nbsp;CIELAB</abbr>
+                    <abbr title="Use colourspace closer to how human eyes percive colour. Results in more vibrant looking and accurate, but less dark and contrast gradients.">Use&nbsp;CIELAB</abbr>
                 </SlottedCheckbox>
             </div>
         </div>
     </section>
 
     <section class="blockviz-data__wrap">
-        <div class="blockviz-data"
+        <div
+            class="blockviz-data"
             :class="{ 'one-row': SimpleViewStore.blockVizCfg.resultsInOneRow }"
         >
             <div v-for="(row, i) in SimpleViewStore.blockVizData" :key="i">
-                <Block v-for="(block, j) in row.textures" :key="j"
-                    :name="block.name" :blocksetIdx="row.blocksetIdx" :texture="block.texture"
+                <Block
+                    v-for="(block, j) in row.textures" :key="j"
+                    :name="block.name" :blockset-idx="row.blocksetIdx" :texture="block.texture"
                 />
             </div>
         </div>

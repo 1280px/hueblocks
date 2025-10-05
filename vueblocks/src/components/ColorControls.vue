@@ -1,45 +1,48 @@
-<script setup>
-    import {ref, defineModel, computed} from 'vue'
-    import { overlayShow } from '@/overlay'
-    import { hex2rgb, rgb2hex } from '@/colors'
+<script setup lang="ts">
+import { computed, defineModel } from 'vue'
 
-    import Icon from '@/components/Icon.vue'
-    import BlockPick from '@/views/GlobalOverlay/BlockPick.vue'
+import { hex2rgb, rgb2hex } from '@/colors'
+import Icon from '@/components/Icon.vue'
 
-    const cbItem = defineModel()
+const { blockpickFun } = defineProps<{
+    blockpickFun: () => any,
+}>()
 
-    const currColorRgb = computed({
-        get: () => cbItem.value.color,
-        set: (rgb) => cbItem.value.color = rgb
-    })
-    const currColorHex = computed({
-        get: () => rgb2hex(currColorRgb.value),
-        set: (hex) => currColorRgb.value = hex2rgb(hex)
-    })
+const cbItem = defineModel()
 
-    const getBlockPickColor = async () => {
-        const res = await overlayShow(
-            BlockPick, {'mode': 'color'}
-        )
+const currColorRgb = computed({
+    get: () => cbItem.value.color,
+    set: rgb => cbItem.value.color = rgb,
+})
+const currColorHex = computed({
+    get: () => rgb2hex(currColorRgb.value),
+    set: hex => currColorRgb.value = hex2rgb(hex),
+})
 
-        if (res) {
-            currColorRgb.value.forEach((c, i) => {
-                currColorRgb.value[i] = res.color[i]
-            })
-            if (res.blockRef) {
-                cbItem.value.blockRef = res.blockRef
-            }
+async function applyBlockPickColor(getBlockPickColor) {
+    const res = await getBlockPickColor()
+
+    if (res) {
+        currColorRgb.value.forEach((c, i) => {
+            currColorRgb.value[i] = res.color[i]
+        })
+        if (res.blockRef) {
+            cbItem.value.blockRef = res.blockRef
         }
     }
+}
 </script>
 
 <template>
     <div class="color-controls">
-        <input type="color"
-            v-model="currColorHex" placeholder="cbItemColor"
+        <input
+            v-model="currColorHex"
+            type="color" placeholder="cbItemColor"
         >
-        <button title="Pick colour from a block…"
-            @click="getBlockPickColor"
+        <button
+            v-if="blockpickFun"
+            title="Pick colour from a block…"
+            @click="async () => await applyBlockPickColor(blockpickFun)"
         >
             <Icon name="block" />
         </button>

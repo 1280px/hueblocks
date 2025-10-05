@@ -1,11 +1,11 @@
 <script setup>
-    import { useSimpleViewStore } from '@/stores/SimpleViewStore'
+import SlottedCheckbox from '@/components/SlottedCheckbox.vue'
 
-    import SlottedCheckbox from '@/components/SlottedCheckbox.vue'
-    import Colorbar from './Colorbar/index.vue'
-    import BlockViz from './BlockViz/index.vue'
+import { useSimpleViewStore } from '@/stores/SimpleViewStore'
+import BlockViz from './BlockViz/index.vue'
+import Colorbar from './Colorbar/index.vue'
 
-    const SimpleViewStore = useSimpleViewStore()
+const SimpleViewStore = useSimpleViewStore()
 </script>
 
 <template>
@@ -19,15 +19,15 @@
                 left click on a colour tag to change it, right click to copy its hex;<br>
                 click on a number between colour tags to change length between them.
             </small>
-            
+
             <SlottedCheckbox v-model="SimpleViewStore.blockVizCfg.hideDuplicates">
                 Hide duplicates
             </SlottedCheckbox>
-    
+
             <SlottedCheckbox v-model="SimpleViewStore.blockVizCfg.resultsInOneRow">
                 Results in one row
             </SlottedCheckbox>
-    
+
             <SlottedCheckbox v-model="SimpleViewStore.blockVizCfg.keepPrevResults">
                 Keep previous results
             </SlottedCheckbox>
@@ -53,7 +53,7 @@
         flex: 1;
         display: flex; flex-direction: column;
     }
-    
+
     .colorbar__wrap {
         @include flex-center;
         align-items: baseline;

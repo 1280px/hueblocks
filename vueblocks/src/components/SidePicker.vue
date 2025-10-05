@@ -1,35 +1,40 @@
-<script setup>
-    import {ref, defineModel, useId} from 'vue'
+<script setup lang="ts">
+import { defineModel, useId } from 'vue'
 
-    import Icon from '@/components/Icon.vue'
+import Icon from '@/components/Icon.vue'
 
-    const currFace = defineModel()
-    currFace.value = !currFace.value ? 'all' : currFace.value
+const { isCompact = false } = defineProps<{
+    isCompact?: boolean,
+}>()
 
-    const id = useId()
+const currFace = defineModel()
+currFace.value = !currFace.value ? 'all' : currFace.value
 
-    // According to Optifine CTM, first two options should be the last;
-    // however, chances are, they will actually be used the most :)
-    const facing = [
-        'all', 'sides', 'top', 'bottom', 'north', 'west', 'south', 'east'
-    ]
+const id = useId()
+
+// According to Optifine CTM, first two options should be the last;
+// however, chances are, they will actually be used the most :)
+const facing = ['all', 'sides', 'top', 'bottom', 'north', 'west', 'south', 'east']
 </script>
 
 <template>
-    <label :for="id" class="side-picker__wrap">
+    <label :for="id" class="side-picker__wrap" :class="[isCompact ? 'compact' : '']">
         <div class="side-picker__image">
             <!-- We're doing this so the icons won't blink when changed -->
             <template v-for="(face, i) in facing" :key="i">
-                <Icon :name="'facing-' + face"
+                <Icon
                     v-show="currFace === face"
+                    :name="`facing-${face}`"
                 />
             </template>
-            <Icon name="dd-arrow" />
+            <Icon v-if="!isCompact" name="dd-arrow" />
         </div>
-        <select class="side-picker__btn" v-model="currFace" :id="id"
+        <select
+            :id="id" v-model="currFace" class="side-picker__btn"
             :title="`Filter by facing: ${currFace.charAt(0).toUpperCase() + currFace.slice(1)}`"
         >
-            <option v-for="(face, i) in facing" :key="i"
+            <option
+                v-for="(face, i) in facing" :key="i"
                 :value="face"
             >{{ face.charAt(0).toUpperCase() + face.slice(1) }}</option>
         </select>
@@ -42,8 +47,12 @@
     .side-picker__wrap {
         position: relative;
         border-radius: $BR_round;
+
+        &.compact {
+            width: 40px;
+        }
     }
-    
+
     .side-picker__btn {
         width: 100%; height: 100%;
         appearance: none;
@@ -53,7 +62,7 @@
         transition: $TR_regular;
 
         &:hover {
-        	border-color: $accent-light;
+            border-color: $accent-light;
         }
 
         &:focus, :active {
@@ -71,6 +80,10 @@
         width: calc(100% - 4px); height: 100%;
         padding-left: 4px; gap: 4px;
         border-radius: $BR_round;
+
+        .compact & {
+            padding-left: 2px;
+        }
     }
 
     label {

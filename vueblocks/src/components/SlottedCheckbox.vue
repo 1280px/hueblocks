@@ -1,17 +1,18 @@
-<script setup>
-    import {ref, defineModel, useId} from 'vue'
+<script setup lang="ts">
+import { defineModel, useId } from 'vue'
 
-    import Icon from '@/components/Icon.vue'
+import Icon from '@/components/Icon.vue'
 
-    const value = defineModel()
-    const id = useId()
+const value = defineModel()
+
+const id = useId()
 </script>
 
 <template>
     <label :for="id">
-    <input type="checkbox" v-model="value" :id="id">
-        <Icon name="check" class="checkbox-check" :class="{ 'active': value }" />
-        <slot></slot>
+        <input :id="id" v-model="value" type="checkbox">
+        <Icon name="check" class="checkbox-check" :class="{ active: value }" />
+        <slot />
     </label>
 </template>
 

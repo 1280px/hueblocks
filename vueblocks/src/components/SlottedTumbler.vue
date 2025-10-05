@@ -1,26 +1,27 @@
-<script setup>
-    import {ref, defineModel, useId} from 'vue'
+<script setup lang="ts">
+import { defineModel, useId } from 'vue'
 
-    const value = defineModel()
-    const id = useId()
+const value = defineModel()
+
+const id = useId()
 </script>
 
 <template>
-        <input type="checkbox" v-model="value" :id="id">
+    <input :id="id" v-model="value" type="checkbox">
 
-        <label class="tumbler__wrap" :for="id">
-            <span class="tumbler__text" :class="{ 'active': value }">
-                <slot name="left"></slot>
-            </span>
+    <label class="tumbler__wrap" :for="id">
+        <span class="tumbler__text" :class="{ active: value }">
+            <slot name="left" />
+        </span>
 
-            <label :for="id" class="tumbler" :class="{ 'active': value }">
-                <!-- "tumblers are essentially just a little fancier checkboxes" -- Me, 2020. -->
-            </label>
-
-            <span class="tumbler__text" :class="{ 'active': !value }">
-                <slot name="right"></slot>
-            </span>
+        <label :for="id" class="tumbler" :class="{ active: value }">
+            <!-- "tumblers are essentially just a little fancier checkboxes" -- me, 2020. -->
         </label>
+
+        <span class="tumbler__text" :class="{ active: !value }">
+            <slot name="right" />
+        </span>
+    </label>
 </template>
 
 <style lang="scss" scoped>
@@ -40,9 +41,9 @@
         transition: $TR_regular;
 
         &.active {
-	        color: $white_50;
+            color: $white_50;
         }
-    }    
+    }
 
     .tumbler {
         display: inline-block;

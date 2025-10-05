@@ -1,6 +1,6 @@
 <template>
     <button>
-        <slot></slot>
+        <slot />
     </button>
 </template>
 
@@ -26,7 +26,7 @@
         }
 
         &:hover {
-        	border-color: $accent-light;
+            border-color: $accent-light;
 
             &.trans {
                 background-color: $white_20;

@@ -1,18 +1,18 @@
 <script setup>
-    import {ref, defineProps} from 'vue'
+import { defineProps } from 'vue'
 
-    const props = defineProps({
-        isLoaded: {
-            type: Boolean,
-            required: true
-        }
-    })
+const props = defineProps({
+    isLoaded: {
+        type: Boolean,
+        required: true,
+    },
+})
 </script>
 
 <template>
     <button type="submit" :disabled="props.isLoaded">
-        <slot v-if="!props.isLoaded" name="normal"></slot>
-        <slot v-else name="disabled"></slot>
+        <slot v-if="!props.isLoaded" name="normal" />
+        <slot v-else name="disabled" />
     </button>
 </template>
 

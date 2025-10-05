@@ -1,33 +1,29 @@
-<script setup>
-    import {ref, defineModel, defineProps, useId} from 'vue'
+<script setup lang="ts">
+import { computed, defineModel, defineProps, useId } from 'vue'
 
-    import Icon from '@/components/Icon.vue'
+import Icon from '@/components/Icon.vue'
 
-    const props = defineProps({
-        names: {
-            type: Array,
-            required: true
-        },
-        default: {
-            type: Number,
-            required: false
-        }
-    })
+const { names } = defineProps<{
+    names: string[],
+}>()
 
-    const value = defineModel()
-    value.value = (props?.default || 0)
-    // TODO: reset value to .default if out of bounds (use computed?)
+const value = defineModel({ default: 0 })
 
-    const id = useId()
+const ibValue = computed({
+    get: () => value.value >= names.length ? names.length - 1 : value.value < 0 ? 0 : value.value,
+    set: (i: number) => value.value = (i >= names.length ? names.length - 1 : i < 0 ? 0 : i),
+})
+
+const id = useId()
 </script>
 
 <template>
     <label :for="id">
-        <slot></slot>
-        <select v-model="value" :id="id" :disabled="names.length < 2">
+        <slot />
+        <select :id="id" v-model="ibValue" :disabled="names.length < 2">
             <option v-for="(name, i) in names" :key="i" :value="i">{{ name }}</option>
         </select>
-        <div class="select__arrow" :class="{ 'inactive': names.length < 2 }">
+        <div class="select__arrow" :class="{ inactive: names.length < 2 }">
             <Icon name="dd-arrow" />
         </div>
     </label>
@@ -36,7 +32,7 @@
 <style lang="scss" scoped>
     @use '@/assets/variables' as *;
 
-    select { 
+    select {
         appearance: none;
         width: 200px; height: 28px;
         margin-left: 5px; padding: 0 8px 1px 8px;

@@ -1,30 +1,28 @@
-<script setup>
-    import {ref, defineProps, onMounted} from 'vue'
-    import { useGlobalStore } from '@/stores/GlobalStore'
+<script setup lang="ts">
+import { defineProps, onMounted, ref } from 'vue'
 
-    const {name} = defineProps({
-        name: {
-            type: String,
-            required: true
-        }
-    })
+import { useGlobalStore } from '@/stores/GlobalStore'
 
-    const iconData = ref(name)
+const { name } = defineProps<{
+    name: string,
+}>()
 
-    onMounted(async () => {
-        const response = await fetch(
-            GlobalStore.getIconPath(name)
-        )
-        iconData.value = await response.text()
-    })
+const GlobalStore = useGlobalStore()
 
-    const GlobalStore = useGlobalStore()
+const iconData = ref(name)
+
+onMounted(async () => {
+    const response = await fetch(
+        GlobalStore.getIconPath(name),
+    )
+    iconData.value = await response.text()
+})
 </script>
 
 <!-- https://xhtml.ru/2020/css/un-repeat-svg-icon-fill-with-currentcolor/ -->
 
 <template>
-    <div class="icon" v-html="iconData"></div>
+    <div class="icon" v-html="iconData" />
 </template>
 
 <style lang="scss" scoped>

@@ -1,22 +1,22 @@
 <script setup>
-    import {ref, defineProps} from 'vue'
-    import { useGlobalStore } from '@/stores/GlobalStore'
+import { defineProps, ref } from 'vue'
 
-    const GlobalStore = useGlobalStore()
-    const {colorCss, blockRef} = defineProps({
-        colorCss: {
-            type: String,
-            required: true
-        },
-        blockRef: {
-            type: [Object, null],
-            required: true
-        },
-    })
+import { useGlobalStore } from '@/stores/GlobalStore'
 
-    // We only want to show background when image is not loaded,
-    // so textrues with alpha channel will show up normally:
-    const isLoaded = ref(false)
+const { colorCss, blockRef } = defineProps({
+    colorCss: {
+        type: String,
+        required: true,
+    },
+    blockRef: {
+        type: [Object, null],
+        required: true,
+    },
+})
+const GlobalStore = useGlobalStore()
+// We only want to show background when image is not loaded,
+// so textrues with alpha channel will show up normally:
+const isLoaded = ref(false)
 </script>
 
 <!-- As if in "tea bag tag" :) -->
@@ -26,14 +26,15 @@
             <div
                 class="colorbar__color-segment__tag-inner"
                 :style="{
-                    'background-color': blockRef ? 'revert-layer' : colorCss
+                    'background-color': blockRef ? 'revert-layer' : colorCss,
                 }"
                 :title="blockRef ? `${blockRef?.name} \n${colorCss}` : colorCss"
             >
-                <img v-if="blockRef" @load="isLoaded = true" @error="isLoaded = false"
-                    :src="GlobalStore.getTexturePath(
-                        blockRef.blocksetIdx, blockRef.texture
-                    )"
+                <img
+                    v-if="blockRef" :src="GlobalStore.getTexturePath(
+                        blockRef.blocksetIdx, blockRef.texture,
+                    )" @load="isLoaded = true"
+                    @error="isLoaded = false"
                 >
             </div>
         </div>

@@ -19,17 +19,19 @@
     "wowerlay": "^1.1.0"
   },
   "devDependencies": {
+    "@antfu/eslint-config": "^5.4.1",
     "@eslint/js": "^9.18.0",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vitest/eslint-plugin": "1.1.25",
     "@vue/test-utils": "^2.4.6",
-    "eslint": "^9.18.0",
+    "eslint": "^9.36.0",
     "eslint-plugin-oxlint": "^0.15.6",
     "eslint-plugin-vue": "^9.32.0",
     "jsdom": "^26.0.0",
     "npm-run-all2": "^7.0.2",
     "oxlint": "^0.15.6",
     "sass": "^1.83.4",
+    "typescript": "^5.7.3",
     "vite": "^6.0.11",
     "vite-plugin-vue-devtools": "^7.7.0",
     "vitest": "^3.0.2"
