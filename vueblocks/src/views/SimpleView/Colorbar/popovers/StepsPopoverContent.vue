@@ -1,19 +1,19 @@
-<script setup>
+<script setup lang="ts">
+import type { ColorRGB } from '@/types/colors'
+import type { ColorbarSeg } from '@/types/simpleview'
+
 import { defineEmits, defineProps } from 'vue'
 
 import Icon from '@/components/Icon.vue'
 import { useSimpleViewStore } from '@/stores/SimpleViewStore'
 
-const { cbIdx } = defineProps({
-    cbIdx: {
-        type: Number,
-        required: true,
-    },
-})
+const { cbIdx } = defineProps<{
+    cbIdx: number,
+}>()
 
-const emit = defineEmits([
-    'done',
-])
+const emit = defineEmits<{
+    done: [],
+}>()
 
 const SimpleViewStore = useSimpleViewStore()
 
@@ -22,10 +22,10 @@ function splitCbItem() {
 
     SimpleViewStore.colorbarData[cbIdx].steps -= half
 
-    const newItem = {
+    const newItem: ColorbarSeg = {
         color: (SimpleViewStore.colorbarData[cbIdx].color).map(
             (c, i) => Math.floor((c / 2) + (SimpleViewStore.colorbarData[cbIdx + 1].color[i] / 2)),
-        ),
+        ) as ColorRGB,
         blockRef: null,
         steps: half,
     }

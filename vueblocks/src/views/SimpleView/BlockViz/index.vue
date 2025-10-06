@@ -1,5 +1,8 @@
-<script setup>
-import { computed, ref } from 'vue'
+<script setup lang="ts">
+import type { Blockset } from '@/types/blocksets'
+import type { Palette } from '@/types/palettes'
+
+import { computed } from 'vue'
 
 import Block from '@/components/Block.vue'
 import Icon from '@/components/Icon.vue'
@@ -9,23 +12,20 @@ import SlottedCheckbox from '@/components/SlottedCheckbox.vue'
 import SlottedDropdown from '@/components/SlottedDropdown.vue'
 import { useGlobalStore } from '@/stores/GlobalStore'
 import { useSimpleViewStore } from '@/stores/SimpleViewStore'
-
 import BigBlackButton from './BigBlackButton.vue'
 
 const GlobalStore = useGlobalStore()
 const SimpleViewStore = useSimpleViewStore()
 
-const blocksetsDataNames = computed(() => {
-    if (!GlobalStore.blocksetsData) {
-        return ['Loading...']
-    }
+const blocksetsDataNames = computed((): Blockset['name'][] => {
+    if (!GlobalStore.blocksetsData) { return ['Loading…'] }
+
     return GlobalStore.blocksetsData.map(bsd => bsd.name)
 })
 
-const blockdataPaletteNames = computed(() => {
-    if (!GlobalStore.currBlocksetPalettes) {
-        return ['Loading...']
-    }
+const blockdataPaletteNames = computed((): Palette['name'][] => {
+    if (!GlobalStore.currBlocksetPalettes) { return ['Loading…'] }
+
     return GlobalStore.currBlocksetPalettes.map(pal => pal.name)
 })
 </script>
@@ -76,9 +76,6 @@ const blockdataPaletteNames = computed(() => {
         </div>
     </section>
 
-    <!-- cbi: {{ JSON.stringify(GlobalStore.currBlocksetIdx) }}
-    cpi: {{ JSON.stringify(GlobalStore.currPaletteIdx) }} -->
-
     <section class="blockviz-options--blockset__wrap">
         <div class="blockviz-options--blockset">
             <div class="blockviz-options--blockset__inner">
@@ -100,19 +97,19 @@ const blockdataPaletteNames = computed(() => {
             <div class="blockviz-options--blockset__inner">
                 <!-- <div style="display: flex">
                     <SlottedDropdown :names="['0%', '30%', '50%']" :default="0"
-                        v-model="SimpleViewStore.blockDataCfg.noiseMinThreshold"
+                        v-model="SimpleViewStore.blockFilterCfg.noiseMinThreshold"
                     >
                         <abbr title="Filters out blocks with colour noise percentage higher than given. The lower the threshold, the less 'noisy' blocks will be used for generation."
                         >Noise:</abbr>
                     </SlottedDropdown>
                     <SlottedDropdown :names="['30%', '50%', '70%', '80%', '100%']" :default="4"
-                        v-model="SimpleViewStore.blockDataCfg.noiseMaxThreshold"
+                        v-model="SimpleViewStore.blockFilterCfg.noiseMaxThreshold"
                     >
                         &nbsp;to
                     </SlottedDropdown>
                 </div> -->
 
-                <SlottedCheckbox v-model="SimpleViewStore.blockDataCfg.useCIELAB">
+                <SlottedCheckbox v-model="SimpleViewStore.blockFilterCfg.useCIELAB">
                     <abbr title="Use colourspace closer to how human eyes percive colour. Results in more vibrant looking and accurate, but less dark and contrast gradients.">Use&nbsp;CIELAB</abbr>
                 </SlottedCheckbox>
             </div>
@@ -151,7 +148,6 @@ const blockdataPaletteNames = computed(() => {
     }
     .blockviz-controls__blob {
         @include flex-center;
-        // height: 40px;
         gap: 4px;
         border-radius: calc($BR_big + $BR_regular);
         padding: 4px;

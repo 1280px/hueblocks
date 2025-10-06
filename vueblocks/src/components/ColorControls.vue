@@ -1,33 +1,36 @@
 <script setup lang="ts">
+import type { ColorHEX, ColorRGB } from '@/types/colors'
+import type { ColorbarSeg } from '@/types/simpleview'
 import { computed, defineModel } from 'vue'
-
 import { hex2rgb, rgb2hex } from '@/colors'
 import Icon from '@/components/Icon.vue'
 
 const { blockpickFun } = defineProps<{
-    blockpickFun: () => any,
+    blockpickFun: () => ColorbarSeg,
 }>()
 
-const cbItem = defineModel()
+const cbItem = defineModel<ColorbarSeg>()
 
-const currColorRgb = computed({
-    get: () => cbItem.value.color,
-    set: rgb => cbItem.value.color = rgb,
+const currColorRgb = computed<ColorRGB>({
+    get: () => cbItem.value!.color,
+    set: (rgb: ColorRGB) => cbItem.value!.color = rgb,
 })
-const currColorHex = computed({
+const currColorHex = computed<ColorHEX>({
     get: () => rgb2hex(currColorRgb.value),
     set: hex => currColorRgb.value = hex2rgb(hex),
 })
 
-async function applyBlockPickColor(getBlockPickColor) {
-    const res = await getBlockPickColor()
+async function applyBlockPickColor(
+    getBlockPickColor: typeof blockpickFun,
+) {
+    const res: ColorbarSeg = await getBlockPickColor()
 
     if (res) {
         currColorRgb.value.forEach((c, i) => {
             currColorRgb.value[i] = res.color[i]
         })
         if (res.blockRef) {
-            cbItem.value.blockRef = res.blockRef
+            cbItem.value!.blockRef = res.blockRef
         }
     }
 }

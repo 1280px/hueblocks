@@ -4,7 +4,7 @@ export default antfu(
     {
         ignores: [
             '**/node_modules',
-            'package.*.json',
+            '**/*.json',
             '.github/*',
             '.vscode/*',
         ],

@@ -11,7 +11,7 @@ function overlayShow(newInnerComponent, newInnerProps) {
     return overlay.value?.show(newInnerComponent, newInnerProps)
 }
 
-const overlayIsShown = computed(() => {
+const overlayIsShown = computed<any>(() => {
     return overlay.value?.visible || false
 })
 

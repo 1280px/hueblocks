@@ -1,28 +1,30 @@
+import type { Block, BlockFacing } from '@/types/blocks'
+import type { BlocksetIndex } from '@/types/blocksets'
+import type { ColorLAB, ColorRGB } from '@/types/colors'
+import type { Palette } from '@/types/palettes'
+import type { BlockFilterConfig, BlockVizConfig, BlockVizRow, ColorbarSeg } from '@/types/simpleview'
+
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 import { deltaE, rgb2lab } from '@/colors'
 
 export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
-    const blockVizCfg = ref({
+    const blockVizCfg = ref<BlockVizConfig>({
         hideDuplicates: true,
         resultsInOneRow: false,
         keepPrevResults: false,
     })
 
-    const blockDataCfg = ref({
-        // Note that blockdata and palettes are stored in GlobalStore!
+    const blockFilterCfg = ref<BlockFilterConfig>({
         useCIELAB: true,
-        noiseThresholdMin: 0,
-        noiseThresholdMax: 4,
     })
 
-    const colorbarData = ref([
+    const colorbarData = ref<ColorbarSeg[]>([
         {
             color: [12, 34, 56],
             blockRef: null,
-            steps: 6, // Length between CURRENT and NEXT color segments,
-            // will be ignored if this is the last color segment
+            steps: 6,
         },
         {
             color: [200, 100, 20],
@@ -45,11 +47,16 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
         },
     ])
 
-    const blockVizData = ref([])
+    const blockVizData = ref<BlockVizRow[]>([])
 
     // Uses exactly the same algorithm as original HueBlocks;
     // results in faster but more "inaccurate" graident generation
-    function blockVizCalcRGB(blockdata, startRGB, endRGB, steps) {
+    function blockVizCalcRGB(
+        blockdata: Block[],
+        startRGB: ColorRGB,
+        endRGB: ColorRGB,
+        steps: number,
+    ): BlockVizRow['textures'] {
         const newSegData = []
 
         for (let step = 0; step < steps; step++) {
@@ -58,11 +65,12 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
                 endRGB[0] * (step / (steps - 1)) + startRGB[0] * (((steps - 1) - step) / (steps - 1)),
                 endRGB[1] * (step / (steps - 1)) + startRGB[1] * (((steps - 1) - step) / (steps - 1)),
                 endRGB[2] * (step / (steps - 1)) + startRGB[2] * (((steps - 1) - step) / (steps - 1)),
-            ]
+            ] as ColorRGB
             // console.log(startRGB, endRGB, stepRGB)
 
             // Now go through all blockdata and find block with closest RGB
-            let [closestBlock, closestBlockScore] = [{ name: 'missingNo' }, 0]
+            let closestBlock: Block = { name: 'missingNo' } as Block
+            let closestBlockScore: number = 0
 
             for (const block of blockdata) {
                 const blockScore = (
@@ -71,7 +79,7 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
                     + 255 - Math.abs(stepRGB[2] - block.rgb[2])
                 ) / (255 * 3)
                 // 0.0 means 'completely opposite colour', 1.0 means 'same colour';
-                // "values < 0.8 in 99% of cases are junk" -- Me, 2020.
+                // values < 0.8 in 99% of cases are pretty much junk.
 
                 if (blockScore > closestBlockScore) {
                     closestBlock = block
@@ -86,7 +94,12 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
 
     // Uses CIELAB transformations and sqrt of mean of squares;
     // results in better but noticeably slower gradient generation
-    function blockVizCalcCIELAB(blockdata, startRGB, endRGB, steps) {
+    function blockVizCalcCIELAB(
+        blockdata: Block[],
+        startRGB: ColorRGB,
+        endRGB: ColorRGB,
+        steps: number,
+    ): BlockVizRow['textures'] {
         const newSegData = []
 
         // Here I'm using antimatter15's RGB<->LAB convertors implementation:
@@ -100,12 +113,13 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
                 endLAB[0] * (step / (steps - 1)) + startLAB[0] * (((steps - 1) - step) / (steps - 1)),
                 endLAB[1] * (step / (steps - 1)) + startLAB[1] * (((steps - 1) - step) / (steps - 1)),
                 endLAB[2] * (step / (steps - 1)) + startLAB[2] * (((steps - 1) - step) / (steps - 1)),
-            ]
+            ] as ColorLAB
             // console.log(startLAB, endLAB, stepLAB)
 
             // L*a*b deltas computed the same way as Euclidian distance
             // (the smaller <=> the closer), which I find very neat
-            let [closestBlock, closestBlockDelta] = [{ name: 'missingNo' }, Infinity]
+            let closestBlock: Block = { name: 'missingNo' } as Block
+            let closestBlockDelta: number = Infinity
 
             for (const block of blockdata) {
                 const blockDelta = deltaE(stepLAB, block.lab)
@@ -121,7 +135,11 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
         return newSegData
     }
 
-    const getFilteredBlockdata = (blockdata, palette, facing) => {
+    const getFilteredBlockdata = (
+        blockdata: Block[],
+        palette: Palette,
+        facing: BlockFacing,
+    ): Block[] => {
         const res = blockdata.filter(
             (block) => {
                 if (palette.count > 0) {
@@ -130,8 +148,8 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
                     }
                 }
 
-                // if ((block.noise < blockDataCfg.value.noiseThresholdMin) &&
-                //     (block.noise > blockDataCfg.value.noiseThresholdMax)) {
+                // if ((block.noise < blockFilterCfg.value.noiseThresholdMin) &&
+                //     (block.noise > blockFilterCfg.value.noiseThresholdMax)) {
                 // return false
                 // }
 
@@ -152,13 +170,18 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
         return res
     }
 
-    const blockVizGenerate = (blocksetIdx, blockdata, palette, facing) => {
+    const blockVizGenerate = (
+        blocksetIdx: BlocksetIndex,
+        blockdata: Block[],
+        palette: Palette,
+        facing: BlockFacing,
+    ) => {
         // First, fulter out blockdata to exclude blocks with
         // undesired side facing, palette, or noise coefficients:
         const filteredBlockdata = getFilteredBlockdata(blockdata, palette, facing)
 
         // Create a blockviz row objecy for new render results...
-        const newBlockVizRow = {
+        const newBlockVizRow: BlockVizRow = {
             blocksetIdx,
             textures: [],
         }
@@ -169,8 +192,8 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
             const segEnd = colorbarData.value[cbIdx + 1].color
             const segSteps = colorbarData.value[cbIdx].steps
 
-            let seg
-            if (blockDataCfg.value.useCIELAB) {
+            let seg: BlockVizRow['textures'] = []
+            if (blockFilterCfg.value.useCIELAB) {
                 seg = blockVizCalcCIELAB(filteredBlockdata, segStart, segEnd, segSteps)
             }
             else {
@@ -196,7 +219,7 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
     }
 
     return {
-        blockVizCfg, blockDataCfg,
+        blockVizCfg, blockFilterCfg,
         colorbarData,
         getFilteredBlockdata,
         blockVizData, blockVizGenerate,

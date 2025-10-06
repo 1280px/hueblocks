@@ -9,7 +9,7 @@ const { name } = defineProps<{
 
 const GlobalStore = useGlobalStore()
 
-const iconData = ref(name)
+const iconData = ref<string>(name)
 
 onMounted(async () => {
     const response = await fetch(

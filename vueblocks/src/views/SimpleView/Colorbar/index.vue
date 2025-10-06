@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue'
 import { Wowerlay } from 'wowerlay'
 
+import { getRandomRbg } from '@/colors'
 import Icon from '@/components/Icon.vue'
 import SlottedButton from '@/components/SlottedButton.vue'
 import { overlayIsShown } from '@/overlay'
@@ -16,6 +17,7 @@ import StepsSegment from './StepsSegment.vue'
 const SimpleViewStore = useSimpleViewStore()
 
 // Colorbar button controls
+
 function colorbarSwap() {
     SimpleViewStore.colorbarData = SimpleViewStore.colorbarData.reverse()
 
@@ -29,37 +31,18 @@ function colorbarSwap() {
         )
     }
 }
+
 function colorbarRandom() {
     // We only want to randomize colors, not lengths
     for (const cbItem of SimpleViewStore.colorbarData) {
         cbItem.blockRef = null
-        cbItem.color = [
-            Number.parseInt(
-                Math.floor(0.3 + Math.random()) * 120
-                + Math.round(Math.random() * 2) * 40
-                + (Math.random() * 56),
-            ),
-            Number.parseInt(
-                Math.floor(0.3 + Math.random()) * 100
-                + Math.round(Math.random() * 4) * 30
-                + (Math.random() * 16),
-            ),
-            Number.parseInt(
-                Math.floor(0.3 + Math.random()) * 80
-                + Math.round(Math.random() * 2) * 40
-                + (Math.random() * 96),
-            ),
-        ]
-        // console.log(cbItem.color[0], cbItem.color[1], cbItem.color[2])
+        // cbItem.color = getRandomRbg(0.33)
+        cbItem.color = getRandomRbg(Math.random() > 0.75 ? 0.96 : 1.12)
     }
 }
 
-// Convert RGB to CSS color string
-function getCssRgb(rgb) {
-    return `rgb(${rgb[0] || 0}, ${rgb[1] || 0}, ${rgb[2] || 0})`
-}
+// Wowerlay popover
 
-// Wowerlay stuff
 const popoverTarget = ref(null)
 const popoverMode = ref(null)
 const popoverData = ref(null)
@@ -101,14 +84,15 @@ const popoverIsShown = computed({
         <div class="colorbar__inner">
             <template v-for="(cbItem, cbIdx) in SimpleViewStore.colorbarData" :key="cbIdx">
                 <ColorSegment
-                    :color-css="getCssRgb(cbItem.color)" :block-ref="cbItem.blockRef"
+                    :color="cbItem.color" :block-ref="cbItem.blockRef"
                     @click="(e) => popoverShow(e, 'color', cbIdx)"
                 />
                 <StepsSegment
                     v-if="cbIdx !== SimpleViewStore.colorbarData.length - 1"
-                    :value="cbItem.steps" :bg="[
-                        getCssRgb(SimpleViewStore.colorbarData[cbIdx]?.color),
-                        getCssRgb(SimpleViewStore.colorbarData[cbIdx + 1]?.color),
+                    :value="cbItem.steps"
+                    :bg="[
+                        SimpleViewStore.colorbarData[cbIdx]?.color,
+                        SimpleViewStore.colorbarData[cbIdx + 1]?.color,
                     ]"
                     @click="(e) => popoverShow(e, 'steps', cbIdx)"
                 />

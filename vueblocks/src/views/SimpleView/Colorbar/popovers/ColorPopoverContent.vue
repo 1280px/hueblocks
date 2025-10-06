@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { defineEmits, defineProps } from 'vue'
 
 import ColorControls from '@/components/ColorControls.vue'
@@ -7,23 +7,19 @@ import { overlayShow } from '@/overlay'
 import { useSimpleViewStore } from '@/stores/SimpleViewStore'
 import BlockPick from '@/widgets/Overlay/BlockPick.vue'
 
-const { cbIdx } = defineProps({
-    cbIdx: {
-        type: Number,
-        required: true,
-    },
-})
+const { cbIdx } = defineProps<{
+    cbIdx: number,
+}>()
 
-const emit = defineEmits([
-    'done',
-])
+const emit = defineEmits<{
+    done: [],
+}>()
 
 const SimpleViewStore = useSimpleViewStore()
 
 function deleteCbItem() {
     if (cbIdx > 0) {
-        SimpleViewStore.colorbarData[cbIdx - 1].steps
-            += SimpleViewStore.colorbarData[cbIdx].steps
+        SimpleViewStore.colorbarData[cbIdx - 1].steps += SimpleViewStore.colorbarData[cbIdx].steps
     }
     SimpleViewStore.colorbarData.splice(cbIdx, 1)
 

@@ -1,9 +1,9 @@
+import type { ColorHEX, ColorLAB, ColorRGB } from './types/colors'
+
 // RGB <--> LAB color converters and LHC distance calculator
 // Source: https://github.com/antimatter15/rgb-lab/
 
-import type { ColorHEX, ColorLAB, ColorRGB } from './types/colors'
-
-function lab2rgb(lab: ColorLAB) {
+function lab2rgb(lab: ColorLAB): ColorRGB {
     let y = (lab[0] + 16) / 116
     let x = lab[1] / 500 + y
     let z = y - lab[2] / 200
@@ -24,7 +24,7 @@ function lab2rgb(lab: ColorLAB) {
     return [Math.max(0, Math.min(1, r)) * 255, Math.max(0, Math.min(1, g)) * 255, Math.max(0, Math.min(1, b)) * 255]
 }
 
-function rgb2lab(rgb: ColorRGB) {
+function rgb2lab(rgb: ColorRGB): ColorLAB {
     let r = rgb[0] / 255
     let g = rgb[1] / 255
     let b = rgb[2] / 255
@@ -45,7 +45,7 @@ function rgb2lab(rgb: ColorRGB) {
     return [(116 * y) - 16, 500 * (x - y), 200 * (y - z)]
 }
 
-function deltaE(labA: ColorLAB, labB: ColorLAB) {
+function deltaE(labA: ColorLAB, labB: ColorLAB): number {
     const deltaL = labA[0] - labB[0]
     const deltaA = labA[1] - labB[1]
     const deltaB = labA[2] - labB[2]
@@ -68,15 +68,44 @@ function deltaE(labA: ColorLAB, labB: ColorLAB) {
 
 // Compact HEX <--> RGB converters I found on S.O. years ago
 // Source: has drown in the flow of its rapid century
-function hex2rgb(hex: ColorHEX) {
+
+function hex2rgb(hex: ColorHEX): ColorRGB {
     return [+`0x${hex[1]}${hex[2]}`, +`0x${hex[3]}${hex[4]}`, +`0x${hex[5]}${hex[6]}`]
 }
-function rgb2hex(rgb: ColorRGB) {
+function rgb2hex(rgb: ColorRGB): ColorHEX {
     return `#${((1 << 24) + (rgb[0] << 16) + (rgb[1] << 8) + rgb[2]).toString(16).slice(1)}`
+}
+
+// Other useful stuff
+
+function getRandomRbg(lightK: number): ColorRGB {
+    return [
+        Math.floor((
+            (lightK + Math.random()) * 120
+            + (Math.random() * 2) * 40
+            + (Math.random() * 56)
+        ) ** lightK % 255),
+        Math.floor((
+            (lightK + Math.random()) * 100
+            + (Math.random() * 4) * 30
+            + (Math.random() * 16)
+        ) ** lightK % 255),
+        Math.floor((
+            (lightK + Math.random()) * 80
+            + (Math.random() * 2) * 40
+            + (Math.random() * 96)
+        ) ** lightK % 255),
+    ]
+}
+
+function getCssRgb(rgb: ColorRGB): string {
+    return `rgb(${rgb[0] || 0}, ${rgb[1] || 0}, ${rgb[2] || 0})`
 }
 
 export {
     deltaE,
+    getCssRgb,
+    getRandomRbg,
     hex2rgb,
     lab2rgb,
     rgb2hex,

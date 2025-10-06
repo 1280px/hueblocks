@@ -1,4 +1,7 @@
-<script setup>
+<script setup lang="ts">
+import type { BlockFacing } from '@/types/blocks'
+import type { ColorbarSeg } from '@/types/simpleview'
+
 import { defineEmits, defineProps } from 'vue'
 
 import ColorControls from '@/components/ColorControls.vue'
@@ -6,23 +9,20 @@ import { overlayShow } from '@/overlay'
 import { useSimpleViewStore } from '@/stores/SimpleViewStore'
 import BlockPick from '@/widgets/Overlay/BlockPick.vue'
 
-const { side } = defineProps({
-    side: {
-        type: String,
-        required: true,
-    },
-})
+const { side } = defineProps<{
+    side: 'left' | 'right',
+}>()
 
-const emit = defineEmits([
-    'done',
-])
+const emit = defineEmits<{
+    done: [],
+}>()
 
 const SimpleViewStore = useSimpleViewStore()
 
 const cbRefIdx = (side === 'left' ? 0 : (SimpleViewStore.colorbarData.length - 1))
 const cbRefItem = SimpleViewStore.colorbarData[cbRefIdx]
 
-const cbNewItem = {
+const cbNewItem: ColorbarSeg = {
     color: [...cbRefItem.color],
     blockRef: cbRefItem.blockRef,
     steps: cbRefItem.steps,

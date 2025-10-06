@@ -1,22 +1,24 @@
-<script setup>
-import { defineProps, ref } from 'vue'
+<script setup lang="ts">
+import type { DisplayBlock } from '@/types/blocks'
+import type { ColorRGB } from '@/types/colors'
 
+import { computed, defineProps, ref } from 'vue'
+
+import { getCssRgb } from '@/colors'
 import { useGlobalStore } from '@/stores/GlobalStore'
 
-const { colorCss, blockRef } = defineProps({
-    colorCss: {
-        type: String,
-        required: true,
-    },
-    blockRef: {
-        type: [Object, null],
-        required: true,
-    },
-})
+const { color, blockRef } = defineProps<{
+    color: ColorRGB,
+    blockRef: DisplayBlock,
+}>()
+
 const GlobalStore = useGlobalStore()
+
 // We only want to show background when image is not loaded,
 // so textrues with alpha channel will show up normally:
-const isLoaded = ref(false)
+const isLoaded = ref<boolean>(false)
+
+const colorCss = computed<string>(() => getCssRgb(color))
 </script>
 
 <!-- As if in "tea bag tag" :) -->
@@ -31,10 +33,11 @@ const isLoaded = ref(false)
                 :title="blockRef ? `${blockRef?.name} \n${colorCss}` : colorCss"
             >
                 <img
-                    v-if="blockRef" :src="GlobalStore.getTexturePath(
+                    v-if="blockRef"
+                    :src="GlobalStore.getTexturePath(
                         blockRef.blocksetIdx, blockRef.texture,
-                    )" @load="isLoaded = true"
-                    @error="isLoaded = false"
+                    )"
+                    @load="isLoaded = true" @error="isLoaded = false"
                 >
             </div>
         </div>

@@ -1,19 +1,16 @@
-<script setup>
+<script setup lang="ts">
+import type { ColorRGB } from '@/types/colors'
+
 import { defineProps } from 'vue'
 
+import { getCssRgb } from '@/colors'
 import SlottedButton from '@/components/SlottedButton.vue'
 import { useSimpleViewStore } from '@/stores/SimpleViewStore'
 
-const { value, bg } = defineProps({
-    value: {
-        type: Number,
-        required: true,
-    },
-    bg: {
-        type: Array,
-        required: true,
-    },
-})
+const { value, bg } = defineProps<{
+    value: number,
+    bg: [ColorRGB, ColorRGB],
+}>()
 
 const SimpleViewStore = useSimpleViewStore()
 </script>
@@ -24,8 +21,8 @@ const SimpleViewStore = useSimpleViewStore()
             flex: value,
             background: (
                 `linear-gradient(
-                ${SimpleViewStore.blockDataCfg.useCIELAB ? 'in lab' : ''}
-                90deg, ${bg[0]}, ${bg[1]})`
+                ${SimpleViewStore.blockFilterCfg.useCIELAB ? 'in lab' : ''} 90deg,
+                ${getCssRgb(bg[0])}, ${getCssRgb(bg[1])})`
             ),
         }"
     >

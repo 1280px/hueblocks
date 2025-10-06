@@ -1,19 +1,17 @@
 <script setup lang="ts">
+import type { DisplayBlock } from '@/types/blocks'
+
 import { defineProps, ref } from 'vue'
 
 import { useGlobalStore } from '@/stores/GlobalStore'
 
-const { blocksetIdx = -1, texture = 'missingNo', name } = defineProps<{
-    blocksetIdx?: number,
-    texture?: string,
-    name: string,
-}>()
+const { blocksetIdx = -1, texture = 'missingNo', name } = defineProps<DisplayBlock>()
 
 const GlobalStore = useGlobalStore()
 
 // We only want to show background when image is not loaded,
 // so textrues with alpha channel will show up normally:
-const isLoaded = ref(false)
+const isLoaded = ref<boolean>(false)
 </script>
 
 <template>

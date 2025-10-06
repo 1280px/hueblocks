@@ -1,14 +1,11 @@
-<script setup>
+<script setup lang="ts">
 import { defineProps } from 'vue'
 
 import Icon from '@/components/Icon.vue'
 
-const { side } = defineProps({
-    side: {
-        type: String,
-        required: true,
-    },
-})
+const { side } = defineProps<{
+    side: 'left' | 'right',
+}>()
 </script>
 
 <template>

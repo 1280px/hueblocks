@@ -5,7 +5,7 @@ const { duration } = defineProps<{
     duration: number,
 }>()
 
-const showMsgbox = ref(true)
+const showMsgbox = ref<boolean>(true)
 
 onMounted(() => {
     setTimeout(
