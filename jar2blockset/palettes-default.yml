@@ -8,6 +8,20 @@
 # revamped to works with filtering system, and will be changed in the future!
 
 palettes:
+  - name: 'Default (opaque only)'
+    includes:
+      # Yes, you can do this as well, which means "include all and then exclude these":
+      - $
+    excludes:
+      - ice.png
+      - glass_$
+      - $_stained_glass.png
+      - frosted_ice_$
+      - slime.png
+      - slime_block.png
+      - honey_block_$
+      - tinted_glass.png
+
   - name: 'Colorful blocks'
     includes:
       - $_log_top.png

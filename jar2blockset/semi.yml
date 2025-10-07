@@ -1,0 +1,16 @@
+# Whether to exclude tectures that contain transparency. Allowed values are:
+# full (disallow any alpha), semi (allow semi-transparent textures), none (allow all)
+exclude-alpha: semi
+
+# Whether to exclude animated textures (ones that have corresponding .mcmecta or .txt
+# file) or blend them into a single texture using their first and last frames.
+exclude-animated: false
+
+# Method of avg color calculation, either legacy (resize) or modern (sqrts of mean of squares)
+colorcalc: modern
+
+# Method used for texture/blockset name autogeneration. Allowed methods are:
+# title (Purple Wool), capital (Purple wool), sep (puRPle wOoL), none (puRPle_wOoL)
+naming:
+  textures: title
+  blockset: title

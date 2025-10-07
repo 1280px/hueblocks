@@ -1,12 +1,13 @@
 import os
 import sys
 
-import numpy as np
-from PIL import Image
-from shutil import rmtree
-import zipfile
-from json import load, dump
 from datetime import datetime, timezone
+from json import load, dump
+from PIL import Image
+import numpy as np
+from shutil import rmtree
+from yaml import safe_load
+import zipfile
 
 import blockdata
 import palettes
@@ -30,30 +31,48 @@ def extract_blocks_from_jar(jar_path, output_path):
                         target.write(source.read())
     return
 
-
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print('\nNot enough arguments! See README for help.')
         sys.exit(1)
+
     JAR_PATH = sys.argv[1]
-    OUTPUT_PATH = os.path.splitext(JAR_PATH)[0]
-
-    EXCLUDE_ALPHA = (sys.argv[2] == '1') if len(sys.argv) >= 3 else True
-    EXCLUDE_ANIMATED = (sys.argv[3] == '1') if len(sys.argv) >= 4 else False
-
-    AUTOPARSER_PATH = (
-        (sys.argv[4] if (len(sys.argv) >= 5) and (sys.argv[4] != 'None') else 'autoparser-default.yml')
+    CONFIG_PATH = (
+        (sys.argv[2] if (len(sys.argv) >= 3) and (sys.argv[2] != 'None') else 'config-default.yml')
+    )
+    FACING_PATH = (
+        (sys.argv[3] if (sys.argv[3] != 'None') else None)
+        if len(sys.argv) >= 5 else 'facing-default.yml'
     )
     BLACKLIST_PATH = (
-        (sys.argv[5] if (sys.argv[5] != 'None') else None)
+        (sys.argv[4] if (sys.argv[4] != 'None') else None)
         if len(sys.argv) >= 5 else 'blacklist-default.yml'
     )
     PALETTES_PATH = (
-        (sys.argv[6] if (sys.argv[6] != 'None') else None)
+        (sys.argv[5] if (sys.argv[5] != 'None') else None)
         if len(sys.argv) >= 6 else 'palettes-default.yml'
     )
+
+    OUTPUT_PATH = os.path.splitext(JAR_PATH)[0]
     BLOCKSETS_PATH = os.path.dirname(JAR_PATH)
-    
+
+
+    # Load teh config file
+    configs = {
+        'exclude-alpha': None,
+        'exclude-animated': None,
+        'colorcalc': None,
+        'naming': {
+            'textures': None,
+            'blockset': None,
+        }
+    }
+    try:
+        with open(CONFIG_PATH, 'r') as config_f:
+            configs = safe_load(config_f)
+    except:
+        print('\nFailed to load config yml! Are you sure the file exists?')
+        sys.exit(1)
 
     # Ask what to do if generated blockset files already exist
     if os.path.isdir(OUTPUT_PATH):
@@ -72,29 +91,26 @@ if __name__ == "__main__":
 
     # Now let's go through every extracted file and remove the unwanted ones
     for fname in sorted(os.listdir(OUTPUT_PATH)):
-        if fname.endswith('.png'):
+        if fname.endswith('.png'): # Exclude .mcmeta and crap like this
             img = Image.open(os.path.join(OUTPUT_PATH, fname))
             img_np = np.asarray(img)
 
             # (A) Exclude textures containing alpha channel
-            if EXCLUDE_ALPHA:
-                # Older textures used P onlu for textures without alpha and RBGA only
-                # for ones with alpha. However, some newer textures also use P even
-                # though they use alpha, so, we have to check it as well, to be sure.
-                if img.mode == 'RGBA':
-                    if (img_np[:, :, 3].min()) < 255:
-                        os.remove(os.path.join(OUTPUT_PATH, fname))
-                        # print('Excluded', fname, '(A RGBA)')
-                        continue
+            if configs['exclude-alpha'] != 'none':
+                # Older textures used P onlu for textures without alpha and RBGA
+                # only for ones with alpha. However, some newer textures also use P
+                # even though they use alpha, and since 1.21.6 some textures use L
+                # or LA (or even RGB somehow for fire!) to the extent of some glass
+                # textures being LA and some RGBA... thank Mojang for this mess.
+                img_rgba = img.convert("RGBA")
+                img_rgba_np = np.asarray(img_rgba)
 
-                elif img.mode == 'P':
-                    img_temp = img.convert("RGBA")
-                    img_temp_np = np.asarray(img_temp)
+                alpha_threshold = 255 if (configs['exclude-alpha'] == 'full') else 1
 
-                    if (img_temp_np[:, :, 3].min()) < 255:
-                        os.remove(os.path.join(OUTPUT_PATH, fname))
-                        # print('Excluded', fname, '(A P)')
-                        continue
+                if (img_rgba_np[:, :, 3].min()) < alpha_threshold:
+                    os.remove(os.path.join(OUTPUT_PATH, fname))
+                    # print(f'Excluded {fname} by found alpha ({img.mode})')
+                    continue
 
             fname_noext = os.path.splitext(fname)[0]
 
@@ -106,7 +122,7 @@ if __name__ == "__main__":
             ):
                 # (B) Exclude textures with .txt/.mcmeta if option is true;
                 # otherwise, use blend of first & last frames as a new texture.
-                if EXCLUDE_ANIMATED:
+                if configs['exclude-animated']:
                     os.remove(os.path.join(OUTPUT_PATH, fname))
                     # print('Excluded', fname, '(B)')
 
@@ -137,12 +153,14 @@ if __name__ == "__main__":
 
 
     # (D) Generate blockdata for each texture, save as JSON
-    autoparser = blockdata.get_autoparser_rules(AUTOPARSER_PATH, OUTPUT_PATH)
+    facing_rules = blockdata.get_facing_rules(FACING_PATH, OUTPUT_PATH)
     print('Computed autoparser rules, processing textures data...\n')
 
     blockdata_res = blockdata.generate_textures_data(
         OUTPUT_PATH,
-        autoparser['facing'], autoparser['naming']['textures'], autoparser['colorcalc']
+        facing_rules,
+        configs['naming']['textures'],
+        configs['colorcalc']
     )
 
     # Add generation timestamp (like it used to be in older HB)
@@ -166,7 +184,7 @@ if __name__ == "__main__":
         print(f'Palettes computation finished, saved as {os.path.join(OUTPUT_PATH, "_palettes.json")}\n')
 
 
-    # Finally, generate blockset description, write/append as JSON
+    # (F) Finally, generate blockset description, write/append as JSON
     descriptions = []
     if os.path.isfile(os.path.join(BLOCKSETS_PATH, '_blocksets.json')):
         with open(os.path.join(BLOCKSETS_PATH, '_blocksets.json'), 'r') as blocksets_f:
@@ -180,7 +198,7 @@ if __name__ == "__main__":
     description_res = {
         'name': blockdata.generate_naming(
             os.path.split(JAR_PATH)[-1],
-            autoparser['naming']['blockset']
+            configs['naming']['blockset']
         ),
         'dir': OUTPUT_PATH,
         'count': len(os.listdir(OUTPUT_PATH))

@@ -19,23 +19,16 @@ def get_blacklisted_blocks(blacklist_path, textures_path):
     return list(blacklist.keys())
 
 
-def get_autoparser_rules(autoparser_path, textures_path):
+def get_facing_rules(autoparser_path, textures_path):
     with open(autoparser_path, 'r') as autoparser_f:
         autoparser_raw = safe_load(autoparser_f)
 
     textures_names = sorted(os.listdir(textures_path))
     textures_names = list(filter(lambda file: file.endswith('.png'), textures_names))
 
-
-    # First, get naming and colorcalc rules from file, no changes needed
-    naming_rules = autoparser_raw['naming']
-    colorcalc_rule = autoparser_raw['colorcalc']
-
-
-    # Second, compute facing filters! This will take MUCH longer...
+    # At first we compute filters for every facing option...
     sides = ['top', 'bottom', 'north', 'south', 'east', 'west', 'sides', 'all']
 
-    # At first we compute filters for every facing option (bruh!!1)
     facing_filters = {
         side: {} for side in sides
     }
@@ -81,13 +74,8 @@ def get_autoparser_rules(autoparser_path, textures_path):
 
         textures_to_sides[name] = present_sides
 
-
-    # Finally, return all the rules as dict
-    return {
-        'naming': naming_rules,
-        'colorcalc': colorcalc_rule,
-        'facing': textures_to_sides
-    }
+    # Finally, return all the facing rules
+    return textures_to_sides
 
 
 def generate_naming(string, naming_rule):

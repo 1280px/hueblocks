@@ -1,5 +1,3 @@
-# Lines starting from '#' are comments; comments and empty lines are simply ignored.
-
 filters:
   # These three lines are simple filters that exclude some block texture.
   # One line contains one filter; comments can NOT be put on the same line as well.
@@ -19,9 +17,10 @@ filters:
   # Below goes the default blacklist that I use to filter out blocks with foliage-affected
   # (i.e. grass) or duplicating textures, or just ones unsuitable for building (i.e. lava).
 
-  # 1.5.1
+  # 1.5.1 (all the textures above are also taken from this version)
   - doorIron_lower.png
   - doorWood_lower.png
+  - destroy_$
   - dragonEgg.png
   - dropper_front.png
   - enchantment_$
@@ -35,6 +34,7 @@ filters:
   - leaves_$
   - piston_bottom.png
   - piston_inner_top.png
+  - portal.png
   - quartz_block_chiseled.png
   - quartz_block_chiseled_top.png
   - quartz_block_lines_top.png
@@ -56,8 +56,12 @@ filters:
   - dropper_front_vertical.png
   - enchanting_table_$
   - end_portal_frame_top.png
+  - frosted_ice_0.png
+  - frosted_ice_1.png
+  - frosted_ice_2.png
   - furnace_front_on.png
   - jukebox$
+  - nether_portal.png
   - observer_front.png
   - observer_back$
   - piston_inner.png
@@ -153,4 +157,8 @@ filters:
   - trial_spawner_top$
   - vault_bottom$
   - vault_top$
-  - wildflowers$
+
+  # 1.21.9
+  - dried_ghast_$
+  # TODO: Maybe add a special handle for shelves to extract their back texture (useful in some builds)
+  - $_shelf.png

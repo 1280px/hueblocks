@@ -1,12 +1,3 @@
-# Method used for texture/blockset name autogeneration. Allowed methods are:
-# title (Purple Wool), capital (Purple wool), sep (puRPle wOoL) and none (puRPle_wOoL)
-naming:
-  textures: title
-  blockset: title
-
-# Method of avg color calculation, either legacy (resize) or modern (sqrts of mean of squares)
-colorcalc: modern
-
 # List of filters for autoparse to recognize what side a given texture is for,
 # using the same notation as in the blacklist file (see comments there).
 # See facing notation's meaning here: https://optifine.readthedocs.io/ctm.html#faces

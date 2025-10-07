@@ -17,11 +17,14 @@ A modular Python script to extract assets from MCJE .jar file, filter only neede
 
     - $A:$ Filter out blocks with ANY transparency (plants, glass, doors, etc.);
     - $B:$ DON'T filter out animated assets (use mean of first and last frames instead);
-    - $C:$ Use `autoparser-default.yml` file for facing data, naming, and color generating configuration;
-    - $D:$ Use `blacklist-default.yml` file for textures exclusion filter;
-    - $E:$ Use `palettes-default.yml` file for texture palettes inclusing filter.
+    - $C:$ Use `blacklist-default.yml` for textures exclusion filter;
+    - $D:$ Use `config-default.yml` settings for data, naming, and color configuration, and `facing-default.yml` to compute textures facing from their names;
+    - $E:$ Use `palettes-default.yml` for texture palettes inclusing filter;
+    - $F:$ Use `config-default.yml` settings for blockset's naming configuration.
 
-    If you wish to change this behaviour, run the script like this: `python3 ./_main.py YOUR_MCJE_VER.jar A B C D E`, where $A,B$ are corresponding options (`1` for True, `0` for False), and $C,D,E$ are pathes to .yml configuration files. You can also use 'None' to disable blacklist and palettes, but providing valid autoparser file is necessary; Every omitted option will use its default value instead. 
+    If you wish to change this behaviour, run the script like this: `python3 ./_main.py YOUR_MCJE_VER.jar c b f p`, where $c,b,f,p$ are pathes to config, blacklist, facing and palettes .yml files respectively. You can also use `None` to disable blacklist and facing parser and palettes, but providing valid config file is necessary; Every omitted option will use its default value instead.
+    
+    You can find more information about each file within default .ymls themselves.
 
 
 ## Output
