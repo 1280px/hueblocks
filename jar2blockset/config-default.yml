@@ -1,6 +1,6 @@
 # Whether to exclude tectures that contain transparency. Allowed values are:
 # full (disallow any alpha), semi (allow semi-transparent textures), none (allow all)
-exclude-alpha: full
+exclude-alpha: semi
 
 # Whether to exclude animated textures (ones that have corresponding .mcmecta or .txt
 # file) or blend them into a single texture using their first and last frames.

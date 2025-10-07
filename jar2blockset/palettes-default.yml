@@ -2,16 +2,16 @@
 # whitelist filters, meaning blocks NOT in "includes", will NOT be in the palette;
 # the "excludes" category is only used for include overrides, i.e. when you want to
 # include every "red_$" block from the blockset EXCEPT for "red_sandstone$".
-# If a computed pallete happens to contain zero blocks, it won't be added to the list.
+# If a computed pallete happens to contain 0 blocks, vueblocks won't show it in the list.
 
 # Please note that the current palettes were straight up copied from HB-legacy,
 # revamped to works with filtering system, and will be changed in the future!
 
 palettes:
   - name: 'Default (opaque only)'
-    includes:
-      # Yes, you can do this as well, which means "include all and then exclude these":
-      - $
+    # Ommiting includes section means "include all blocks (and then exclude ones below)",
+    # and ommiting excludes section means "don't exclude any blocks from the included ones"
+
     excludes:
       - ice.png
       - glass_$
@@ -74,6 +74,7 @@ palettes:
       - shulker_box.png
       - shulker$
       - terracotta.png
+      - tinted_glass.png
       - wool$
 
     excludes:
@@ -152,6 +153,7 @@ palettes:
       - stone_slab$
       - stone.png
       - stonebrick$
+      - tinted_glass.png
       - tuff$
       - white_$
 

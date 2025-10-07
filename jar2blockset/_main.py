@@ -102,7 +102,7 @@ if __name__ == "__main__":
                 # even though they use alpha, and since 1.21.6 some textures use L
                 # or LA (or even RGB somehow for fire!) to the extent of some glass
                 # textures being LA and some RGBA... thank Mojang for this mess.
-                img_rgba = img.convert("RGBA")
+                img_rgba = img.convert('RGBA')
                 img_rgba_np = np.asarray(img_rgba)
 
                 alpha_threshold = 255 if (configs['exclude-alpha'] == 'full') else 1
@@ -170,7 +170,7 @@ if __name__ == "__main__":
 
     with open(os.path.join(OUTPUT_PATH, '_blockdata.json'), 'w') as blockdata_f:
         dump(blockdata_res, blockdata_f, indent=2, ensure_ascii=True)
-    print(f'Blockdata generation finished, saved as {os.path.join(OUTPUT_PATH, "_blockdata.json")}\n')
+    print(f'Blockdata generation finished, saved as {os.path.join(OUTPUT_PATH, '_blockdata.json')}\n')
 
 
     # (E) Compute palettes for the blockset, save as JSON
@@ -181,7 +181,7 @@ if __name__ == "__main__":
 
         with open(os.path.join(OUTPUT_PATH, '_palettes.json'), 'w') as palettes_f:
             dump(palettes_res, palettes_f, indent=2, ensure_ascii=True)
-        print(f'Palettes computation finished, saved as {os.path.join(OUTPUT_PATH, "_palettes.json")}\n')
+        print(f'Palettes computation finished, saved as {os.path.join(OUTPUT_PATH, '_palettes.json')}\n')
 
 
     # (F) Finally, generate blockset description, write/append as JSON
@@ -207,7 +207,7 @@ if __name__ == "__main__":
 
     with open(os.path.join(BLOCKSETS_PATH, '_blocksets.json'), 'w') as blocksets_f:
         dump(descriptions, blocksets_f, indent=2, ensure_ascii=True)
-    print(f'Blocksets data saved as {os.path.join(OUTPUT_PATH, "_palettes.json")}\n')
+    print(f'Updated blocksets data saved as {os.path.join(BLOCKSETS_PATH, '_blocksets.json')}\n')
 
 
     print('Done!!!1 :DDD')

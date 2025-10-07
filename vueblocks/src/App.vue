@@ -3,7 +3,7 @@ import { defineAsyncComponent, onMounted, ref, watch } from 'vue'
 
 import { overlayBind, overlayIsShown } from '@/overlay'
 import { useGlobalStore } from '@/stores/GlobalStore'
-
+import { getCssRgb, getRandomRbg } from './colors'
 import Header from './widgets/Header.vue'
 import Overlay from './widgets/Overlay/index.vue'
 
@@ -23,9 +23,18 @@ watch(overlayIsShown, (v) => {
 })
 
 onMounted(async () => {
+    document.querySelector('#app').style.background = (
+        `linear-gradient(
+        ${150 + Math.random() * 60}deg in oklab,
+        ${getCssRgb(getRandomRbg(0.80))},
+        ${getCssRgb(getRandomRbg(3.86))}
+        )`
+    )
+
     await GlobalStore.loadBlocksetsData()
     await GlobalStore.loadBlocksetBlockdata()
     await GlobalStore.loadBlocksetPalettes()
+
     await overlayBind(overlayRef.value)
 })
 </script>
@@ -58,9 +67,9 @@ onMounted(async () => {
     }
     #app {
         position: relative;
-        background: linear-gradient(#000628 20px, #282b58 420px);
-        background: linear-gradient(#080018 20px, #2d1e80 420px);
-        background: linear-gradient(#001b1d 20px, #099862 420px);
+        // background: linear-gradient(#000628 20px, #282b58 420px);
+        // background: linear-gradient(#080018 20px, #2d1e80 420px);
+        // background: linear-gradient(#001b1d 20px, #099862 420px);
         color: $white;
         font-size: 16px; font-family: $FONTS;
     }

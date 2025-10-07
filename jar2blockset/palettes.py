@@ -8,10 +8,17 @@ import filters
 
 def generate_palette(palette_raw, textures_names, title='palette'):
     # Since palette is basically a whitelist filter, compute it first
-    palette_in = filters.compute_filter(palette_raw['includes'], textures_names, f'{title} includes')
+    if (palette_raw.get('includes')):
+        palette_in = filters.compute_filter(palette_raw['includes'], textures_names, f'{title} includes')
+    else:
+        palette_in = {name: 'X' for name in textures_names}
 
     # And now, for the results of this filter... we apply "exludes" filter!
-    palette_ex = filters.compute_filter(palette_raw['excludes'], textures_names, f'{title} excludes')
+    if (palette_raw.get('excludes')):
+        palette_ex = filters.compute_filter(palette_raw['excludes'], textures_names, f'{title} excludes')
+    else:
+        palette_ex = {}
+
     palette = [rule for rule in (palette_in).keys() if rule not in (palette_ex).keys()]
 
     # Finally, don't forget to exclude textures that aren't in the blockset in the first place
@@ -36,6 +43,7 @@ def get_palettes_data(palettes_path, textures_path):
         palette_data['name'] = palette_raw['name']
  
         palette_res = generate_palette(palette_raw, textures_names, palette_data['name'])
+
         palette_data['textures'] = palette_res
         palette_data['count'] = len(palette_res)
 
