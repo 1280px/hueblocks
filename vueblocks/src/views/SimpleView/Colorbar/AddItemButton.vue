@@ -9,7 +9,9 @@ const { side } = defineProps<{
 </script>
 
 <template>
-    <button class="colorbar__add-btn" :class="side">
+    <button
+        class="colorbar__add-btn" :class="side"
+    >
         <Icon name="zoom-in" />
     </button>
 </template>

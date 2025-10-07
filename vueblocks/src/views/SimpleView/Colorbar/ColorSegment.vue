@@ -1,16 +1,11 @@
 <script setup lang="ts">
-import type { DisplayBlock } from '@/types/blocks'
-import type { ColorRGB } from '@/types/colors'
+import type { ColorbarSeg } from '@/types/simpleview'
 
 import { computed, defineProps, ref } from 'vue'
-
 import { getCssRgb } from '@/colors'
 import { useGlobalStore } from '@/stores/GlobalStore'
 
-const { color, blockRef } = defineProps<{
-    color: ColorRGB,
-    blockRef: DisplayBlock,
-}>()
+const { color, blockRef } = defineProps<Omit<ColorbarSeg, 'steps'>>()
 
 const GlobalStore = useGlobalStore()
 
@@ -23,7 +18,9 @@ const colorCss = computed<string>(() => getCssRgb(color))
 
 <!-- As if in "tea bag tag" :) -->
 <template>
-    <button class="colorbar__color-segment">
+    <button
+        class="colorbar__color-segment"
+    >
         <div class="colorbar__color-segment__tag">
             <div
                 class="colorbar__color-segment__tag-inner"

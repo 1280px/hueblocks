@@ -2,7 +2,7 @@
 import type { Blockset } from '@/types/blocksets'
 import type { Palette } from '@/types/palettes'
 
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 import Block from '@/components/Block.vue'
 import Icon from '@/components/Icon.vue'
@@ -28,6 +28,14 @@ const blockdataPaletteNames = computed((): Palette['name'][] => {
 
     return GlobalStore.currBlocksetPalettes.map(pal => pal.name)
 })
+
+// This is a rather fragile solution, however, as it's impossible to
+// remove rows other than delete all of them, it is toletable I guess?
+const hiddenBlockIds = ref<Set<string>>(new Set()) // Format: 'row_block'
+
+function copyBlockTextureName(name: string) {
+    navigator.clipboard.writeText(name.split('.png')[0])
+}
 </script>
 
 <template>
@@ -40,12 +48,17 @@ const blockdataPaletteNames = computed((): Palette['name'][] => {
             <div class="blockviz-controls__blob">
                 <BigBlackButton
                     :is-loaded="!GlobalStore.currBlocksetBlockdata"
-                    @click="SimpleViewStore.blockVizGenerate(
-                        GlobalStore.currBlocksetIdx,
-                        GlobalStore.currBlocksetBlockdata,
-                        GlobalStore.currBlocksetPalettes[GlobalStore.currPaletteIdx],
-                        GlobalStore.blockFacing,
-                    )"
+                    @click="() => {
+                        SimpleViewStore.blockVizGenerate(
+                            GlobalStore.currBlocksetIdx,
+                            GlobalStore.currBlocksetBlockdata,
+                            GlobalStore.currBlocksetPalettes[GlobalStore.currPaletteIdx],
+                            GlobalStore.blockFacing,
+                        )
+                        if (SimpleViewStore.blockVizData.length < 2) {
+                            hiddenBlockIds.clear()
+                        }
+                    }"
                 >
                     <template #normal>
                         GENERATE BLOCK GRAIDENT
@@ -77,6 +90,10 @@ const blockdataPaletteNames = computed((): Palette['name'][] => {
     </section>
 
     <section class="blockviz-options--blockset__wrap">
+        <small>
+            tip: left click a block to hide it, right click to copy id
+        </small>
+
         <div class="blockviz-options--blockset">
             <div class="blockviz-options--blockset__inner">
                 <SlottedDropdown
@@ -125,6 +142,9 @@ const blockdataPaletteNames = computed((): Palette['name'][] => {
                 <Block
                     v-for="(block, j) in row.textures" :key="j"
                     :name="block.name" :blockset-idx="row.blocksetIdx" :texture="block.texture"
+                    :class="{ 'block-hidden': hiddenBlockIds.has(`${i}_${j}`) }"
+                    @click="() => hiddenBlockIds.add(`${i}_${j}`)"
+                    @contextmenu.prevent="() => copyBlockTextureName(block.texture)"
                 />
             </div>
         </div>
@@ -135,23 +155,23 @@ const blockdataPaletteNames = computed((): Palette['name'][] => {
     @use '@/assets/variables' as *;
 
     .blockviz-controls__wrap {
-        height: 48px;
+        height: 32px;
         transform: translateY(32px);
         margin: 4px 0 32px;
         background: linear-gradient(#181818bb, $dark_bg);
     }
     .blockviz-controls {
         @include flex-center;
-        gap: 2vw; // 4vw;
         height: 64px;
+        gap: 2vw; // 4vw;
         transform: translateY(-32px);
     }
     .blockviz-controls__blob {
         @include flex-center;
         gap: 4px;
-        border-radius: calc($BR_big + $BR_regular);
         padding: 4px;
         background: linear-gradient(#181818bb 50%, $trans 51%);
+        border-radius: calc($BR_big + $BR_regular);
 
         &.round {
             border-radius: $BR_round;
@@ -163,7 +183,7 @@ const blockdataPaletteNames = computed((): Palette['name'][] => {
     }
     .blockviz-options--blockset {
         @include responsive-width;
-        margin: auto;
+        margin: 6px auto 0;
 
         &, .blockviz-options--blockset__inner {
             @include flex-center;

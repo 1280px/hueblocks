@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue'
 import { Wowerlay } from 'wowerlay'
 
-import { getRandomRbg } from '@/colors'
+import { getRandomRbg, rgb2hex } from '@/colors'
 import Icon from '@/components/Icon.vue'
 import SlottedButton from '@/components/SlottedButton.vue'
 import { overlayIsShown } from '@/overlay'
@@ -16,7 +16,7 @@ import StepsSegment from './StepsSegment.vue'
 
 const SimpleViewStore = useSimpleViewStore()
 
-// Colorbar button controls
+// Colorbar aside buttons
 
 function colorbarSwap() {
     SimpleViewStore.colorbarData = SimpleViewStore.colorbarData.reverse()
@@ -41,6 +41,29 @@ function colorbarRandom() {
     }
 }
 
+// Colorbar quick actions
+
+function changeLenOnScroll(e, cbIdx) {
+    if (e.deltaY > 0) {
+        SimpleViewStore.colorbarData[cbIdx].steps = (
+            SimpleViewStore.colorbarData[cbIdx].steps > 3
+                ? SimpleViewStore.colorbarData[cbIdx].steps - 1
+                : 3
+        )
+    }
+    else {
+        SimpleViewStore.colorbarData[cbIdx].steps = (
+            SimpleViewStore.colorbarData[cbIdx].steps < 99
+                ? SimpleViewStore.colorbarData[cbIdx].steps + 1
+                : 99
+        )
+    }
+}
+
+function copyColorTagHex(rgb) {
+    navigator.clipboard.writeText(rgb2hex(rgb))
+}
+
 // Wowerlay popover
 
 const popoverTarget = ref(null)
@@ -63,9 +86,8 @@ const popoverIsShown = computed({
         return !!popoverTarget.value
     },
     set: () => {
-        if (overlayIsShown.value) {
-            return
-        }
+        if (overlayIsShown.value) { return }
+
         popoverTarget.value = null
     },
 })
@@ -86,6 +108,7 @@ const popoverIsShown = computed({
                 <ColorSegment
                     :color="cbItem.color" :block-ref="cbItem.blockRef"
                     @click="(e) => popoverShow(e, 'color', cbIdx)"
+                    @contextmenu.prevent="copyColorTagHex(cbItem.color)"
                 />
                 <StepsSegment
                     v-if="cbIdx !== SimpleViewStore.colorbarData.length - 1"
@@ -95,6 +118,7 @@ const popoverIsShown = computed({
                         SimpleViewStore.colorbarData[cbIdx + 1]?.color,
                     ]"
                     @click="(e) => popoverShow(e, 'steps', cbIdx)"
+                    @wheel.prevent="(e) => changeLenOnScroll(e, cbIdx)"
                 />
             </template>
         </div>

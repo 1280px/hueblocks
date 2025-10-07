@@ -17,7 +17,7 @@ const SimpleViewStore = useSimpleViewStore()
         <section class="blockviz-options--viz">
             <small>
                 left click on a colour tag to change it, right click to copy its hex;<br>
-                click on a number between colour tags to change length between them.
+                click or scroll a label between tags to change length between them.
             </small>
 
             <SlottedCheckbox v-model="SimpleViewStore.blockVizCfg.hideDuplicates">

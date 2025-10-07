@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { DisplayBlock } from '@/types/blocks'
 
-import { defineProps, ref } from 'vue'
+import { defineProps, onMounted, ref } from 'vue'
 
 import { useGlobalStore } from '@/stores/GlobalStore'
 
@@ -42,5 +42,10 @@ const isLoaded = ref<boolean>(false)
         & img {
             height: 100%;
         }
+    }
+
+    .block-hidden {
+        width: 0 !important; height: 0 !important;
+        transition: $TR_slow;
     }
 </style>

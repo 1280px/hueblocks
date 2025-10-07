@@ -17,7 +17,8 @@ const SimpleViewStore = useSimpleViewStore()
 
 <template>
     <section
-        class="colorbar__len-segment" :style="{
+        class="colorbar__len-segment"
+        :style="{
             flex: value,
             background: (
                 `linear-gradient(

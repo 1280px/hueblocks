@@ -25,9 +25,9 @@ watch(overlayIsShown, (v) => {
 onMounted(async () => {
     document.querySelector('#app').style.background = (
         `linear-gradient(
-        ${150 + Math.random() * 60}deg in oklab,
-        ${getCssRgb(getRandomRbg(0.80))},
-        ${getCssRgb(getRandomRbg(3.86))}
+        ${160 + Math.random() * 40}deg in oklab,
+        ${getCssRgb(getRandomRbg(0.72))},
+        ${getCssRgb(getRandomRbg(3.86))} 800px
         )`
     )
 

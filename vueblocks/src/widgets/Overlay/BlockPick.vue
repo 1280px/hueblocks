@@ -18,6 +18,7 @@ const { mode } = defineProps({
         required: true,
     },
 })
+
 const emit = defineEmits([
     'done',
 ])
