@@ -17,7 +17,7 @@ const isLoaded = ref<boolean>(false)
 <template>
     <div
         :class="{ loading: !isLoaded }" class="block"
-        :style="{ width: GlobalStore?.blockSize || '64px', height: GlobalStore?.blockSize || '64px' }"
+        :style="{ width: GlobalStore.blockSize, height: GlobalStore.blockSize }"
     >
         <img
             v-show="isLoaded" :src="GlobalStore.getTexturePath(blocksetIdx, texture)" :alt="name"

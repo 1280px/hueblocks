@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import type { BlockTooltip } from '@/types/blocks'
 import type { Blockset } from '@/types/blocksets'
 import type { Palette } from '@/types/palettes'
 
 import { computed, ref } from 'vue'
+import { Wowerlay } from 'wowerlay'
 
 import Block from '@/components/Block.vue'
 import Icon from '@/components/Icon.vue'
@@ -36,6 +38,8 @@ const hiddenBlockIds = ref<Set<string>>(new Set()) // Format: 'row_block'
 function copyBlockTextureName(name: string) {
     navigator.clipboard.writeText(name.split('.png')[0])
 }
+
+const tooltipData = ref<BlockTooltip>({ target: null, name: 'missingNo' })
 </script>
 
 <template>
@@ -112,17 +116,18 @@ function copyBlockTextureName(name: string) {
             </div>
 
             <div class="blockviz-options--blockset__inner">
-                <!-- <div style="display: flex">
-                    <SlottedDropdown :names="['0%', '30%', '50%']" :default="0"
-                        v-model="SimpleViewStore.blockFilterCfg.noiseMinThreshold"
+                <!-- <div style="display: flex; justify-content: center; flex-wrap: wrap;">
+                    <SlottedDropdown
+                        v-model="SimpleViewStore.blockFilterCfg.noiseMinThreshold" :names="['0%', '30%', '50%']"
+                        :default="0"
                     >
-                        <abbr title="Filters out blocks with colour noise percentage higher than given. The lower the threshold, the less 'noisy' blocks will be used for generation."
-                        >Noise:</abbr>
+                        <abbr title="Filters out blocks with colour noise percentage higher than given. The lower the threshold, the less 'noisy' blocks will be used for generation.">Noise:</abbr>
                     </SlottedDropdown>
-                    <SlottedDropdown :names="['30%', '50%', '70%', '80%', '100%']" :default="4"
-                        v-model="SimpleViewStore.blockFilterCfg.noiseMaxThreshold"
+                    <SlottedDropdown
+                        v-model="SimpleViewStore.blockFilterCfg.noiseMaxThreshold" :names="['30%', '50%', '70%', '80%', '100%']"
+                        :default="4"
                     >
-                        &nbsp;to
+                        &nbsp; to
                     </SlottedDropdown>
                 </div> -->
 
@@ -145,10 +150,20 @@ function copyBlockTextureName(name: string) {
                     :class="{ 'block-hidden': hiddenBlockIds.has(`${i}_${j}`) }"
                     @click="() => hiddenBlockIds.add(`${i}_${j}`)"
                     @contextmenu.prevent="() => copyBlockTextureName(block.texture)"
+                    @mouseenter.prevent="(e) => tooltipData = { target: e.target, name: block.name }"
+                    @mouseleave.prevent="(e) => tooltipData.target = null"
                 />
             </div>
         </div>
     </section>
+
+    <Wowerlay
+        :target="tooltipData.target" :visible="tooltipData.target !== null"
+        position="top-start" :gap="parseInt(GlobalStore.blockSize) / 16 * -15"
+        class="tooltip" :style="{ 'margin-left': `${parseInt(GlobalStore.blockSize) / 16}px` }"
+    >
+        {{ tooltipData.name }}
+    </Wowerlay>
 </template>
 
 <style lang="scss" scoped>
@@ -168,8 +183,7 @@ function copyBlockTextureName(name: string) {
     }
     .blockviz-controls__blob {
         @include flex-center;
-        gap: 4px;
-        padding: 4px;
+        padding: 4px; gap: 4px;
         background: linear-gradient(#181818bb 50%, $trans 51%);
         border-radius: calc($BR_big + $BR_regular);
 

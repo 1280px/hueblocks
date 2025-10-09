@@ -31,7 +31,7 @@ function done(data) {
 
 watch(visible, async (v) => {
     if (v === true) {
-        setTimeout(() => dialogRef.value?.showModal(), 1)
+        setTimeout(() => dialogRef.value?.show(), 1)
     }
 })
 

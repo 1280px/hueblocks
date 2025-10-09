@@ -133,8 +133,8 @@ const popoverIsShown = computed({
     </section>
 
     <Wowerlay
-        v-model:visible="popoverIsShown" class="popover" :target="popoverTarget"
-        :gap="12"
+        v-model:visible="popoverIsShown" :target="popoverTarget" :gap="12"
+        class="popover"
     >
         <template #arrow="{ side, placement }">
             <div class="popover-arrow" :class="`${side}`" />

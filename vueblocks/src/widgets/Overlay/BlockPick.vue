@@ -2,6 +2,7 @@
 // This overlay inner component is in widgets dir because it
 // expected to be shared across many different views & modes!
 import { defineEmits, onMounted, ref, watch } from 'vue'
+import { Wowerlay } from 'wowerlay'
 
 import Block from '@/components/Block.vue'
 import Icon from '@/components/Icon.vue'
@@ -64,9 +65,12 @@ watch([overlayIsShown, localFilterByFacing], (v) => {
         // Reconnect to reactive properties
     }
 })
+
 onMounted(() => {
     updateBlocksetData()
 })
+
+const tooltipData = ref({ target: null, name: 'missingNo' })
 </script>
 
 <template>
@@ -79,8 +83,7 @@ onMounted(() => {
         </header>
 
         <main v-if="mode === 'palette'">
-            TODO: Consider whether this section should be left untouched until the
-            palettes refresh (and, well, whether palettes refresh is needed at all...)
+            <h1>Work in progress!!!</h1>
         </main>
 
         <main v-else-if="mode === 'color'">
@@ -99,6 +102,8 @@ onMounted(() => {
                 >
                     <Block
                         :name="block.name" :blockset-idx="blocksetIdx" :texture="block.texture"
+                        @mouseenter.prevent="(e) => tooltipData = { target: e.target, name: block.name }"
+                        @mouseleave.prevent="(e) => tooltipData.target = null"
                     />
                 </button>
             </section>
@@ -141,6 +146,14 @@ onMounted(() => {
             <Icon name="check" />
         </SlottedButton>
     </aside>
+
+    <Wowerlay
+        :target="tooltipData.target" :visible="tooltipData.target !== null"
+        position="top-start" :gap="parseInt(GlobalStore.blockSize) / 16 * -15"
+        class="tooltip" :style="{ 'margin-left': `${parseInt(GlobalStore.blockSize) / 16}px` }"
+    >
+        {{ tooltipData.name }}
+    </Wowerlay>
 </template>
 
 <style lang="scss" scoped>
@@ -202,7 +215,7 @@ onMounted(() => {
         &:hover, &:focus {
             box-shadow: 0 0 0 4px $white_50, 0 0 8px 4px #0004;
             z-index: 999;
-            transition: all $TR_fast, scale $TR_slow;
+            transition: all 0ms, scale $TR_slow;
 
             &:active {
                 box-shadow: 0 0 0 2px $white_80, 0 0 4px 4px #0004;

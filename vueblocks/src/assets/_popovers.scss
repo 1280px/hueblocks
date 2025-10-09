@@ -69,3 +69,12 @@
         background-color: $accent-light;
     }
 }
+
+.tooltip {
+    padding: 4px;
+    background-color: $dark_80; color: $white;
+    border-radius: $BR_regular;
+    font-size: .8em; font-family: $FONTS;
+    pointer-events: none;
+    z-index: 999;
+}

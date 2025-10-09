@@ -49,6 +49,7 @@ $black: #000;
 $dark_bg: #111;
 $dark_border: #666;
 $dark: #333;
+$dark_80: color.change($dark, $alpha: 80%);
 $dark_60: color.change($dark, $alpha: 60%);
 $dark_20: color.change($dark, $alpha: 20%);
 

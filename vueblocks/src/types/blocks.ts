@@ -5,6 +5,7 @@ export const blockFacing = ['all', 'sides', 'top', 'bottom', 'north', 'west', 's
 // Note that 'all' and 'sides' are meta-faces, meaning OptiFine CTM
 // provides them as aliases for all sides and all sides except top and bottom
 // respectively, and for that reason j2bs blocksets don't use them at all.
+
 export type BlockFacing = typeof blockFacing[number]
 
 export interface Block {
@@ -23,4 +24,9 @@ export interface Block {
 // change every time current blockset is changed as well:
 export interface DisplayBlock extends Pick<Block, 'name' | 'texture'> {
     blocksetIdx: BlocksetIndex,
+}
+
+export interface BlockTooltip {
+    name: Block['name'],
+    target: HTMLElement | null,
 }
