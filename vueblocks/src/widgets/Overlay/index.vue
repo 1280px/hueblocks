@@ -53,20 +53,24 @@ defineExpose({
 </template>
 
 <style lang="scss" scoped>
+    @use 'sass:color';
     @use '@/assets/variables' as *;
 
     // Unfortunately Vue doesn't know how to process ::backdrop
     // in <Transition>, so we'll have to tape some crutches...
     .overlay {
         display: flex; flex-direction: column;
-        width: 100%; max-width: 100vw;
-        height: 100%; max-height: 100vh;
+        width: 100%; max-width: 100vw; height: 100%; max-height: 100vh;
         margin: 0; padding: 32px;
         inset: 0; box-sizing: border-box;
         overflow-y: scroll;
-        background-color: $accent-dark_25; border-color: transparent;
-        backdrop-filter: blur(4px);
+        background-color: color.mix($dark_80, $accent-dark); border-color: $trans;
         z-index: 99;
+
+        @media (any-pointer: fine) {
+            background-color: $accent-dark_25;
+            backdrop-filter: blur(4px);
+        }
     }
     .overlay::backdrop {
         background: none !important;

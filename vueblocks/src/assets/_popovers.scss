@@ -2,7 +2,7 @@
 
 .popover {
     padding: 8px;
-    background-color: $white; color: $black;
+    background-color: $white; color: $dark_bg;
     border-radius: $BR_big;
     box-shadow: $SH_smooth, $SH_subtle;
     font-size: 1em; font-family: $FONTS;
@@ -77,4 +77,8 @@
     font-size: .8em; font-family: $FONTS;
     pointer-events: none;
     z-index: 999;
+
+    @media (any-pointer: coarse) {
+        display: none;
+    }
 }

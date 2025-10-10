@@ -44,10 +44,9 @@ $SH_subtle: 0 0 2px #0006;
 $SH_smooth: 0 4px 12px #0001;
 
 
-$black: #000;
-
 $dark_bg: #111;
 $dark_border: #666;
+
 $dark: #333;
 $dark_80: color.change($dark, $alpha: 80%);
 $dark_60: color.change($dark, $alpha: 60%);
@@ -66,4 +65,5 @@ $white_80: color.change($white, $alpha: 80%);
 $white_50: color.change($white, $alpha: 50%);
 $white_30: color.change($white, $alpha: 30%);
 $white_20: color.change($white, $alpha: 20%);
+
 $trans: color.change($white, $alpha: 0%);
