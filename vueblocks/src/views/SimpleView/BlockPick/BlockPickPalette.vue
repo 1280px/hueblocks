@@ -19,7 +19,7 @@ const emit = defineEmits<{
 const GlobalStore = useGlobalStore()
 const SimpleViewStore = useSimpleViewStore()
 
-const blockdataByAlphabet = ref<Map<string, BlockT[]>>(new Map())
+const blockdataByAlphabet = ref<Record<string, BlockT[]>>({})
 const selectedBlockdata = ref<Set<BlockT>>(new Set())
 
 const blocksetIdx = ref<number>(-1)
@@ -34,19 +34,16 @@ function updateBlocksetData() {
         'all',
     )
 
-    blockdataByAlphabet.value.clear()
+    blockdataByAlphabet.value = {}
 
     for (const block of filteredBlockdata.sort(
         (b1, b2) => b1.name.localeCompare(b2.name),
     )) {
         const letter = block.name[0]
-        if (!blockdataByAlphabet.value.has(letter)) {
-            blockdataByAlphabet.value.set(letter, [])
+        if (!blockdataByAlphabet.value[letter]) {
+            blockdataByAlphabet.value[letter] = []
         }
-        blockdataByAlphabet.value.set(
-            letter,
-            [...(blockdataByAlphabet.value.get(letter) ?? []), block],
-        )
+        blockdataByAlphabet.value[letter].push(block)
     }
 }
 
@@ -65,18 +62,17 @@ onMounted(() => {
 
         <hr>
 
-        <Block
-            v-for="block of SimpleViewStore.getFilteredBlockdata(
-                GlobalStore.currBlocksetBlockdata,
-                GlobalStore.currBlocksetPalettes[GlobalStore.currPaletteIdx],
-                'all',
-            )" :key="block.name" :name="block.name" :blockset-idx="blocksetIdx"
-            :texture="block.texture"
-            @mouseenter.prevent="(e: MouseEvent) => tooltipData = {
-                target: e.target as HTMLElement, name: block.name,
-            }"
-            @mouseleave.prevent="(e: MouseEvent) => tooltipData.target = null"
-        />
+        <section v-for="bdLetter of Object.keys(blockdataByAlphabet)" :key="bdLetter">
+            <span>{{ bdLetter }}</span>
+            <Block
+                v-for="block of blockdataByAlphabet[bdLetter]" :key="block.name"
+                :name="block.name" :blockset-idx="blocksetIdx" :texture="block.texture"
+                @mouseenter.prevent="(e: MouseEvent) => tooltipData = {
+                    target: e.target as HTMLElement, name: block.name,
+                }"
+                @mouseleave.prevent="(e: MouseEvent) => tooltipData.target = null"
+            />
+        </section>
     </main>
 
     <aside>

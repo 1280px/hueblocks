@@ -68,9 +68,8 @@ onMounted(async () => {
     }
     #app {
         position: relative;
-        // background: linear-gradient(#000628 20px, #282b58 420px);
-        // background: linear-gradient(#080018 20px, #2d1e80 420px);
-        // background: linear-gradient(#001b1d 20px, #099862 420px);
+        background: linear-gradient(#000628 20px, #282b58 420px);
+        background: linear-gradient(#001b1d 20px, #099862 420px);
         color: $white;
         font-size: 16px; font-family: $FONTS;
     }

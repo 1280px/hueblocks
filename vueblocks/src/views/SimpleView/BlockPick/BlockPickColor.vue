@@ -22,7 +22,7 @@ const emit = defineEmits<{
 const GlobalStore = useGlobalStore()
 const SimpleViewStore = useSimpleViewStore()
 
-const blockdataByAlphabet = ref<Map<string, BlockT[]>>(new Map())
+const blockdataByAlphabet = ref<Record<string, BlockT[]>>({})
 
 const blocksetIdx = ref<number>(-1)
 const localFilterByFacing = ref<BlockFacing>('all')
@@ -37,19 +37,16 @@ function updateBlocksetData() {
         localFilterByFacing.value,
     )
 
-    blockdataByAlphabet.value.clear()
+    blockdataByAlphabet.value = {}
 
     for (const block of filteredBlockdata.sort(
         (b1, b2) => b1.name.localeCompare(b2.name),
     )) {
         const letter = block.name[0]
-        if (!blockdataByAlphabet.value.has(letter)) {
-            blockdataByAlphabet.value.set(letter, [])
+        if (!blockdataByAlphabet.value[letter]) {
+            blockdataByAlphabet.value[letter] = []
         }
-        blockdataByAlphabet.value.set(
-            letter,
-            [...(blockdataByAlphabet.value.get(letter) ?? []), block],
-        )
+        blockdataByAlphabet.value[letter].push(block)
     }
 }
 
@@ -77,7 +74,7 @@ onMounted(() => {
         <section v-for="bdLetter of Object.keys(blockdataByAlphabet)" :key="bdLetter">
             <span>{{ bdLetter }}</span>
             <button
-                v-for="block of blockdataByAlphabet.get(bdLetter)" :key="block.name"
+                v-for="block of blockdataByAlphabet[bdLetter]" :key="block.name"
                 class="block__click-wrap" @click="emit('done', {
                     color: block.rgb,
                     blockRef: {

@@ -16,7 +16,6 @@ import { overlayShow } from '@/overlay'
 import { useGlobalStore } from '@/stores/GlobalStore'
 import { useSimpleViewStore } from '@/stores/SimpleViewStore'
 import BlockPickPalette from '../BlockPick/BlockPickPalette.vue'
-
 import BigBlackButton from './BigBlackButton.vue'
 
 const GlobalStore = useGlobalStore()
@@ -48,10 +47,28 @@ function copyBlockTextureName(name: string) {
 // which is kinda brittle, but the opposite can't happen normally
 const processPaletteIdx = computed({
     get: () => GlobalStore.currPaletteIdx,
-    set: idx => idx === (GlobalStore.currBlocksetPalettes.length - 1)
-        ? overlayShow([BlockPickPalette, []])
-        : GlobalStore.currPaletteIdx = idx,
+    set: (idx) => {
+        if (idx === (GlobalStore.currBlocksetPalettes.length - 1)) {
+            test()
+        }
+        else {
+            GlobalStore.currPaletteIdx = idx
+        }
+    },
 })
+// TODO: fix this faulty piece of logic below and above (bruh)
+
+async function test() {
+    const res = await overlayShow([BlockPickPalette, []])
+    console.log(res)
+
+    if (res !== null) {
+        GlobalStore.currPaletteIdx = 1
+    }
+    else {
+        GlobalStore.currPaletteIdx = 0
+    }
+}
 </script>
 
 <template>
