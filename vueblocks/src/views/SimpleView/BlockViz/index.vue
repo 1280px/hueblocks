@@ -5,30 +5,35 @@ import type { Palette } from '@/types/palettes'
 
 import { computed, ref } from 'vue'
 import { Wowerlay } from 'wowerlay'
-
 import Block from '@/components/Block.vue'
 import Icon from '@/components/Icon.vue'
 import SidePicker from '@/components/SidePicker.vue'
+
 import SlottedButton from '@/components/SlottedButton.vue'
 import SlottedCheckbox from '@/components/SlottedCheckbox.vue'
 import SlottedDropdown from '@/components/SlottedDropdown.vue'
+import { overlayShow } from '@/overlay'
 import { useGlobalStore } from '@/stores/GlobalStore'
 import { useSimpleViewStore } from '@/stores/SimpleViewStore'
+import BlockPickPalette from '../BlockPick/BlockPickPalette.vue'
+
 import BigBlackButton from './BigBlackButton.vue'
 
 const GlobalStore = useGlobalStore()
 const SimpleViewStore = useSimpleViewStore()
 
+const tooltipData = ref<BlockTooltip>({ target: null, name: 'missingNo' })
+
 const blocksetsDataNames = computed((): Blockset['name'][] => {
     if (!GlobalStore.blocksetsData) { return ['Loading…'] }
 
-    return GlobalStore.blocksetsData.map(bsd => bsd.name)
+    return GlobalStore.blocksetsData.map(bsd => bsd !== '<hr>' ? bsd.name : '<hr>')
 })
 
 const blockdataPaletteNames = computed((): Palette['name'][] => {
     if (!GlobalStore.currBlocksetPalettes) { return ['Loading…'] }
 
-    return GlobalStore.currBlocksetPalettes.map(pal => pal.name)
+    return GlobalStore.currBlocksetPalettes.map(pal => pal !== '<hr>' ? pal.name : '<hr>')
 })
 
 // This is a rather fragile solution, however, as it's impossible to
@@ -39,7 +44,14 @@ function copyBlockTextureName(name: string) {
     navigator.clipboard.writeText(name.split('.png')[0])
 }
 
-const tooltipData = ref<BlockTooltip>({ target: null, name: 'missingNo' })
+// We assume the Edit palette option is always the latest one,
+// which is kinda brittle, but the opposite can't happen normally
+const processPaletteIdx = computed({
+    get: () => GlobalStore.currPaletteIdx,
+    set: idx => idx === (GlobalStore.currBlocksetPalettes.length - 1)
+        ? overlayShow([BlockPickPalette, []])
+        : GlobalStore.currPaletteIdx = idx,
+})
 </script>
 
 <template>
@@ -108,7 +120,7 @@ const tooltipData = ref<BlockTooltip>({ target: null, name: 'missingNo' })
                 </SlottedDropdown>
 
                 <SlottedDropdown
-                    v-model="GlobalStore.currPaletteIdx"
+                    v-model="processPaletteIdx"
                     :names="blockdataPaletteNames"
                 >
                     Palette:
@@ -150,8 +162,11 @@ const tooltipData = ref<BlockTooltip>({ target: null, name: 'missingNo' })
                     :class="{ 'block-hidden': hiddenBlockIds.has(`${i}_${j}`) }"
                     @click="() => hiddenBlockIds.add(`${i}_${j}`)"
                     @contextmenu.prevent="() => copyBlockTextureName(block.texture)"
-                    @mouseenter.prevent="(e) => tooltipData = { target: e.target, name: block.name }"
-                    @mouseleave.prevent="(e) => tooltipData.target = null"
+                    @mouseenter.prevent="(e: MouseEvent) => tooltipData = {
+                        target: e.target as HTMLElement,
+                        name: block.name,
+                    }"
+                    @mouseleave.prevent="(e: MouseEvent) => tooltipData.target = null"
                 />
             </div>
         </div>

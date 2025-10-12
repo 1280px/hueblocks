@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { BlockFacing } from '@/types/blocks'
 import type { ColorbarSeg } from '@/types/simpleview'
 
 import { defineEmits, defineProps } from 'vue'
@@ -7,7 +6,7 @@ import { defineEmits, defineProps } from 'vue'
 import ColorPicker from '@/components/ColorPicker.vue'
 import { overlayShow } from '@/overlay'
 import { useSimpleViewStore } from '@/stores/SimpleViewStore'
-import BlockPick from '@/widgets/Overlay/BlockPick.vue'
+import BlockPickColor from '@/views/SimpleView/BlockPick/BlockPickColor.vue'
 
 const { side } = defineProps<{
     side: 'left' | 'right',
@@ -55,9 +54,9 @@ function addCbItem() {
         <label class="popover-item">Colour:&nbsp;
             <ColorPicker
                 v-model="cbNewItem"
-                :blockpick="() => overlayShow({
-                    content: BlockPick, props: { mode: 'color' },
-                })"
+                :colorpick="() => overlayShow([
+                    BlockPickColor, { },
+                ])"
             />
         </label>
 

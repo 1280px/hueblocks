@@ -29,7 +29,7 @@ export const useGlobalStore = defineStore('GlobalStore', () => {
 
     const blocksetsPath = `${_baseUrl}/blocksets/` + `_blocksets.json`
 
-    const blocksetsData = ref<Blockset[]>([])
+    const blocksetsData = ref<((Blockset | '<hr>')[])>([])
     const loadBlocksetsData = async () => {
         const res = await fetch(blocksetsPath)
         const data = await res.json()
@@ -52,7 +52,11 @@ export const useGlobalStore = defineStore('GlobalStore', () => {
     })
 
     const getBlocksetPath = (blocksetIdx: number) => {
-        if (!blocksetsData.value || !blocksetsData?.value[blocksetIdx]) {
+        if (
+            !blocksetsData.value
+            || !blocksetsData?.value[blocksetIdx]
+            || blocksetsData.value[blocksetIdx] === '<hr>'
+        ) {
             return 'missingNo'
         }
         return `${_baseUrl}/blocksets/${blocksetsData?.value[blocksetIdx]?.dir}`
@@ -75,18 +79,32 @@ export const useGlobalStore = defineStore('GlobalStore', () => {
         currBlocksetBlockdata.value = data.slice(1)
     }
 
-    const currBlocksetPalettes = ref<Palette[]>([])
+    const currBlocksetPalettes = ref<(Palette | '<hr>')[]>([])
     const loadBlocksetPalettes = async () => {
         const blocksetPath = getBlocksetPath(currBlocksetIdx.value)
         const res = await fetch(`${blocksetPath}/` + `_palettes.json`)
         let data = await res.json() as Palette[]
 
-        data = data.filter((p: any) => p.count && (p.count > 0) && p.textures)
+        data = data.filter((p: any) => (p?.count > 0) && p?.textures)
 
         // If no valid palettes found, we're okay, just don't add anything
         currBlocksetPalettes.value = data.length ? data : []
 
-        // Add default pseudo-palette
+        currBlocksetPalettes.value = [
+            ...currBlocksetPalettes.value,
+            '<hr>',
+            // {
+            //     name: 'Custom palette',
+            //     textures: [],
+            //     count: -1,
+            // },
+            {
+                name: 'Edit palette…',
+                textures: [],
+                count: -1,
+            },
+        ]
+
         currBlocksetPalettes.value.unshift({
             name: 'Default (all blocks)',
             textures: [],

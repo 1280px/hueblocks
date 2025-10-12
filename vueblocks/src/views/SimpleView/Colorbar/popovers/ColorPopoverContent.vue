@@ -5,7 +5,7 @@ import ColorPicker from '@/components/ColorPicker.vue'
 import Icon from '@/components/Icon.vue'
 import { overlayShow } from '@/overlay'
 import { useSimpleViewStore } from '@/stores/SimpleViewStore'
-import BlockPick from '@/widgets/Overlay/BlockPick.vue'
+import BlockPickColor from '@/views/SimpleView/BlockPick/BlockPickColor.vue'
 
 const { cbIdx } = defineProps<{
     cbIdx: number,
@@ -45,9 +45,9 @@ function deleteCbItem() {
             <label class="popover-item">Colour:
                 <ColorPicker
                     v-model="SimpleViewStore.colorbarData[cbIdx]"
-                    :blockpick="() => overlayShow({
-                        content: BlockPick, props: { mode: 'color' },
-                    })"
+                    :colorpick="() => overlayShow([
+                        BlockPickColor, { },
+                    ])"
                     @change="SimpleViewStore.colorbarData[cbIdx].blockRef = null"
                 />
             </label>

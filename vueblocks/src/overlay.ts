@@ -12,7 +12,7 @@ function overlayShow(newContent: OverlayContent) {
     return overlay.value?.show(newContent)
 }
 
-const overlayIsShown = computed<any>(() => {
+const overlayIsShown = computed<boolean>(() => {
     return overlay.value?.visible || false
 })
 

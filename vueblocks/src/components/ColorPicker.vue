@@ -5,8 +5,8 @@ import { computed, defineModel } from 'vue'
 import { hex2rgb, rgb2hex } from '@/colors'
 import Icon from '@/components/Icon.vue'
 
-const { blockpick } = defineProps<{
-    blockpick: () => ColorbarSeg,
+const { colorpick } = defineProps<{
+    colorpick: () => ColorbarSeg,
 }>()
 
 const cbItem = defineModel<ColorbarSeg>()
@@ -20,10 +20,10 @@ const currColorHex = computed<ColorHEX>({
     set: hex => currColorRgb.value = hex2rgb(hex),
 })
 
-async function applyBlockPickColor(
-    getBlockPickColor: typeof blockpick,
+async function applyPickedColor(
+    getPickedColor: typeof colorpick,
 ) {
-    const res: ColorbarSeg = await getBlockPickColor()
+    const res: ColorbarSeg = await getPickedColor()
 
     if (res) {
         currColorRgb.value.forEach((c, i) => {
@@ -37,15 +37,15 @@ async function applyBlockPickColor(
 </script>
 
 <template>
-    <div class="color-controls">
+    <div class="color-picker">
         <input
             v-model="currColorHex"
             type="color" placeholder="cbItemColor"
         >
         <button
-            v-if="blockpick"
+            v-if="colorpick"
             title="Pick colour from a block…"
-            @click="async () => await applyBlockPickColor(blockpick)"
+            @click="async () => await applyPickedColor(colorpick)"
         >
             <Icon name="block" />
         </button>
@@ -55,11 +55,12 @@ async function applyBlockPickColor(
 <style lang="scss" scoped>
     @use '@/assets/variables' as *;
 
-    .color-controls {
+    .color-picker {
         display: flex; flex-direction: row;
         width: 80px;
     }
-    .color-controls > button {
+
+    .color-picker > button {
         min-width: 32px;
     }
 </style>

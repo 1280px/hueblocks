@@ -5,7 +5,7 @@ import { overlayBind, overlayIsShown } from '@/overlay'
 import { useGlobalStore } from '@/stores/GlobalStore'
 import { getCssRgb, getRandomRbg } from './colors'
 import Header from './widgets/Header.vue'
-import Overlay from './widgets/Overlay/index.vue'
+import Overlay from './widgets/Overlay.vue'
 
 // This is the exact way how all views should load!
 const SimpleView = defineAsyncComponent({
@@ -105,7 +105,7 @@ onMounted(async () => {
     button, input[type=checkbox], input[type=radio], label, a, select, option {
         cursor: pointer;
 
-        & :disabled {
+        &:disabled {
             cursor: not-allowed;
         }
     }

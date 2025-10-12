@@ -15,6 +15,12 @@
         background-color: $dark_20; color: $white;
         transition: $TR_regular;
 
+        &:disabled {
+            border: 4px solid $accent-light_50;
+            background-color: $dark_20;
+            opacity: .6;
+        }
+
         &.round {
             height: 40px; min-width: 40px;
             border-radius: $BR_round;
@@ -23,9 +29,13 @@
         &.trans {
             background-color: $trans;
             border: 0 solid $trans;
+
+            &:disabled {
+                opacity: .6;
+            }
         }
 
-        &:hover {
+        &:not(:disabled):hover {
             border-color: $accent-light;
 
             &.trans {

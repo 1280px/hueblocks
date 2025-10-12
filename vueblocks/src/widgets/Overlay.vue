@@ -7,10 +7,7 @@ const visible = ref<boolean>(false)
 const cancellable = ref<boolean>(true)
 let res = null
 
-const content = ref<OverlayContent>({
-    content: null,
-    props: [],
-})
+const content = ref<OverlayContent>([null, { }])
 
 function show(newContent: OverlayContent, newCancellable = true) {
     content.value = newContent
@@ -52,18 +49,22 @@ defineExpose({
             v-show="visible" ref="dialogRef" class="overlay"
             @cancel="cancellable ? done() : $event.preventDefault()"
         >
-            <component :is="content.content" v-bind="content.props" @done="done" />
+            <component :is="content[0]" v-bind="content[1]" @done="done" />
+
+            <!-- <button @click="done">
+                An example how to close Overlay component
+            </button> -->
         </dialog>
     </Transition>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
     @use 'sass:color';
     @use '@/assets/variables' as *;
 
     // Unfortunately Vue doesn't know how to process ::backdrop
     // in <Transition>, so we'll have to tape some crutches...
-    .overlay {
+    dialog.overlay {
         display: flex; flex-direction: column;
         width: 100%; max-width: 100vw; height: 100%; max-height: 100vh;
         margin: 0; padding: 32px;
@@ -77,7 +78,7 @@ defineExpose({
             backdrop-filter: blur(4px);
         }
     }
-    .overlay::backdrop {
+    dialog.overlay::backdrop {
         background: none !important;
     }
 
@@ -89,15 +90,32 @@ defineExpose({
         opacity: 0;
     }
 
-    // The expected inner sections are <header> for title,
+    // Expected inner sections are <header> for title,
     // <main> for body, and <aside> for controls:
-    .overlay > header {
-        background-color: green;
+    dialog.overlay > header {
+        @include flex-center;
+        margin-bottom: 32px;
+
+        @media (max-width: 800px) {
+            margin-top: 64px;
+        }
     }
-    .overlay > main {
-        background-color: red;
+    dialog.overlay > main {
+        @include responsive-width;
+        flex: 1;
+        display: flex; flex-direction: column;
+        margin: auto;
     }
-    .overlay > aside {
-        background-color: blue;
+    dialog.overlay > aside {
+        // TODO: simplify this rule
+        position: absolute;
+        top: 32px; right: 32px;
+        display: flex; flex-direction: row-reverse;
+        justify-content: center; align-items: flex-end;
+        margin: 0; gap: 4px;
+
+        @media (min-width: 800px) {
+            flex-direction: column;
+        }
     }
 </style>

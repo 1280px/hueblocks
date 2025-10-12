@@ -21,7 +21,12 @@ const id = useId()
     <label :for="id">
         <slot />
         <select :id="id" v-model="ibValue" :disabled="names.length < 2">
-            <option v-for="(name, i) in names" :key="i" :value="i">{{ name }}</option>
+            <component
+                :is="name !== '<hr>' ? 'option' : 'hr'"
+                v-for="(name, i) in names" :key="i" :value="i"
+            >
+                {{ name }}
+            </component>
         </select>
         <div class="select__arrow" :class="{ inactive: names.length < 2 }">
             <Icon name="dd-arrow" />
