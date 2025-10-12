@@ -1,25 +1,31 @@
-<script setup>
+<script setup lang="ts">
+import type { OverlayContent } from '@/types/overlays'
+
 import { ref, watch } from 'vue'
 
-const visible = ref(false)
-const cancellable = ref(true)
-const innerComponent = ref(null); const innerProps = ref({})
+const visible = ref<boolean>(false)
+const cancellable = ref<boolean>(true)
 let res = null
 
-function show(newInnerComponent, newInnerProps = {}, newCancellable = true) {
-    innerComponent.value = newInnerComponent
-    innerProps.value = newInnerProps
+const content = ref<OverlayContent>({
+    content: null,
+    props: [],
+})
+
+function show(newContent: OverlayContent, newCancellable = true) {
+    content.value = newContent
     cancellable.value = newCancellable
     visible.value = true
 
-    return new Promise((resolve) => {
-        res = resolve
-    })
+    // Force microtask
+    return new Promise(
+        (resolve) => { res = resolve },
+    )
 }
 
 const dialogRef = ref()
 
-function done(data) {
+function done(data?) {
     visible.value = false
 
     // Even though dialog is just a nested element, we still
@@ -28,7 +34,6 @@ function done(data) {
 
     res?.(data || null)
 }
-
 watch(visible, async (v) => {
     if (v === true) {
         setTimeout(() => dialogRef.value?.show(), 1)
@@ -36,8 +41,8 @@ watch(visible, async (v) => {
 })
 
 defineExpose({
-    show, // --> overlayShow()
-    visible, // --> overlayIsShown()
+    show, // --> overlayShow() in overlay.ts
+    visible, // --> overlayIsShown() in overlay.ts
 })
 </script>
 
@@ -47,7 +52,7 @@ defineExpose({
             v-show="visible" ref="dialogRef" class="overlay"
             @cancel="cancellable ? done() : $event.preventDefault()"
         >
-            <component :is="innerComponent" v-bind="innerProps" @done="done" />
+            <component :is="content.content" v-bind="content.props" @done="done" />
         </dialog>
     </Transition>
 </template>
@@ -82,5 +87,17 @@ defineExpose({
     }
     .overlay-enter-from, .overlay-leave-to {
         opacity: 0;
+    }
+
+    // The expected inner sections are <header> for title,
+    // <main> for body, and <aside> for controls:
+    .overlay > header {
+        background-color: green;
+    }
+    .overlay > main {
+        background-color: red;
+    }
+    .overlay > aside {
+        background-color: blue;
     }
 </style>

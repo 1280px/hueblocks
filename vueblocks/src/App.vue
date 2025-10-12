@@ -7,6 +7,7 @@ import { getCssRgb, getRandomRbg } from './colors'
 import Header from './widgets/Header.vue'
 import Overlay from './widgets/Overlay/index.vue'
 
+// This is the exact way how all views should load!
 const SimpleView = defineAsyncComponent({
     loader: () => import('./views/SimpleView/index.vue'),
     loadingComponent: () => 'Loading SimpleView…',

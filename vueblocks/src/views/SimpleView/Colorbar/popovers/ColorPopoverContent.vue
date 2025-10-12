@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { defineEmits, defineProps } from 'vue'
 
-import ColorControls from '@/components/ColorControls.vue'
+import ColorPicker from '@/components/ColorPicker.vue'
 import Icon from '@/components/Icon.vue'
 import { overlayShow } from '@/overlay'
 import { useSimpleViewStore } from '@/stores/SimpleViewStore'
@@ -31,19 +31,27 @@ function deleteCbItem() {
     <div class="popover-content">
         <div class="popover-item">
             <button
-                title="Delete this colour tag" :disabled="SimpleViewStore.colorbarData.length <= 2"
+                :title="SimpleViewStore.colorbarData.length > 2
+                    ? 'Delete this colour tag' : 'There should be at least 2 colours for a gradient'
+                "
+                :disabled="SimpleViewStore.colorbarData.length <= 2"
                 @click="deleteCbItem"
             >
                 <Icon name="colortag-del" />
             </button>
+
             <hr>
+
             <label class="popover-item">Colour:
-                <ColorControls
+                <ColorPicker
                     v-model="SimpleViewStore.colorbarData[cbIdx]"
-                    :blockpick-fun="() => overlayShow(BlockPick, { mode: 'color' })"
+                    :blockpick="() => overlayShow({
+                        content: BlockPick, props: { mode: 'color' },
+                    })"
                     @change="SimpleViewStore.colorbarData[cbIdx].blockRef = null"
                 />
             </label>
+
             <button type="submit" @click.prevent="emit('done')">
                 OK
             </button>

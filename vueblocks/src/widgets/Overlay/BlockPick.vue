@@ -229,8 +229,4 @@ const tooltipData = ref({ target: null, name: 'missingNo' })
             scale: 0.875;
         }
     }
-
-    .side-picker__wrap {
-        width: 84px; height: 40px;
-    }
 </style>

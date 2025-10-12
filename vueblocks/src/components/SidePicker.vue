@@ -49,7 +49,8 @@ const facing = ['all', 'sides', 'top', 'bottom', 'north', 'west', 'south', 'east
         border-radius: $BR_round;
 
         &.compact {
-            width: 40px;
+            // Same sizes as smallest round SlottedButton
+            width: 40px; height: 40px;
         }
     }
 

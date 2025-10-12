@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { BlockTooltip } from '@/types/blocks'
 import type { Blockset } from '@/types/blocksets'
+import type { BlockTooltip } from '@/types/overlays'
 import type { Palette } from '@/types/palettes'
 
 import { computed, ref } from 'vue'

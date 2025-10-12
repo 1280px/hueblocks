@@ -1,14 +1,15 @@
+import type { HTMLOverlayElement, OverlayContent } from './types/overlays'
+
 import { computed, ref } from 'vue'
 
-// Same ref data accessible from everywhere!
-let overlay = ref<HTMLDialogElement | null>(null)
+const overlay = ref<HTMLOverlayElement | null>(null)
 
-function overlayBind(ref) {
+function overlayBind(ref: HTMLOverlayElement) {
     overlay.value = ref
 }
 
-function overlayShow(newInnerComponent, newInnerProps) {
-    return overlay.value?.show(newInnerComponent, newInnerProps)
+function overlayShow(newContent: OverlayContent) {
+    return overlay.value?.show(newContent)
 }
 
 const overlayIsShown = computed<any>(() => {

@@ -38,18 +38,24 @@ function splitCbItem() {
     <div class="popover-content">
         <div class="popover-item">
             <button
-                title="Insert colour tag in between" :disabled="SimpleViewStore.colorbarData[cbIdx].steps <= 5"
+                :title="SimpleViewStore.colorbarData[cbIdx].steps > 5
+                    ? 'Insert colour tag in between' : 'Length too short to be splittable in between'
+                "
+                :disabled="SimpleViewStore.colorbarData[cbIdx].steps <= 5"
                 @click="splitCbItem"
             >
                 <Icon name="colortag" />
             </button>
+
             <hr>
+
             <label class="popover-item">Length:
                 <input
-                    v-model="SimpleViewStore.colorbarData[cbIdx].steps" type="number" min="3"
-                    max="999"
+                    v-model="SimpleViewStore.colorbarData[cbIdx].steps"
+                    type="number" min="3" max="999"
                 >
             </label>
+
             <button type="submit" @click.prevent="emit('done')">
                 OK
             </button>

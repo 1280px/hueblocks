@@ -25,8 +25,3 @@ export interface Block {
 export interface DisplayBlock extends Pick<Block, 'name' | 'texture'> {
     blocksetIdx: BlocksetIndex,
 }
-
-export interface BlockTooltip {
-    name: Block['name'],
-    target: HTMLElement | null,
-}

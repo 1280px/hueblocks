@@ -5,8 +5,8 @@ import { computed, defineModel } from 'vue'
 import { hex2rgb, rgb2hex } from '@/colors'
 import Icon from '@/components/Icon.vue'
 
-const { blockpickFun } = defineProps<{
-    blockpickFun: () => ColorbarSeg,
+const { blockpick } = defineProps<{
+    blockpick: () => ColorbarSeg,
 }>()
 
 const cbItem = defineModel<ColorbarSeg>()
@@ -21,7 +21,7 @@ const currColorHex = computed<ColorHEX>({
 })
 
 async function applyBlockPickColor(
-    getBlockPickColor: typeof blockpickFun,
+    getBlockPickColor: typeof blockpick,
 ) {
     const res: ColorbarSeg = await getBlockPickColor()
 
@@ -43,9 +43,9 @@ async function applyBlockPickColor(
             type="color" placeholder="cbItemColor"
         >
         <button
-            v-if="blockpickFun"
+            v-if="blockpick"
             title="Pick colour from a block…"
-            @click="async () => await applyBlockPickColor(blockpickFun)"
+            @click="async () => await applyBlockPickColor(blockpick)"
         >
             <Icon name="block" />
         </button>

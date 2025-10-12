@@ -4,7 +4,7 @@ import type { ColorbarSeg } from '@/types/simpleview'
 
 import { defineEmits, defineProps } from 'vue'
 
-import ColorControls from '@/components/ColorControls.vue'
+import ColorPicker from '@/components/ColorPicker.vue'
 import { overlayShow } from '@/overlay'
 import { useSimpleViewStore } from '@/stores/SimpleViewStore'
 import BlockPick from '@/widgets/Overlay/BlockPick.vue'
@@ -51,12 +51,16 @@ function addCbItem() {
                 type="number" min="3" max="999"
             >
         </label>
+
         <label class="popover-item">Colour:&nbsp;
-            <ColorControls
+            <ColorPicker
                 v-model="cbNewItem"
-                :blockpick-fun="() => overlayShow(BlockPick, { mode: 'color' })"
+                :blockpick="() => overlayShow({
+                    content: BlockPick, props: { mode: 'color' },
+                })"
             />
         </label>
+
         <div class="popover-item">
             <button type="submit" @click.prevent="addCbItem">
                 Add!
