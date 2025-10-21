@@ -7,7 +7,7 @@ const { names } = defineProps<{
     names: string[],
 }>()
 
-const value = defineModel({ default: 0 })
+const value = defineModel<number>({ default: 0 })
 
 const ibValue = computed<number>({
     get: () => value.value >= names.length ? names.length - 1 : value.value < 0 ? 0 : value.value,

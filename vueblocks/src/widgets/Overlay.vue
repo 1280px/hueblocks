@@ -46,7 +46,7 @@ defineExpose({
 <template>
     <Transition name="overlay">
         <dialog
-            v-show="visible" ref="dialogRef" class="overlay"
+            v-show="visible" id="overlay" ref="dialogRef"
             @cancel="cancellable ? done() : $event.preventDefault()"
         >
             <component :is="content[0]" v-bind="content[1]" @done="done" />
@@ -64,11 +64,12 @@ defineExpose({
 
     // Unfortunately Vue doesn't know how to process ::backdrop
     // in <Transition>, so we'll have to tape some crutches...
-    dialog.overlay {
+    #overlay {
+        position: fixed;
         display: flex; flex-direction: column;
         width: 100%; max-width: 100vw; height: 100%; max-height: 100vh;
         margin: 0; padding: 32px;
-        inset: 0; box-sizing: border-box;
+        box-sizing: border-box;
         overflow-y: scroll;
         background-color: color.mix($dark_80, $accent-dark); border-color: $trans;
         z-index: 99;
@@ -78,7 +79,7 @@ defineExpose({
             backdrop-filter: blur(4px);
         }
     }
-    dialog.overlay::backdrop {
+    #overlay::backdrop {
         background: none !important;
     }
 
@@ -92,7 +93,7 @@ defineExpose({
 
     // Expected inner sections are <header> for title,
     // <main> for body, and <aside> for controls:
-    dialog.overlay > header {
+    #overlay > header {
         @include flex-center;
         margin-bottom: 32px;
 
@@ -100,13 +101,13 @@ defineExpose({
             margin-top: 64px;
         }
     }
-    dialog.overlay > main {
+    #overlay > main {
         @include responsive-width;
         flex: 1;
         display: flex; flex-direction: column;
         margin: auto;
     }
-    dialog.overlay > aside {
+    #overlay > aside {
         // TODO: simplify this rule
         position: absolute;
         top: 32px; right: 32px;

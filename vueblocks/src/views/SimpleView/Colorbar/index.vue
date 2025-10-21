@@ -1,5 +1,7 @@
-<script setup>
+<script setup lang="ts">
+import type { ColorRGB } from '@/types/colors'
 import { computed, ref } from 'vue'
+
 import { Wowerlay } from 'wowerlay'
 
 import { getRandomRbg, rgb2hex } from '@/colors'
@@ -15,6 +17,8 @@ import StepsPopoverContent from './popovers/StepsPopoverContent.vue'
 import StepsSegment from './StepsSegment.vue'
 
 const SimpleViewStore = useSimpleViewStore()
+
+type ColorbarPopoverMode = 'color' | 'steps' | 'addItem'
 
 // Colorbar aside buttons
 
@@ -43,41 +47,43 @@ function colorbarRandom() {
 
 // Colorbar quick actions
 
-function changeLenOnScroll(e, cbIdx) {
-    if (e.deltaY > 0) {
-        SimpleViewStore.colorbarData[cbIdx].steps = (
-            SimpleViewStore.colorbarData[cbIdx].steps > 3
-                ? SimpleViewStore.colorbarData[cbIdx].steps - 1
-                : 3
-        )
-    }
-    else {
-        SimpleViewStore.colorbarData[cbIdx].steps = (
-            SimpleViewStore.colorbarData[cbIdx].steps < 99
-                ? SimpleViewStore.colorbarData[cbIdx].steps + 1
-                : 99
-        )
+function changeLenOnScroll(e: WheelEventInit, cbIdx: number) {
+    if (e.deltaY) {
+        if (e.deltaY > 0) {
+            SimpleViewStore.colorbarData[cbIdx].steps = (
+                SimpleViewStore.colorbarData[cbIdx].steps > 3
+                    ? SimpleViewStore.colorbarData[cbIdx].steps - 1
+                    : 3
+            )
+        }
+        else {
+            SimpleViewStore.colorbarData[cbIdx].steps = (
+                SimpleViewStore.colorbarData[cbIdx].steps < 99
+                    ? SimpleViewStore.colorbarData[cbIdx].steps + 1
+                    : 99
+            )
+        }
     }
 }
 
-function copyColorTagHex(rgb) {
+function copyColorTagHex(rgb: ColorRGB) {
     navigator.clipboard.writeText(rgb2hex(rgb))
 }
 
 // Wowerlay popover
 
-const popoverTarget = ref(null)
-const popoverMode = ref(null)
-const popoverData = ref(null)
+const popoverTarget = ref<EventTarget | null>(null)
+const popoverMode = ref<ColorbarPopoverMode>()
+const popoverData = ref<any>() // Fragile
 
-function popoverShow(event, mode, data) {
-    if (popoverTarget.value === event.currentTarget) {
+function popoverShow(e: Event, mode: ColorbarPopoverMode, data: any) {
+    if (popoverTarget.value === e.currentTarget) {
         popoverTarget.value = null
     }
     else {
         popoverMode.value = mode
         popoverData.value = data
-        popoverTarget.value = event.currentTarget
+        popoverTarget.value = e.currentTarget
     }
 }
 
@@ -101,13 +107,13 @@ const popoverIsShown = computed({
 
         <AddItemButton
             side="left" title="Add new color to the left"
-            @click="(e) => popoverShow(e, 'addItem', 'left')"
+            @click="(e: Event) => popoverShow(e, 'addItem', 'left')"
         />
         <div class="colorbar__inner">
             <template v-for="(cbItem, cbIdx) in SimpleViewStore.colorbarData" :key="cbIdx">
                 <ColorSegment
                     :color="cbItem.color" :block-ref="cbItem.blockRef"
-                    @click="(e) => popoverShow(e, 'color', cbIdx)"
+                    @click="(e: Event) => popoverShow(e, 'color', cbIdx)"
                     @contextmenu.prevent="copyColorTagHex(cbItem.color)"
                 />
                 <StepsSegment
@@ -117,14 +123,14 @@ const popoverIsShown = computed({
                         SimpleViewStore.colorbarData[cbIdx]?.color,
                         SimpleViewStore.colorbarData[cbIdx + 1]?.color,
                     ]"
-                    @click="(e) => popoverShow(e, 'steps', cbIdx)"
-                    @wheel.prevent="(e) => changeLenOnScroll(e, cbIdx)"
+                    @click="(e: Event) => popoverShow(e, 'steps', cbIdx)"
+                    @wheel.prevent="(e: WheelEventInit) => changeLenOnScroll(e, cbIdx)"
                 />
             </template>
         </div>
         <AddItemButton
             side="right" title="Add new color to the right"
-            @click="(e) => popoverShow(e, 'addItem', 'right')"
+            @click="(e: Event) => popoverShow(e, 'addItem', 'right')"
         />
 
         <SlottedButton class="trans" title="Randomize colours" @click="colorbarRandom">
@@ -133,7 +139,7 @@ const popoverIsShown = computed({
     </section>
 
     <Wowerlay
-        v-model:visible="popoverIsShown" :target="popoverTarget" :gap="12"
+        v-model:visible="popoverIsShown" :target="(popoverTarget as (HTMLElement | null))" :gap="12"
         class="popover"
     >
         <template #arrow="{ side, placement }">

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { BlockFacing } from '@/types/blocks'
+
 import { defineModel, useId } from 'vue'
 
 import Icon from '@/components/Icon.vue'
@@ -7,7 +9,7 @@ const { isCompact = false } = defineProps<{
     isCompact?: boolean,
 }>()
 
-const currFace = defineModel()
+const currFace = defineModel<BlockFacing>({ default: 'all' })
 currFace.value = !currFace.value ? 'all' : currFace.value
 
 const id = useId()

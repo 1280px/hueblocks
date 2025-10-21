@@ -85,7 +85,11 @@ async function test() {
                         SimpleViewStore.blockVizGenerate(
                             GlobalStore.currBlocksetIdx,
                             GlobalStore.currBlocksetBlockdata,
-                            GlobalStore.currBlocksetPalettes[GlobalStore.currPaletteIdx],
+                            (
+                                GlobalStore.currBlocksetPalettes[GlobalStore.currPaletteIdx] === '<hr>'
+                                    ? GlobalStore.currBlocksetPalettes[0] as Palette // 'All Blocks' palette always comes first
+                                    : GlobalStore.currBlocksetPalettes[GlobalStore.currPaletteIdx] as Palette
+                            ),
                             GlobalStore.blockFacing,
                         )
                         if (SimpleViewStore.blockVizData.length < 2) {
@@ -120,13 +124,12 @@ async function test() {
                 </SlottedButton>
             </div>
         </div>
-    </section>
-
-    <section class="blockviz-options--blockset__wrap">
         <small>
             tip: left click a block to hide it, right click to copy id
         </small>
+    </section>
 
+    <section class="blockviz-options--blockset__wrap">
         <div class="blockviz-options--blockset">
             <div class="blockviz-options--blockset__inner">
                 <SlottedDropdown
@@ -202,21 +205,17 @@ async function test() {
     @use '@/assets/variables' as *;
 
     .blockviz-controls__wrap {
-        height: 32px;
-        transform: translateY(32px);
-        margin: 4px 0 32px;
-        background: linear-gradient(#181818bb, $dark_bg);
+        background: linear-gradient(transparent 32px, #181818bb 32px, $dark_bg);
     }
     .blockviz-controls {
         @include flex-center;
         height: 64px;
         gap: 2vw; // 4vw;
-        transform: translateY(-32px);
     }
     .blockviz-controls__blob {
         @include flex-center;
         padding: 4px; gap: 4px;
-        background: linear-gradient(#181818bb 50%, $trans 51%);
+        background: linear-gradient(#181818bb 50.5%, $trans 50.5%);
         border-radius: calc($BR_big + $BR_regular);
 
         &.round {

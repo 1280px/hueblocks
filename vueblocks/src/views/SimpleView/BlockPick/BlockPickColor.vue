@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { BlockFacing, Block as BlockT } from '@/types/blocks'
 import type { BlockTooltip } from '@/types/overlays'
+import type { Palette } from '@/types/palettes'
 import type { ColorbarSeg } from '@/types/simpleview'
 
 import { defineEmits, onMounted, ref, watch } from 'vue'
@@ -10,7 +11,6 @@ import Block from '@/components/Block.vue'
 import Icon from '@/components/Icon.vue'
 import SidePicker from '@/components/SidePicker.vue'
 import SlottedButton from '@/components/SlottedButton.vue'
-
 import { overlayIsShown } from '@/overlay'
 import { useGlobalStore } from '@/stores/GlobalStore'
 import { useSimpleViewStore } from '@/stores/SimpleViewStore'
@@ -33,7 +33,11 @@ function updateBlocksetData() {
 
     const filteredBlockdata = SimpleViewStore.getFilteredBlockdata(
         GlobalStore.currBlocksetBlockdata,
-        GlobalStore.currBlocksetPalettes[GlobalStore.currPaletteIdx],
+        (
+            GlobalStore.currBlocksetPalettes[GlobalStore.currPaletteIdx] === '<hr>'
+                ? GlobalStore.currBlocksetPalettes[0] as Palette // 'All Blocks' palette always comes first
+                : GlobalStore.currBlocksetPalettes[GlobalStore.currPaletteIdx] as Palette
+        ),
         localFilterByFacing.value,
     )
 

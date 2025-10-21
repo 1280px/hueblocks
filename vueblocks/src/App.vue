@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { defineAsyncComponent, onMounted, ref, watch } from 'vue'
 
 import { overlayBind, overlayIsShown } from '@/overlay'
@@ -24,7 +24,7 @@ watch(overlayIsShown, (v) => {
 })
 
 onMounted(async () => {
-    document.querySelector('#app').style.background = (
+    (document.querySelector('#app') as HTMLElement).style.background = (
         `linear-gradient(
         ${160 + Math.random() * 40}deg in oklab,
         ${getCssRgb(getRandomRbg(0.72))},
@@ -36,7 +36,7 @@ onMounted(async () => {
     await GlobalStore.loadBlocksetBlockdata()
     await GlobalStore.loadBlocksetPalettes()
 
-    await overlayBind(overlayRef.value)
+    overlayBind(overlayRef.value)
 })
 </script>
 
@@ -68,8 +68,7 @@ onMounted(async () => {
     }
     #app {
         position: relative;
-        background: linear-gradient(#000628 20px, #282b58 420px);
-        background: linear-gradient(#001b1d 20px, #099862 420px);
+        background: linear-gradient(#000628 20px, #282b58 420px); // <-- Nostalgic fallback value
         color: $white;
         font-size: 16px; font-family: $FONTS;
     }

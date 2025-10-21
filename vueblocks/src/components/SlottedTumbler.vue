@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { defineModel, useId } from 'vue'
 
-const value = defineModel()
+const value = defineModel<boolean>({ default: false })
 
 const id = useId()
 </script>

@@ -23,14 +23,14 @@ const currColorHex = computed<ColorHEX>({
 async function applyPickedColor(
     getPickedColor: typeof colorpick,
 ) {
-    const res: ColorbarSeg = await getPickedColor()
+    const res: ColorbarSeg = getPickedColor()
 
     if (res) {
         currColorRgb.value.forEach((c, i) => {
             currColorRgb.value[i] = res.color[i]
         })
-        if (res.blockRef) {
-            cbItem.value!.blockRef = res.blockRef
+        if (res.blockRef && cbItem.value) {
+            cbItem.value.blockRef = res.blockRef
         }
     }
 }

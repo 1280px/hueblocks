@@ -3,7 +3,7 @@ import { defineModel, useId } from 'vue'
 
 import Icon from '@/components/Icon.vue'
 
-const value = defineModel()
+const value = defineModel<boolean>({ default: false })
 
 const id = useId()
 </script>

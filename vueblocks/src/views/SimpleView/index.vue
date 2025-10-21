@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import SlottedCheckbox from '@/components/SlottedCheckbox.vue'
 
 import { useSimpleViewStore } from '@/stores/SimpleViewStore'
@@ -62,7 +62,7 @@ const SimpleViewStore = useSimpleViewStore()
 
     .blockviz-options--viz {
         @include flex-center;
-        margin: 4px auto 20px;
+        margin: 4px auto 24px;
         flex-wrap: wrap;
         gap: 0 16px;
 

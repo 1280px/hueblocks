@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import type { Block as BlockT } from '@/types/blocks'
-
 import type { BlockTooltip } from '@/types/overlays'
-import { defineEmits, onMounted, ref } from 'vue'
+import type { Palette } from '@/types/palettes'
 
+import { defineEmits, onMounted, ref } from 'vue'
 import { Wowerlay } from 'wowerlay'
+
 import Block from '@/components/Block.vue'
 import Icon from '@/components/Icon.vue'
-
 import SlottedButton from '@/components/SlottedButton.vue'
 import { useGlobalStore } from '@/stores/GlobalStore'
 import { useSimpleViewStore } from '@/stores/SimpleViewStore'
@@ -30,7 +30,11 @@ function updateBlocksetData() {
 
     const filteredBlockdata = SimpleViewStore.getFilteredBlockdata(
         GlobalStore.currBlocksetBlockdata,
-        GlobalStore.currBlocksetPalettes[GlobalStore.currPaletteIdx],
+        (
+            GlobalStore.currBlocksetPalettes[GlobalStore.currPaletteIdx] === '<hr>'
+                ? GlobalStore.currBlocksetPalettes[0] as Palette // 'All Blocks' palette always comes first
+                : GlobalStore.currBlocksetPalettes[GlobalStore.currPaletteIdx] as Palette
+        ),
         'all',
     )
 
