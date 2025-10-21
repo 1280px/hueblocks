@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { ColorRGB } from '@/types/colors'
-import { computed, ref } from 'vue'
+import type { ColorbarPopoverData } from '@/types/simpleview'
 
+import { computed, ref } from 'vue'
 import { Wowerlay } from 'wowerlay'
 
 import { getRandomRbg, rgb2hex } from '@/colors'
@@ -18,12 +19,10 @@ import StepsSegment from './StepsSegment.vue'
 
 const SimpleViewStore = useSimpleViewStore()
 
-type ColorbarPopoverMode = 'color' | 'steps' | 'addItem'
-
 // Colorbar aside buttons
 
 function colorbarSwap() {
-    SimpleViewStore.colorbarData = SimpleViewStore.colorbarData.reverse()
+    SimpleViewStore.colorbarData = [...SimpleViewStore.colorbarData].reverse()
 
     // We also want to reverse all the lengths, which is why
     // we need to shift the unused last length back to the end:
@@ -47,22 +46,20 @@ function colorbarRandom() {
 
 // Colorbar quick actions
 
-function changeLenOnScroll(e: WheelEventInit, cbIdx: number) {
-    if (e.deltaY) {
-        if (e.deltaY > 0) {
-            SimpleViewStore.colorbarData[cbIdx].steps = (
-                SimpleViewStore.colorbarData[cbIdx].steps > 3
-                    ? SimpleViewStore.colorbarData[cbIdx].steps - 1
-                    : 3
-            )
-        }
-        else {
-            SimpleViewStore.colorbarData[cbIdx].steps = (
-                SimpleViewStore.colorbarData[cbIdx].steps < 99
-                    ? SimpleViewStore.colorbarData[cbIdx].steps + 1
-                    : 99
-            )
-        }
+function changeLenOnScroll(e: WheelEvent, cbIdx: number) {
+    if (e.deltaY > 0) {
+        SimpleViewStore.colorbarData[cbIdx].steps = (
+            SimpleViewStore.colorbarData[cbIdx].steps > 3
+                ? SimpleViewStore.colorbarData[cbIdx].steps - 1
+                : 3
+        )
+    }
+    else {
+        SimpleViewStore.colorbarData[cbIdx].steps = (
+            SimpleViewStore.colorbarData[cbIdx].steps < 99
+                ? SimpleViewStore.colorbarData[cbIdx].steps + 1
+                : 99
+        )
     }
 }
 
@@ -73,15 +70,13 @@ function copyColorTagHex(rgb: ColorRGB) {
 // Wowerlay popover
 
 const popoverTarget = ref<EventTarget | null>(null)
-const popoverMode = ref<ColorbarPopoverMode>()
-const popoverData = ref<any>() // Fragile
+const popoverData = ref<ColorbarPopoverData>()
 
-function popoverShow(e: Event, mode: ColorbarPopoverMode, data: any) {
+function popoverShow(e: Event, data: ColorbarPopoverData) {
     if (popoverTarget.value === e.currentTarget) {
         popoverTarget.value = null
     }
     else {
-        popoverMode.value = mode
         popoverData.value = data
         popoverTarget.value = e.currentTarget
     }
@@ -107,13 +102,13 @@ const popoverIsShown = computed({
 
         <AddItemButton
             side="left" title="Add new color to the left"
-            @click="(e: Event) => popoverShow(e, 'addItem', 'left')"
+            @click="(e: MouseEvent) => popoverShow(e, { mode: 'addItem', side: 'left' })"
         />
         <div class="colorbar__inner">
             <template v-for="(cbItem, cbIdx) in SimpleViewStore.colorbarData" :key="cbIdx">
                 <ColorSegment
                     :color="cbItem.color" :block-ref="cbItem.blockRef"
-                    @click="(e: Event) => popoverShow(e, 'color', cbIdx)"
+                    @click="(e: MouseEvent) => popoverShow(e, { mode: 'color', cbIdx })"
                     @contextmenu.prevent="copyColorTagHex(cbItem.color)"
                 />
                 <StepsSegment
@@ -123,14 +118,14 @@ const popoverIsShown = computed({
                         SimpleViewStore.colorbarData[cbIdx]?.color,
                         SimpleViewStore.colorbarData[cbIdx + 1]?.color,
                     ]"
-                    @click="(e: Event) => popoverShow(e, 'steps', cbIdx)"
-                    @wheel.prevent="(e: WheelEventInit) => changeLenOnScroll(e, cbIdx)"
+                    @click="(e: MouseEvent) => popoverShow(e, { mode: 'color', cbIdx })"
+                    @wheel.prevent="(e: WheelEvent) => changeLenOnScroll(e, cbIdx)"
                 />
             </template>
         </div>
         <AddItemButton
             side="right" title="Add new color to the right"
-            @click="(e: Event) => popoverShow(e, 'addItem', 'right')"
+            @click="(e: MouseEvent) => popoverShow(e, { mode: 'addItem', side: 'right' })"
         />
 
         <SlottedButton class="trans" title="Randomize colours" @click="colorbarRandom">
@@ -147,16 +142,16 @@ const popoverIsShown = computed({
         </template>
 
         <ColorPopoverContent
-            v-if="popoverMode === 'color'"
-            :cb-idx="popoverData" @done="popoverTarget = null"
+            v-if="popoverData?.mode === 'color'"
+            :cb-idx="popoverData.cbIdx" @done="popoverTarget = null"
         />
         <StepsPopoverContent
-            v-else-if="popoverMode === 'steps'"
-            :cb-idx="popoverData" @done="popoverTarget = null"
+            v-else-if="popoverData?.mode === 'steps'"
+            :cb-idx="popoverData.cbIdx" @done="popoverTarget = null"
         />
         <AddItemPopoverContent
-            v-else-if="popoverMode === 'addItem'"
-            :side="popoverData" @done="popoverTarget = null"
+            v-else-if="popoverData?.mode === 'addItem'"
+            :side="popoverData.side" @done="popoverTarget = null"
         />
     </Wowerlay>
 </template>

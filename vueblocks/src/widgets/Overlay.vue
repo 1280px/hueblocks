@@ -59,7 +59,6 @@ defineExpose({
 </template>
 
 <style lang="scss">
-    @use 'sass:color';
     @use '@/assets/variables' as *;
 
     // Unfortunately Vue doesn't know how to process ::backdrop
@@ -71,7 +70,7 @@ defineExpose({
         margin: 0; padding: 32px;
         box-sizing: border-box;
         overflow-y: scroll;
-        background-color: color.mix($dark_80, $accent-dark); border-color: $trans;
+        background-color: $accent-dark_bg; border-color: $trans;
         z-index: 99;
 
         @media (any-pointer: fine) {

@@ -37,24 +37,25 @@ $BR_round: 1280px;
 $TR_fancy: 1s;
 $TR_slow: .33s;
 $TR_regular: .2s;
-$TR_fast: .05s;
+$TR_fast: .066s;
 
 $SH_regular: 0 2px 4px #0002;
 $SH_subtle: 0 0 2px #0006;
 $SH_smooth: 0 4px 12px #0001;
 
 
-$dark_bg: #111;
-$dark_border: #666;
-
 $dark: #333;
-$dark_80: color.change($dark, $alpha: 80%);
 $dark_60: color.change($dark, $alpha: 60%);
 $dark_20: color.change($dark, $alpha: 20%);
+
+$dark_bg: #111;
+$dark_border: #666;
 
 $accent-dark: #151942;
 $accent-dark_50: color.change($accent-dark, $alpha: 50%);
 $accent-dark_25: color.change($accent-dark, $alpha: 25%);
+
+$accent-dark_bg: color.mix(color.change($dark, $alpha: 80%), $accent-dark, $weight: 66%);
 
 $accent-light: #a1a3b3;
 $accent-light_50: color.change($accent-light, $alpha: 50%);

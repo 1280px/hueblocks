@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import type { Blockset } from '@/types/blocksets'
-import type { BlockTooltip } from '@/types/overlays'
+import type { BlockTooltip as BlockTooltipT } from '@/types/overlays'
 import type { Palette } from '@/types/palettes'
 
 import { computed, ref } from 'vue'
-import { Wowerlay } from 'wowerlay'
+
 import Block from '@/components/Block.vue'
+import BlockTooltip from '@/components/BlockTooltip.vue'
 import Icon from '@/components/Icon.vue'
 import SidePicker from '@/components/SidePicker.vue'
-
 import SlottedButton from '@/components/SlottedButton.vue'
 import SlottedCheckbox from '@/components/SlottedCheckbox.vue'
 import SlottedDropdown from '@/components/SlottedDropdown.vue'
@@ -21,7 +21,7 @@ import BigBlackButton from './BigBlackButton.vue'
 const GlobalStore = useGlobalStore()
 const SimpleViewStore = useSimpleViewStore()
 
-const tooltipData = ref<BlockTooltip>({ target: null, name: 'missingNo' })
+const tooltipData = ref<BlockTooltipT>({ target: null, name: 'missingNo' })
 
 const blocksetsDataNames = computed((): Blockset['name'][] => {
     if (!GlobalStore.blocksetsData) { return ['Loading…'] }
@@ -139,6 +139,9 @@ async function test() {
                     Version:
                 </SlottedDropdown>
 
+                <!-- @TODO: v-model зесь надо вместо делать кастомную фукнция для @change,
+                пока юзер находится в оверлее фукнция изменения не прырывается и ничё не
+                меняет... если не поможет с "ПРОТЕКАНИЕМ" состояния то хуй его ЗНАЕТ... -->
                 <SlottedDropdown
                     v-model="processPaletteIdx"
                     :names="blockdataPaletteNames"
@@ -192,13 +195,7 @@ async function test() {
         </div>
     </section>
 
-    <Wowerlay
-        :target="tooltipData.target" :visible="tooltipData.target !== null"
-        position="top-start" :gap="parseInt(GlobalStore.blockSize) / 16 * -15"
-        class="tooltip" :style="{ 'margin-left': `${parseInt(GlobalStore.blockSize) / 16}px` }"
-    >
-        {{ tooltipData.name }}
-    </Wowerlay>
+    <BlockTooltip :tooltip-data="tooltipData" />
 </template>
 
 <style lang="scss" scoped>

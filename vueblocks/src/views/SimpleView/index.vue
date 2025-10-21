@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import SlottedCheckbox from '@/components/SlottedCheckbox.vue'
-
 import { useSimpleViewStore } from '@/stores/SimpleViewStore'
 import BlockViz from './BlockViz/index.vue'
 import Colorbar from './Colorbar/index.vue'

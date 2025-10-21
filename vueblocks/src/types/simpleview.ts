@@ -19,6 +19,11 @@ export interface ColorbarSeg {
     steps: number, // Length between CURRENT and NEXT color segments,
 } // will be ignored if this is the last color segment in colorbar
 
+export type ColorbarPopoverData = null
+    | { mode: 'color', cbIdx: number }
+    | { mode: 'steps', cbIdx: number }
+    | { mode: 'addItem', side: 'left' | 'right' }
+
 export interface BlockVizRow {
     blocksetIdx: BlocksetIndex,
     textures: Block[],

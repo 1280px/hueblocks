@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import type { Block as BlockT } from '@/types/blocks'
-import type { BlockTooltip } from '@/types/overlays'
+import type { BlockTooltip as BlockTooltipT } from '@/types/overlays'
 import type { Palette } from '@/types/palettes'
 
-import { defineEmits, onMounted, ref } from 'vue'
-import { Wowerlay } from 'wowerlay'
+import { defineEmits, ref, watch } from 'vue'
 
 import Block from '@/components/Block.vue'
+import BlockTooltip from '@/components/BlockTooltip.vue'
 import Icon from '@/components/Icon.vue'
 import SlottedButton from '@/components/SlottedButton.vue'
 import { useGlobalStore } from '@/stores/GlobalStore'
@@ -22,12 +22,9 @@ const SimpleViewStore = useSimpleViewStore()
 const blockdataByAlphabet = ref<Record<string, BlockT[]>>({})
 const selectedBlockdata = ref<Set<BlockT>>(new Set())
 
-const blocksetIdx = ref<number>(-1)
-const tooltipData = ref<BlockTooltip>({ target: null, name: 'missingNo' })
+const tooltipData = ref<BlockTooltipT>({ target: null, name: 'missingNo' })
 
 function updateBlocksetData() {
-    blocksetIdx.value = GlobalStore.currBlocksetIdx
-
     const filteredBlockdata = SimpleViewStore.getFilteredBlockdata(
         GlobalStore.currBlocksetBlockdata,
         (
@@ -51,9 +48,11 @@ function updateBlocksetData() {
     }
 }
 
-onMounted(() => {
-    updateBlocksetData()
-})
+watch(
+    () => GlobalStore.currBlocksetBlockdata,
+    () => updateBlocksetData(),
+    { immediate: true },
+)
 </script>
 
 <template>
@@ -70,7 +69,7 @@ onMounted(() => {
             <span>{{ bdLetter }}</span>
             <Block
                 v-for="block of blockdataByAlphabet[bdLetter]" :key="block.name"
-                :name="block.name" :blockset-idx="blocksetIdx" :texture="block.texture"
+                :name="block.name" :blockset-idx="GlobalStore.currBlocksetIdx" :texture="block.texture"
                 @mouseenter.prevent="(e: MouseEvent) => tooltipData = {
                     target: e.target as HTMLElement, name: block.name,
                 }"
@@ -114,13 +113,7 @@ onMounted(() => {
         </SlottedButton>
     </aside>
 
-    <Wowerlay
-        :target="tooltipData.target" :visible="tooltipData.target !== null"
-        position="top-start" :gap="parseInt(GlobalStore.blockSize) / 16 * -15"
-        class="tooltip" :style="{ 'margin-left': `${parseInt(GlobalStore.blockSize) / 16}px` }"
-    >
-        {{ tooltipData.name }}
-    </Wowerlay>
+    <BlockTooltip :tooltip-data="tooltipData" />
 </template>
 
 <style lang="scss" scoped>

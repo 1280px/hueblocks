@@ -38,7 +38,8 @@ const id = useId()
     .tumbler__text {
         color: $white;
         font-weight: $FW_bold;
-        transition: $TR_regular;
+        transition: $TR_slow;
+        user-select: none;
 
         &.active {
             color: $white_50;
@@ -73,6 +74,7 @@ const id = useId()
 
         .tumbler__wrap:hover:active & {
             &::before {
+                transition: $TR_regular;
                 background-color: $white_80;
                 border-color: $white;
                 box-shadow: 0px 0px 0px 2px $accent-light_50;

@@ -6,7 +6,7 @@ import { hex2rgb, rgb2hex } from '@/colors'
 import Icon from '@/components/Icon.vue'
 
 const { colorpick } = defineProps<{
-    colorpick: () => ColorbarSeg,
+    colorpick: () => Promise<ColorbarSeg>,
 }>()
 
 const cbItem = defineModel<ColorbarSeg>()
@@ -23,7 +23,7 @@ const currColorHex = computed<ColorHEX>({
 async function applyPickedColor(
     getPickedColor: typeof colorpick,
 ) {
-    const res: ColorbarSeg = getPickedColor()
+    const res: ColorbarSeg = await getPickedColor()
 
     if (res) {
         currColorRgb.value.forEach((c, i) => {

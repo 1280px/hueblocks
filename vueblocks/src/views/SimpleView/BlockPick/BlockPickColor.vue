@@ -1,17 +1,16 @@
 <script setup lang="ts">
 import type { BlockFacing, Block as BlockT } from '@/types/blocks'
-import type { BlockTooltip } from '@/types/overlays'
+import type { BlockTooltip as BlockTooltipT } from '@/types/overlays'
 import type { Palette } from '@/types/palettes'
 import type { ColorbarSeg } from '@/types/simpleview'
 
-import { defineEmits, onMounted, ref, watch } from 'vue'
-import { Wowerlay } from 'wowerlay'
+import { defineEmits, ref, watch } from 'vue'
 
 import Block from '@/components/Block.vue'
+import BlockTooltip from '@/components/BlockTooltip.vue'
 import Icon from '@/components/Icon.vue'
 import SidePicker from '@/components/SidePicker.vue'
 import SlottedButton from '@/components/SlottedButton.vue'
-import { overlayIsShown } from '@/overlay'
 import { useGlobalStore } from '@/stores/GlobalStore'
 import { useSimpleViewStore } from '@/stores/SimpleViewStore'
 
@@ -24,13 +23,11 @@ const SimpleViewStore = useSimpleViewStore()
 
 const blockdataByAlphabet = ref<Record<string, BlockT[]>>({})
 
-const blocksetIdx = ref<number>(-1)
 const localFilterByFacing = ref<BlockFacing>('all')
-const tooltipData = ref<BlockTooltip>({ target: null, name: 'missingNo' })
+
+const tooltipData = ref<BlockTooltipT>({ target: null, name: 'missingNo' })
 
 function updateBlocksetData() {
-    blocksetIdx.value = GlobalStore.currBlocksetIdx
-
     const filteredBlockdata = SimpleViewStore.getFilteredBlockdata(
         GlobalStore.currBlocksetBlockdata,
         (
@@ -54,19 +51,11 @@ function updateBlocksetData() {
     }
 }
 
-watch([overlayIsShown, localFilterByFacing], (v) => {
-    if (v) {
-        // Prevent unneeded update when overlay is being hidden
-        updateBlocksetData()
-    }
-    if (!v) {
-        // Reconnect to reactive properties
-    }
-})
-
-onMounted(() => {
-    updateBlocksetData()
-})
+watch(
+    () => GlobalStore.currBlocksetBlockdata,
+    () => updateBlocksetData(),
+    { immediate: true },
+)
 </script>
 
 <template>
@@ -83,13 +72,13 @@ onMounted(() => {
                     color: block.rgb,
                     blockRef: {
                         name: block.name,
-                        blocksetIdx,
+                        blocksetIdx: GlobalStore.currBlocksetIdx,
                         texture: block.texture,
                     },
                 })"
             >
                 <Block
-                    :name="block.name" :blockset-idx="blocksetIdx" :texture="block.texture"
+                    :name="block.name" :blockset-idx="GlobalStore.currBlocksetIdx" :texture="block.texture"
                     @mouseenter.prevent="(e: MouseEvent) => tooltipData = {
                         target: e.target as HTMLElement, name: block.name,
                     }"
@@ -108,7 +97,9 @@ onMounted(() => {
             <Icon name="close" />
         </SlottedButton>
 
-        <SidePicker v-model="localFilterByFacing" :is-compact="true" />
+        <SidePicker
+            v-model="localFilterByFacing" :is-compact="true" @change="updateBlocksetData()"
+        />
 
         <SlottedButton
             class="round"
@@ -127,13 +118,7 @@ onMounted(() => {
         </SlottedButton>
     </aside>
 
-    <Wowerlay
-        :target="tooltipData.target" :visible="tooltipData.target !== null"
-        position="top-start" :gap="parseInt(GlobalStore.blockSize) / 16 * -15"
-        class="tooltip" :style="{ 'margin-left': `${parseInt(GlobalStore.blockSize) / 16}px` }"
-    >
-        {{ tooltipData.name }}
-    </Wowerlay>
+    <BlockTooltip :tooltip-data="tooltipData" />
 </template>
 
 <style lang="scss" scoped>
