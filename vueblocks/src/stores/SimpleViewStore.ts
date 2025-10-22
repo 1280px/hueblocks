@@ -142,7 +142,10 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
     ): Block[] => {
         const res = blockdata.filter(
             (block) => {
-                if (palette.count > 0) {
+                if (
+                    palette.count > 0 // 'All blocks' (0) is fake palette and contains 0 textures
+                    || palette.count === -2 // -2 is used by 'Custom palette' option
+                ) {
                     if (!palette.textures.includes(block.texture)) {
                         return false
                     }

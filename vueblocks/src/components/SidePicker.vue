@@ -4,6 +4,7 @@ import type { BlockFacing } from '@/types/blocks'
 import { defineModel, useId } from 'vue'
 
 import Icon from '@/components/Icon.vue'
+import { blockFacing } from '@/types/blocks'
 
 const { isCompact = false } = defineProps<{
     isCompact?: boolean,
@@ -13,22 +14,17 @@ const currFace = defineModel<BlockFacing>({ default: 'all' })
 currFace.value = !currFace.value ? 'all' : currFace.value
 
 const id = useId()
-
-// According to Optifine CTM, first two options should be the last;
-// however, chances are, they will actually be used the most :)
-const facing = ['all', 'sides', 'top', 'bottom', 'north', 'west', 'south', 'east']
 </script>
 
 <template>
     <label :for="id" class="side-picker__wrap" :class="[isCompact ? 'compact' : '']">
         <div class="side-picker__image">
             <!-- We're doing this so the icons won't blink when changed -->
-            <template v-for="(face, i) in facing" :key="i">
-                <Icon
-                    v-show="currFace === face"
-                    :name="`facing-${face}`"
-                />
+
+            <template v-for="(face, i) in blockFacing" :key="i">
+                <Icon v-show="currFace === face" :name="`facing-${face}`" />
             </template>
+
             <Icon v-if="!isCompact" name="dd-arrow" />
         </div>
         <select
@@ -36,9 +32,10 @@ const facing = ['all', 'sides', 'top', 'bottom', 'north', 'west', 'south', 'east
             :title="`Filter by facing: ${currFace.charAt(0).toUpperCase() + currFace.slice(1)}`"
         >
             <option
-                v-for="(face, i) in facing" :key="i"
-                :value="face"
-            >{{ face.charAt(0).toUpperCase() + face.slice(1) }}</option>
+                v-for="(face, i) in blockFacing" :key="i" :value="face"
+            >
+                {{ face.charAt(0).toUpperCase() + face.slice(1) }}
+            </option>
         </select>
     </label>
 </template>

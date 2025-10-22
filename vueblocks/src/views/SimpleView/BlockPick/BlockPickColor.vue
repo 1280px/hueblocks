@@ -66,9 +66,11 @@ watch(
     <main>
         <section v-for="bdLetter of Object.keys(blockdataByAlphabet)" :key="bdLetter">
             <span>{{ bdLetter }}</span>
+
             <button
                 v-for="block of blockdataByAlphabet[bdLetter]" :key="block.name"
-                class="block__click-wrap" @click="emit('done', {
+                class="block__click-wrap"
+                @click="emit('done', {
                     color: block.rgb,
                     blockRef: {
                         name: block.name,
@@ -76,13 +78,13 @@ watch(
                         texture: block.texture,
                     },
                 })"
+                @mouseenter.prevent="(e: MouseEvent) => tooltipData = {
+                    target: e.target as HTMLElement, name: block.name,
+                }"
+                @mouseleave.prevent="(e: MouseEvent) => tooltipData.target = null"
             >
                 <Block
                     :name="block.name" :blockset-idx="GlobalStore.currBlocksetIdx" :texture="block.texture"
-                    @mouseenter.prevent="(e: MouseEvent) => tooltipData = {
-                        target: e.target as HTMLElement, name: block.name,
-                    }"
-                    @mouseleave.prevent="(e: MouseEvent) => tooltipData.target = null"
                 />
             </button>
         </section>
@@ -137,28 +139,28 @@ watch(
     }
 
     .block__click-wrap {
+        appearance: none;
         width: fit-content; height: fit-content;
         padding: 0;
-        appearance: none;
-        background: none;
-        border: none;
-        transition: $TR_regular;
+        background: none; border: none;
+
+        & .block {
+            transition: $TR_regular;
+        }
 
         &:hover, &:focus {
-            box-shadow: 0 0 0 4px $white_50, 0 0 8px 4px #0004;
             z-index: 999;
-            transition: all 0ms, scale $TR_slow;
 
-            &:active {
+            & .block {
+                box-shadow: 0 0 0 4px $white_50, 0 0 8px 4px #0004;
+                transition: all 0ms, scale $TR_slow;
+            }
+
+            &:active .block {
                 box-shadow: 0 0 0 2px $white_80, 0 0 4px 4px #0004;
                 transition: $TR_regular;
                 scale: 0.875;
             }
-        }
-
-        &:checked .block {
-            transition: all $TR_regular, scale $TR_slow;
-            scale: 0.875;
         }
     }
 </style>

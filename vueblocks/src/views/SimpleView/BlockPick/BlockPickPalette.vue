@@ -3,7 +3,7 @@ import type { Block as BlockT } from '@/types/blocks'
 import type { BlockTooltip as BlockTooltipT } from '@/types/overlays'
 import type { Palette } from '@/types/palettes'
 
-import { defineEmits, ref, watch } from 'vue'
+import { defineEmits, ref, useId, watch } from 'vue'
 
 import Block from '@/components/Block.vue'
 import BlockTooltip from '@/components/BlockTooltip.vue'
@@ -12,15 +12,18 @@ import SlottedButton from '@/components/SlottedButton.vue'
 import { useGlobalStore } from '@/stores/GlobalStore'
 import { useSimpleViewStore } from '@/stores/SimpleViewStore'
 
+const { originalPaletteIdx = -1 } = defineProps<{
+    originalPaletteIdx?: number,
+}>()
+
 const emit = defineEmits<{
-    done: [blocks?: BlockT[]],
+    done: [blocks?: BlockT['texture'][]],
 }>()
 
 const GlobalStore = useGlobalStore()
 const SimpleViewStore = useSimpleViewStore()
 
 const blockdataByAlphabet = ref<Record<string, BlockT[]>>({})
-const selectedBlockdata = ref<Set<BlockT>>(new Set())
 
 const tooltipData = ref<BlockTooltipT>({ target: null, name: 'missingNo' })
 
@@ -48,6 +51,16 @@ function updateBlocksetData() {
     }
 }
 
+const selectedTextures = ref<Set<BlockT['texture']>>(new Set())
+function selectTexture(texture: BlockT['texture'], isAdded: boolean) {
+    if (isAdded && !selectedTextures.value.has(texture)) {
+        selectedTextures.value.add(texture)
+    }
+    else if (!isAdded && selectedTextures.value.has(texture)) {
+        selectedTextures.value.delete(texture)
+    }
+}
+
 watch(
     () => GlobalStore.currBlocksetBlockdata,
     () => updateBlocksetData(),
@@ -57,24 +70,34 @@ watch(
 
 <template>
     <header>
-        <h2>— &nbsp; Pick blocks you want to use as a palette &nbsp; —</h2>
+        <h2>— &nbsp; Pick 3+ blocks you want to use as a palette &nbsp; —</h2>
+
+        <!-- <h1>originalPaletteIndex: {{ originalPaletteIdx }}</h1> -->
     </header>
 
     <main>
-        <h1>Work in progress!!!</h1>
-
-        <hr>
-
         <section v-for="bdLetter of Object.keys(blockdataByAlphabet)" :key="bdLetter">
             <span>{{ bdLetter }}</span>
-            <Block
-                v-for="block of blockdataByAlphabet[bdLetter]" :key="block.name"
-                :name="block.name" :blockset-idx="GlobalStore.currBlocksetIdx" :texture="block.texture"
-                @mouseenter.prevent="(e: MouseEvent) => tooltipData = {
-                    target: e.target as HTMLElement, name: block.name,
-                }"
-                @mouseleave.prevent="(e: MouseEvent) => tooltipData.target = null"
-            />
+
+            <template v-for="block of blockdataByAlphabet[bdLetter]" :key="block.name">
+                <input
+                    :id="block.texture" type="checkbox" class="block__select-cb"
+                    :value="selectedTextures.has(block.texture)"
+                    @change="(e) => selectTexture(block.texture, e.target.checked)"
+                >
+
+                <label
+                    :for="block.texture" class="block__select-wrap"
+                    @mouseenter.prevent="(e: MouseEvent) => tooltipData = {
+                        target: e.target as HTMLElement, name: block.name,
+                    }"
+                    @mouseleave.prevent="() => tooltipData.target = null"
+                >
+                    <Block
+                        :name="block.name" :blockset-idx="GlobalStore.currBlocksetIdx" :texture="block.texture"
+                    />
+                </label>
+            </template>
         </section>
     </main>
 
@@ -89,25 +112,25 @@ watch(
 
         <SlottedButton
             class="round"
-            title="Zoom out (test minus)"
-            @click="GlobalStore.changeBlockSize(1 / 1.5)"
+            title="Zoom out (0.5x)"
+            @click="GlobalStore.changeBlockSize(0.5)"
         >
             <Icon name="zoom-out" />
         </SlottedButton>
 
         <SlottedButton
             class="round"
-            title="Zoom in (test plus)"
-            @click="GlobalStore.changeBlockSize(1.5)"
+            title="Zoom in (2.0x)"
+            @click="GlobalStore.changeBlockSize(2.0)"
         >
             <Icon name="zoom-in" />
         </SlottedButton>
 
         <SlottedButton
             class="round"
-            :disabled="selectedBlockdata.entries.length < 3"
-            :title="selectedBlockdata.entries.length < 3 ? 'Please select at least 3 blocks!' : 'Select'"
-            @click="emit('done', Array.from(selectedBlockdata))"
+            :disabled="selectedTextures.size < 3"
+            :title="selectedTextures.size < 3 ? 'Please select at least 3 blocks!' : 'Create custom palette'"
+            @click="emit('done', Array.from(selectedTextures))"
         >
             <Icon name="check" />
         </SlottedButton>
@@ -128,6 +151,36 @@ watch(
         & span {
             position: absolute;
             margin-left: -32px;
+        }
+    }
+
+    .block__select-cb {
+        display: none;
+    }
+
+    .block__select-wrap {
+        & .block {
+            transition: $TR_regular;
+        }
+
+        &:hover, &:focus {
+            z-index: 999;
+
+            & .block {
+                box-shadow: 0 0 0 4px $white_50, 0 0 8px 4px #0004;
+                transition: all 0ms, scale $TR_slow;
+            }
+
+            &:active .block {
+                box-shadow: 0 0 0 2px $white_80, 0 0 4px 4px #0004;
+                transition: $TR_regular;
+                scale: 0.875;
+            }
+        }
+
+        .block__select-cb:checked + & .block {
+            transition: all $TR_regular, scale $TR_slow;
+            scale: 0.75;
         }
     }
 </style>

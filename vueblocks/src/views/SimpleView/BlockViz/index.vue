@@ -43,30 +43,26 @@ function copyBlockTextureName(name: string) {
     navigator.clipboard.writeText(name.split('.png')[0])
 }
 
-// We assume the Edit palette option is always the latest one,
-// which is kinda brittle, but the opposite can't happen normally
-const processPaletteIdx = computed({
-    get: () => GlobalStore.currPaletteIdx,
-    set: (idx) => {
-        if (idx === (GlobalStore.currBlocksetPalettes.length - 1)) {
-            test()
+// We assume the 'Edit palette' option is always the latest -- brittle!
+async function processPaletteChange(idx: number) {
+    if (idx === (GlobalStore.currBlocksetPalettes.length - 1)) {
+        const res = await overlayShow(
+            [BlockPickPalette, { originalPaletteIdx: GlobalStore.currPaletteIdx }],
+        )
+
+        // console.log(res, GlobalStore.currPaletteIdx, GlobalStore.customPaletteTextures)
+
+        if (res !== null) {
+            GlobalStore.customPaletteTextures = [...res]
+            GlobalStore.toggleCustomPalette(true)
+            GlobalStore.currPaletteIdx = GlobalStore.currBlocksetPalettes.length - 2
         }
         else {
-            GlobalStore.currPaletteIdx = idx
+            GlobalStore.currPaletteIdx = 0
         }
-    },
-})
-// TODO: fix this faulty piece of logic below and above (bruh)
-
-async function test() {
-    const res = await overlayShow([BlockPickPalette, []])
-    console.log(res)
-
-    if (res !== null) {
-        GlobalStore.currPaletteIdx = 1
     }
     else {
-        GlobalStore.currPaletteIdx = 0
+        GlobalStore.currPaletteIdx = idx
     }
 }
 </script>
@@ -139,12 +135,10 @@ async function test() {
                     Version:
                 </SlottedDropdown>
 
-                <!-- @TODO: v-model зесь надо вместо делать кастомную фукнция для @change,
-                пока юзер находится в оверлее фукнция изменения не прырывается и ничё не
-                меняет... если не поможет с "ПРОТЕКАНИЕМ" состояния то хуй его ЗНАЕТ... -->
                 <SlottedDropdown
-                    v-model="processPaletteIdx"
+                    v-model="GlobalStore.currPaletteIdx"
                     :names="blockdataPaletteNames"
+                    @update:model-value="processPaletteChange"
                 >
                     Palette:
                 </SlottedDropdown>
@@ -167,7 +161,9 @@ async function test() {
                 </div> -->
 
                 <SlottedCheckbox v-model="SimpleViewStore.blockFilterCfg.useCIELAB">
-                    <abbr title="Use colourspace closer to how human eyes percive colour. Results in more vibrant looking and accurate, but less dark and contrast gradients.">Use&nbsp;CIELAB</abbr>
+                    <abbr
+                        title="Use colourspace closer to how human eyes percive colour. Results in more vibrant and accurate, but less saturacted and contrast gradients."
+                    >Use&nbsp;CIELAB</abbr>
                 </SlottedCheckbox>
             </div>
         </div>

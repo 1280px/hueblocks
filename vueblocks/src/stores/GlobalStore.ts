@@ -46,6 +46,10 @@ export const useGlobalStore = defineStore('GlobalStore', () => {
         set: (value) => {
             _currBlocksetIdx.value = value
             currPaletteIdx.value = 0
+
+            toggleCustomPalette(false)
+            customPaletteTextures.value = []
+
             loadBlocksetBlockdata()
             loadBlocksetPalettes()
         },
@@ -91,25 +95,49 @@ export const useGlobalStore = defineStore('GlobalStore', () => {
         currBlocksetPalettes.value = data.length ? data : []
 
         currBlocksetPalettes.value = [
+            {
+                name: 'Default (all blocks)',
+                textures: [],
+                count: -1,
+            },
+
             ...currBlocksetPalettes.value,
+
             '<hr>',
             // {
             //     name: 'Custom palette',
             //     textures: [],
-            //     count: -1,
+            //     count: -2,
             // },
             {
-                name: 'Edit palette…',
+                name: 'Edit current palette…',
                 textures: [],
-                count: -1,
+                count: -3,
             },
         ]
+    }
 
-        currBlocksetPalettes.value.unshift({
-            name: 'Default (all blocks)',
-            textures: [],
-            count: -1,
-        })
+    const customPaletteTextures = ref<Palette['textures']>([])
+    const toggleCustomPalette = (isShown: boolean) => {
+        const customIdx = currBlocksetPalettes.value.findIndex(
+            (pal: Palette | '<hr>') => (pal !== '<hr>' && pal.count === -2),
+        )
+
+        if (isShown && customIdx === -1) {
+            // We want to show the option right before 'Edit palette'
+            const editIdx = currBlocksetPalettes.value.findIndex(
+                (pal: Palette | '<hr>') => (pal !== '<hr>' && pal.count === -3),
+            )
+
+            currBlocksetPalettes.value.splice(editIdx, 0, {
+                name: 'Custom palette',
+                textures: customPaletteTextures, // TODO: Typing (doesn't break anything but still hurts)
+                count: -2,
+            })
+        }
+        else if (!isShown && customIdx !== -1) {
+            currBlocksetPalettes.value.splice(customIdx, 1)
+        }
     }
 
     const currPaletteIdx = ref<PaletteIndex>(0)
@@ -124,6 +152,7 @@ export const useGlobalStore = defineStore('GlobalStore', () => {
         getBlocksetPath, getTexturePath,
         currBlocksetBlockdata, loadBlocksetBlockdata,
         currBlocksetPalettes, loadBlocksetPalettes,
+        customPaletteTextures, toggleCustomPalette,
         currPaletteIdx,
     }
 })
