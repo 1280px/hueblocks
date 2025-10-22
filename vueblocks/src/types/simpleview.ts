@@ -2,12 +2,12 @@ import type { Block, DisplayBlock } from './blocks'
 import type { BlocksetIndex } from './blocksets'
 import type { ColorRGB } from './colors'
 
-export interface BlockVizConfig {
+export interface BlockDisplayConfig {
     hideDuplicates: boolean,
     resultsInOneRow: boolean,
     keepPrevResults: boolean,
 }
-export interface BlockFilterConfig {
+export interface BlockFilteringConfig {
     useCIELAB: boolean,
     // noiseThresholdMin: 0,
     // noiseThresholdMax: 4,

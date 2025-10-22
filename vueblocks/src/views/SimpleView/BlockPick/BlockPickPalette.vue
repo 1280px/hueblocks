@@ -3,7 +3,7 @@ import type { Block as BlockT } from '@/types/blocks'
 import type { BlockTooltip as BlockTooltipT } from '@/types/overlays'
 import type { Palette } from '@/types/palettes'
 
-import { defineEmits, ref, useId, watch } from 'vue'
+import { defineEmits, ref, watch } from 'vue'
 
 import Block from '@/components/Block.vue'
 import BlockTooltip from '@/components/BlockTooltip.vue'
@@ -61,9 +61,31 @@ function selectTexture(texture: BlockT['texture'], isAdded: boolean) {
     }
 }
 
+// TODO: Find a way to provide a PREVIOUS palette idx (the code below does work)
+function selectPaletteTextures(paletteIdx: number) {
+    selectedTextures.value.clear()
+
+    if (
+        GlobalStore.currBlocksetPalettes[paletteIdx] === '<hr>'
+        || !GlobalStore.currBlocksetPalettes[paletteIdx].textures.length
+    ) {
+        return
+    }
+
+    const filteredBlockdata = SimpleViewStore.getFilteredBlockdata(
+        GlobalStore.currBlocksetBlockdata,
+        GlobalStore.currBlocksetPalettes[paletteIdx],
+        'all',
+    )
+    for (const block of filteredBlockdata) {
+        selectedTextures.value.add(block.texture)
+    }
+    // console.log(filteredBlockdata)
+}
+
 watch(
     () => GlobalStore.currBlocksetBlockdata,
-    () => updateBlocksetData(),
+    () => { updateBlocksetData(); selectPaletteTextures(originalPaletteIdx) },
     { immediate: true },
 )
 </script>

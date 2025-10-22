@@ -2,7 +2,7 @@ import type { Block, BlockFacing } from '@/types/blocks'
 import type { BlocksetIndex } from '@/types/blocksets'
 import type { ColorLAB, ColorRGB } from '@/types/colors'
 import type { Palette } from '@/types/palettes'
-import type { BlockFilterConfig, BlockVizConfig, BlockVizRow, ColorbarSeg } from '@/types/simpleview'
+import type { BlockDisplayConfig, BlockFilteringConfig, BlockVizRow, ColorbarSeg } from '@/types/simpleview'
 
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
@@ -10,13 +10,13 @@ import { ref } from 'vue'
 import { deltaE, rgb2lab } from '@/colors'
 
 export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
-    const blockVizCfg = ref<BlockVizConfig>({
+    const blockDisplayCfg = ref<BlockDisplayConfig>({
         hideDuplicates: true,
         resultsInOneRow: false,
         keepPrevResults: false,
     })
 
-    const blockFilterCfg = ref<BlockFilterConfig>({
+    const blockFilteringCfg = ref<BlockFilteringConfig>({
         useCIELAB: true,
     })
 
@@ -151,8 +151,8 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
                     }
                 }
 
-                // if ((block.noise < blockFilterCfg.value.noiseThresholdMin) &&
-                //     (block.noise > blockFilterCfg.value.noiseThresholdMax)) {
+                // if ((block.noise < blockFilteringCfg.value.noiseThresholdMin) &&
+                //     (block.noise > blockFilteringCfg.value.noiseThresholdMax)) {
                 // return false
                 // }
 
@@ -196,7 +196,7 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
             const segSteps = colorbarData.value[cbIdx].steps
 
             let seg: BlockVizRow['textures'] = []
-            if (blockFilterCfg.value.useCIELAB) {
+            if (blockFilteringCfg.value.useCIELAB) {
                 seg = blockVizCalcCIELAB(filteredBlockdata, segStart, segEnd, segSteps)
             }
             else {
@@ -207,13 +207,13 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
         }
 
         // Finally, check the row's texture data for duplicates
-        if (blockVizCfg.value.hideDuplicates) {
+        if (blockDisplayCfg.value.hideDuplicates) {
             newBlockVizRow.textures = newBlockVizRow.textures.filter((td, i) => {
                 return i <= 0 || td.texture !== newBlockVizRow.textures[i - 1].texture
             })
         }
 
-        if (blockVizCfg.value.keepPrevResults) {
+        if (blockDisplayCfg.value.keepPrevResults) {
             blockVizData.value.push(newBlockVizRow)
         }
         else {
@@ -222,7 +222,7 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
     }
 
     return {
-        blockVizCfg, blockFilterCfg,
+        blockDisplayCfg, blockFilteringCfg,
         colorbarData,
         getFilteredBlockdata,
         blockVizData, blockVizGenerate,

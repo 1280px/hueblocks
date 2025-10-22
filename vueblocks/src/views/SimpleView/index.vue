@@ -1,10 +1,40 @@
 <script setup lang="ts">
-import SlottedCheckbox from '@/components/SlottedCheckbox.vue'
+import type { Palette } from '@/types/palettes'
+
+import { ref } from 'vue'
+
+import { useGlobalStore } from '@/stores/GlobalStore'
 import { useSimpleViewStore } from '@/stores/SimpleViewStore'
-import BlockViz from './BlockViz/index.vue'
+import BlockDisplayOptions from './BlockViz/BlockDisplayOptions.vue'
+import BlockFilteringOptions from './BlockViz/BlockFilteringOptions.vue'
+import BlockVizControls from './BlockViz/BlockVizControls.vue'
+import BlockVizData from './BlockViz/BlockVizData.vue'
 import Colorbar from './Colorbar/index.vue'
 
+const GlobalStore = useGlobalStore()
 const SimpleViewStore = useSimpleViewStore()
+
+// This is a rather fragile solution, however, as it's impossible to
+// remove rows other than delete all of them, it is toletable I guess?
+const hiddenBlockIds = ref<Set<string>>(
+    new Set(), // Format: 'row_block'
+)
+
+function bbbAction() {
+    SimpleViewStore.blockVizGenerate(
+        GlobalStore.currBlocksetIdx,
+        GlobalStore.currBlocksetBlockdata,
+        (
+            GlobalStore.currBlocksetPalettes[GlobalStore.currPaletteIdx] === '<hr>'
+                ? GlobalStore.currBlocksetPalettes[0] as Palette // 'All Blocks' palette always comes first
+                : GlobalStore.currBlocksetPalettes[GlobalStore.currPaletteIdx] as Palette
+        ),
+        GlobalStore.blockFacing,
+    )
+    if (SimpleViewStore.blockVizData.length < 2) {
+        hiddenBlockIds.value.clear()
+    }
+}
 </script>
 
 <template>
@@ -13,29 +43,19 @@ const SimpleViewStore = useSimpleViewStore()
             <Colorbar />
         </section>
 
-        <section class="blockviz-options--viz">
-            <small>
-                left click on a colour tag to change it, right click to copy its hex;<br>
-                click or scroll a label between tags to change length between them.
-            </small>
-
-            <SlottedCheckbox v-model="SimpleViewStore.blockVizCfg.hideDuplicates">
-                Hide duplicates
-            </SlottedCheckbox>
-
-            <SlottedCheckbox v-model="SimpleViewStore.blockVizCfg.resultsInOneRow">
-                Results in one row
-            </SlottedCheckbox>
-
-            <SlottedCheckbox v-model="SimpleViewStore.blockVizCfg.keepPrevResults">
-                Keep previous results
-            </SlottedCheckbox>
-        </section>
+        <BlockDisplayOptions />
     </main>
 
     <footer>
         <section class="blockviz__wrap">
-            <BlockViz />
+            <BlockVizControls @bbb-click="bbbAction()" />
+
+            <BlockFilteringOptions />
+
+            <BlockVizData
+                :hidden-block-ids="hiddenBlockIds"
+                @hide-block="(pos) => hiddenBlockIds.add(pos)"
+            />
         </section>
     </footer>
 </template>
@@ -57,19 +77,6 @@ const SimpleViewStore = useSimpleViewStore()
         @include flex-center;
         align-items: baseline;
         gap: 4px;
-    }
-
-    .blockviz-options--viz {
-        @include flex-center;
-        margin: 4px auto 24px;
-        flex-wrap: wrap;
-        gap: 0 16px;
-
-        & small {
-            width: 100%;
-            text-align: center;
-            margin-bottom: 20px;
-        }
     }
 
     .blockviz__wrap {
