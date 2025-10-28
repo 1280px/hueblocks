@@ -4,15 +4,12 @@ import type { Palette } from '@/types/palettes'
 
 import { computed } from 'vue'
 
-import SlottedCheckbox from '@/components/SlottedCheckbox.vue'
 import SlottedDropdown from '@/components/SlottedDropdown.vue'
 import { overlayShow } from '@/overlay'
 import { useGlobalStore } from '@/stores/GlobalStore'
-import { useSimpleViewStore } from '@/stores/SimpleViewStore'
 import BlockPickPalette from '../BlockPick/BlockPickPalette.vue'
 
 const GlobalStore = useGlobalStore()
-const SimpleViewStore = useSimpleViewStore()
 
 const blocksetsDataNames = computed((): Blockset['name'][] => {
     if (!GlobalStore.blocksetsData) { return ['Loading…'] }
@@ -68,31 +65,15 @@ async function processPaletteChange(idx: number) {
                 >
                     Palette:
                 </SlottedDropdown>
-            </div>
 
-            <div class="blockviz-options__inner">
                 <!-- <div style="display: flex; justify-content: center; flex-wrap: wrap;">
                     <SlottedDropdown
-                        v-model="SimpleViewStore.blockFilteringCfg.noiseMinThreshold" :names="['0%', '30%', '50%']"
+                        v-model="SimpleViewStore.blockFilteringCfg.noiseMinThreshold" :names="['No threshold', 'Low noise', 'Low & Medium noise', 'Medium & High noise']"
                         :default="0"
                     >
-                        <abbr title="Filters out blocks with colour noise percentage higher than given. The lower the threshold, the less 'noisy' blocks will be used for generation.">Noise:</abbr>
-                    </SlottedDropdown>
-                    <SlottedDropdown
-                        v-model="SimpleViewStore.blockFilteringCfg.noiseMaxThreshold" :names="['30%', '50%', '70%', '80%', '100%']"
-                        :default="4"
-                    >
-                        &nbsp; to
+                        <abbr title="Filters out blocks with colour texture variability percentage higher than given. The lower the threshold, the less 'noisy' (texture-prominent) blocks will be used for generation.">Noise:</abbr>
                     </SlottedDropdown>
                 </div> -->
-
-                <SlottedCheckbox v-model="SimpleViewStore.blockFilteringCfg.useCIELAB">
-                    <abbr
-                        title="Use colourspace closer to how human eyes percive colour. Results in more vibrant and accurate, but less saturacted and contrast gradients."
-                    >
-                        Use&nbsp;CIELAB
-                    </abbr>
-                </SlottedCheckbox>
             </div>
         </div>
     </section>

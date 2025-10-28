@@ -118,7 +118,7 @@ const popoverIsShown = computed({
                         SimpleViewStore.colorbarData[cbIdx]?.color,
                         SimpleViewStore.colorbarData[cbIdx + 1]?.color,
                     ]"
-                    @click="(e: MouseEvent) => popoverShow(e, { mode: 'color', cbIdx })"
+                    @click="(e: MouseEvent) => popoverShow(e, { mode: 'steps', cbIdx })"
                     @wheel.prevent="(e: WheelEvent) => changeLenOnScroll(e, cbIdx)"
                 />
             </template>

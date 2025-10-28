@@ -23,6 +23,14 @@ const SimpleViewStore = useSimpleViewStore()
         <SlottedCheckbox v-model="SimpleViewStore.blockDisplayCfg.keepPrevResults">
             Keep previous results
         </SlottedCheckbox>
+
+        <SlottedCheckbox v-model="SimpleViewStore.blockFilteringCfg.useCIELAB">
+            <abbr
+                title="Use colourspace closer to how human eyes percive colour. Results in more vibrant and natural looking, but often less saturated and contrast gradients."
+            >
+                Use&nbsp;CIELAB
+            </abbr>
+        </SlottedCheckbox>
     </section>
 </template>
 
@@ -31,14 +39,14 @@ const SimpleViewStore = useSimpleViewStore()
 
     .blockviz-options {
         @include flex-center;
-        margin: 4px auto 24px;
         flex-wrap: wrap;
-        gap: 0 16px;
+        gap: 8px 16px;
+        margin: 4px auto 24px; padding: 0 12px;
 
         & small {
             width: 100%;
+            margin-bottom: 12px;
             text-align: center;
-            margin-bottom: 20px;
         }
     }
 </style>

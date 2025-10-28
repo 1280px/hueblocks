@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { ColorbarSeg } from '@/types/simpleview'
+
 import { defineEmits, defineProps } from 'vue'
 
 import ColorPicker from '@/components/ColorPicker.vue'
@@ -25,6 +27,21 @@ function deleteCbItem() {
 
     emit('done')
 }
+
+async function applyPickedColor() {
+    const res: ColorbarSeg = await overlayShow([
+        BlockPickColor,
+        { },
+    ])
+
+    if (res) {
+        SimpleViewStore.colorbarData[cbIdx].color = [...res.color]
+
+        if (res.blockRef) {
+            SimpleViewStore.colorbarData[cbIdx].blockRef = res.blockRef
+        }
+    }
+}
 </script>
 
 <template>
@@ -44,11 +61,9 @@ function deleteCbItem() {
 
             <label class="popover-item">Colour:
                 <ColorPicker
-                    v-model="SimpleViewStore.colorbarData[cbIdx]"
-                    :colorpick="() => overlayShow([
-                        BlockPickColor, { },
-                    ])"
-                    @change="SimpleViewStore.colorbarData[cbIdx].blockRef = null"
+                    v-model="SimpleViewStore.colorbarData[cbIdx].color"
+                    colorpick-text="Pick colour from a block…" colorpick-icon="block"
+                    @colorpick="applyPickedColor"
                 />
             </label>
 

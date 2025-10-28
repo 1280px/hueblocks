@@ -1,39 +1,28 @@
 <script setup lang="ts">
 import type { ColorHEX, ColorRGB } from '@/types/colors'
-import type { ColorbarSeg } from '@/types/simpleview'
 import { computed, defineModel } from 'vue'
 import { hex2rgb, rgb2hex } from '@/colors'
 import Icon from '@/components/Icon.vue'
 
-const { colorpick } = defineProps<{
-    colorpick: () => Promise<ColorbarSeg>,
+const { colorpickIcon = null, colorpickText = null } = defineProps<{
+    colorpickIcon?: string | null,
+    colorpickText?: string | null,
 }>()
 
-const cbItem = defineModel<ColorbarSeg>()
+const emit = defineEmits<{
+    colorpick: [],
+}>()
+
+const color = defineModel<ColorRGB>()
 
 const currColorRgb = computed<ColorRGB>({
-    get: () => cbItem.value!.color,
-    set: (rgb: ColorRGB) => cbItem.value!.color = rgb,
+    get: () => color.value!,
+    set: (rgb: ColorRGB) => color.value! = rgb,
 })
 const currColorHex = computed<ColorHEX>({
     get: () => rgb2hex(currColorRgb.value),
     set: hex => currColorRgb.value = hex2rgb(hex),
 })
-
-async function applyPickedColor(
-    getPickedColor: typeof colorpick,
-) {
-    const res: ColorbarSeg = await getPickedColor()
-
-    if (res) {
-        currColorRgb.value.forEach((c, i) => {
-            currColorRgb.value[i] = res.color[i]
-        })
-        if (res.blockRef && cbItem.value) {
-            cbItem.value.blockRef = res.blockRef
-        }
-    }
-}
 </script>
 
 <template>
@@ -43,11 +32,11 @@ async function applyPickedColor(
             type="color" placeholder="cbItemColor"
         >
         <button
-            v-if="colorpick"
-            title="Pick colour from a block…"
-            @click="async () => await applyPickedColor(colorpick)"
+            v-if="colorpickIcon && colorpickText"
+            :title="colorpickText"
+            @click="() => emit('colorpick')"
         >
-            <Icon name="block" />
+            <Icon :name="colorpickIcon" />
         </button>
     </div>
 </template>
@@ -56,8 +45,9 @@ async function applyPickedColor(
     @use '@/assets/variables' as *;
 
     .color-picker {
+        flex: 1 1 0;
         display: flex; flex-direction: row;
-        width: 80px;
+        max-width: 80px;
     }
 
     .color-picker > button {
