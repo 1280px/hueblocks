@@ -2,7 +2,7 @@
 import type { Blockset } from '@/types/blocksets'
 import type { Palette } from '@/types/palettes'
 
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 
 import SlottedDropdown from '@/components/SlottedDropdown.vue'
 import { overlayShow } from '@/overlay'
@@ -24,13 +24,13 @@ const blockdataPaletteNames = computed((): Palette['name'][] => {
 })
 
 // We assume the 'Edit palette' option is always the latest -- brittle!
-async function processPaletteChange(idx: number) {
-    if (idx === (GlobalStore.currBlocksetPalettes.length - 1)) {
-        const res = await overlayShow(
-            [BlockPickPalette, { originalPaletteIdx: GlobalStore.currPaletteIdx }],
-        )
+async function processPaletteChange(newIdx: number, oldIdx: number) {
+    if (newIdx === (GlobalStore.currBlocksetPalettes.length - 1)) {
+        // console.log(GlobalStore.currPaletteIdx, newIdx, oldIdx)
 
-        // console.log(res, GlobalStore.currPaletteIdx, GlobalStore.customPaletteTextures)
+        const res = await overlayShow(
+            [BlockPickPalette, { originalPaletteIdx: oldIdx }],
+        )
 
         if (res !== null) {
             GlobalStore.customPaletteTextures = [...res]
@@ -38,13 +38,18 @@ async function processPaletteChange(idx: number) {
             GlobalStore.currPaletteIdx = GlobalStore.currBlocksetPalettes.length - 2
         }
         else {
-            GlobalStore.currPaletteIdx = 0
+            GlobalStore.currPaletteIdx = oldIdx
         }
     }
     else {
-        GlobalStore.currPaletteIdx = idx
+        GlobalStore.currPaletteIdx = newIdx
     }
 }
+
+watch(
+    () => GlobalStore.currPaletteIdx,
+    (newIdx, oldIdx) => processPaletteChange(newIdx, oldIdx),
+)
 </script>
 
 <template>
@@ -61,7 +66,6 @@ async function processPaletteChange(idx: number) {
                 <SlottedDropdown
                     v-model="GlobalStore.currPaletteIdx"
                     :names="blockdataPaletteNames"
-                    @update:model-value="processPaletteChange"
                 >
                     Palette:
                 </SlottedDropdown>

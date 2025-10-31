@@ -137,7 +137,7 @@ const popoverIsShown = computed({
         v-model:visible="popoverIsShown" :target="(popoverTarget as (HTMLElement | null))" :gap="12"
         class="popover"
     >
-        <template #arrow="{ side, placement }">
+        <template #arrow="{ side }">
             <div class="popover-arrow" :class="`${side}`" />
         </template>
 

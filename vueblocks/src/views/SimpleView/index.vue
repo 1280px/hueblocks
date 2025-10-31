@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import type { Palette } from '@/types/palettes'
 
-import { ref } from 'vue'
-
 import { useGlobalStore } from '@/stores/GlobalStore'
 import { useSimpleViewStore } from '@/stores/SimpleViewStore'
 import BlockDisplayOptions from './BlockViz/BlockDisplayOptions.vue'
@@ -16,9 +14,7 @@ const SimpleViewStore = useSimpleViewStore()
 
 // This is a rather fragile solution, however, as it's impossible to
 // remove rows other than delete all of them, it is toletable I guess?
-const hiddenBlockIds = ref<Set<string>>(
-    new Set(), // Format: 'row_block'
-)
+const hiddenBlockIds = new Set<string>() // Format: 'row_block'
 
 function bbbAction() {
     SimpleViewStore.blockVizGenerate(
@@ -32,7 +28,7 @@ function bbbAction() {
         GlobalStore.blockFacing,
     )
     if (SimpleViewStore.blockVizData.length < 2) {
-        hiddenBlockIds.value.clear()
+        hiddenBlockIds.clear()
     }
 }
 </script>

@@ -51,7 +51,9 @@ function updateBlocksetData() {
     }
 }
 
+// https://stackoverflow.com/questions/39007637/javascript-set-vs-array-performance
 const selectedTextures = ref<Set<BlockT['texture']>>(new Set())
+
 function selectTexture(texture: BlockT['texture'], isAdded: boolean) {
     if (isAdded && !selectedTextures.value.has(texture)) {
         selectedTextures.value.add(texture)
@@ -61,10 +63,10 @@ function selectTexture(texture: BlockT['texture'], isAdded: boolean) {
     }
 }
 
-// TODO: Find a way to provide a PREVIOUS palette idx (the code below does work)
 function selectPaletteTextures(paletteIdx: number) {
     selectedTextures.value.clear()
 
+    // console.log(paletteIdx)
     if (
         GlobalStore.currBlocksetPalettes[paletteIdx] === '<hr>'
         || !GlobalStore.currBlocksetPalettes[paletteIdx].textures.length
@@ -77,15 +79,23 @@ function selectPaletteTextures(paletteIdx: number) {
         GlobalStore.currBlocksetPalettes[paletteIdx],
         'all',
     )
-    for (const block of filteredBlockdata) {
-        selectedTextures.value.add(block.texture)
-    }
-    // console.log(filteredBlockdata)
+    selectedTextures.value = new Set(
+        filteredBlockdata.map(block => block.texture),
+    )
+    // console.log(selectedTextures.value)
 }
 
+// We use this to not create unnecessary reactivity for every block
+const isProcessing = ref<boolean>(false)
+
 watch(
-    () => GlobalStore.currBlocksetBlockdata,
-    () => { updateBlocksetData(); selectPaletteTextures(originalPaletteIdx) },
+    [() => GlobalStore.currBlocksetBlockdata, () => originalPaletteIdx],
+    () => {
+        isProcessing.value = false
+        updateBlocksetData()
+        selectPaletteTextures(originalPaletteIdx)
+        isProcessing.value = true
+    },
     { immediate: true },
 )
 </script>
@@ -93,19 +103,19 @@ watch(
 <template>
     <header>
         <h2>— &nbsp; Pick 3+ blocks you want to use as a palette &nbsp; —</h2>
-
-        <!-- <h1>originalPaletteIndex: {{ originalPaletteIdx }}</h1> -->
     </header>
 
-    <main>
+    <main v-if="isProcessing">
         <section v-for="bdLetter of Object.keys(blockdataByAlphabet)" :key="bdLetter">
             <span>{{ bdLetter }}</span>
 
             <template v-for="block of blockdataByAlphabet[bdLetter]" :key="block.name">
                 <input
                     :id="block.texture" type="checkbox" class="block__select-cb"
-                    :value="selectedTextures.has(block.texture)"
-                    @change="(e) => selectTexture(block.texture, e.target.checked)"
+                    :checked="selectedTextures.has(block.texture)"
+                    @change="(e: InputEvent) => selectTexture(
+                        block.texture, (e.target as HTMLInputElement).checked,
+                    )"
                 >
 
                 <label

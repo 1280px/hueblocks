@@ -52,7 +52,7 @@ const GlobalStore = useGlobalStore()
         </div>
 
         <small>
-            tip: left click a block to hide it, right click to copy id
+            left click on a block to hide it, right click to copy id
         </small>
     </section>
 </template>

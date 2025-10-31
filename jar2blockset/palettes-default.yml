@@ -13,39 +13,46 @@ palettes:
     # and ommiting excludes section means "don't exclude any blocks from the included ones"
 
     excludes:
-      - ice.png
-      - glass_$
       - $_stained_glass.png
       - frosted_ice_$
-      - slime.png
-      - slime_block.png
+      - glass_$
       - honey_block_$
+      - ice.png
+      - slime_block.png
+      - slime.png
       - tinted_glass.png
 
   - name: 'Colorful blocks'
     includes:
+      - $_coral_block.png
       - $_log_top.png
       - $_log.png
       - $_planks.png
       - $_stem_top.png
       - $_stem.png
+      - $_wart_block.png
       - $copper.png
       - $froglight_side.png
-      - $nether_wart_block.png
       - $sponge.png
       - amethyst_block.png
+      - andesite.png
       - bamboo_block.png
       - black_$
       - blue_$
+      - bone_block_side.png
       - brown_$
+      - calcite.png
+      - clay.png
       - coal_block.png
       - concrete_$
       - copper_block.png
       - cyan_$
       - diamond_block.png
+      - diorite.png
       - emerald_block.png
       - glazed_terracotta_$
       - gold_block.png
+      - granite.png
       - gray_$
       - green_$
       - hardened_clay$
@@ -70,16 +77,23 @@ palettes:
       - redstone_block.png
       - redstone_block.png
       - resin_block.png
+      - sandstone_top.png
+      - sculk.png
       - shroomlight.png
       - shulker_box.png
       - shulker$
       - terracotta.png
       - tinted_glass.png
+      - white_$
       - wool$
+      - yellow_$
 
     excludes:
       - blue_ice.png
-      - red_sand$
+      - dead_$
+      - red_sand.png
+      - red_sandstone_bottom.png
+      - red_sandstone.png
       - test_block$
 
   - name: 'Grayscale blocks'
@@ -109,13 +123,14 @@ palettes:
       - cobbled_deepslate.png
       - cobblestone.png
       - crafter_bottom.png
+      - creaking_heart_top.png
       - cyan_terracotta.png
       - dead_$
-      - deepslate.png
       - deepslate_bricks.png
+      - deepslate_coal$
       - deepslate_tiles.png
       - deepslate_top.png
-      - deepslate_coal$
+      - deepslate.png
       - dispenser_$
       - furnace$
       - gravel.png
@@ -133,6 +148,8 @@ palettes:
       - observer$
       - obsidian.png
       - pale_moss_block.png
+      - pale_oak_log.png
+      - pale_oak_planks.png
       - pale_oak_trapdoor.png
       - piston_bottom.png
       - polished_blackstone$
@@ -153,6 +170,7 @@ palettes:
       - stone_slab$
       - stone.png
       - stonebrick$
+      - stonecutter_bottom.png
       - tinted_glass.png
       - tuff$
       - white_$
@@ -176,22 +194,22 @@ palettes:
   - name: 'Overworld natural blocks'
     includes:
       - $_coral_block.png
-      - $_ice.png
       - $_log_top.png
       - $_log.png
       - $_ore.png
+      - $azalea_top.png
       - $dirt.png
+      - $ice.png
       - $moss_block.png
       - $snow.png
       - amethyst_block.png
       - andesite.png
-      - azalea_top.png
       - bedrock.png
       - bee_nest_$
       - bone_block_$
       - brown_mushroom_block.png
       - brown_terracotta.png
-      - buddying_amethyst.png
+      - budding_amethyst.png
       - calcite.png
       - carved_pumpkin.png
       - clay.png
@@ -220,9 +238,11 @@ palettes:
       - melon$
       - mossy_cobblestone.png
       - mud.png
-      - muddy_mangrove_roots_side.png
+      - muddy_mangrove_roots$
       - mushroom_block$
+      - mushroom_stem$
       - mycelium$
+      - obsidian.png
       - orange_terracotta.png
       - podzol$
       - pumpkin$
@@ -232,6 +252,7 @@ palettes:
       - red_terracotta.png
       - sand$
       - sculk$
+      - smooth_basalt.png
       - stone.png
       - terracotta.png
       - tuff.png
@@ -242,51 +263,56 @@ palettes:
       - crimson_$
       - deepslate_bricks.png
       - deepslate_tiles.png
-      - nether_gold_ore.png
+      - dirt_path_top.png
+      - grass_path_top.png
+      - nether_$
       - quartz_ore.png
       - test_block$
       - warped_$
 
   - name: 'Nether + End blocks'
     includes:
-      - ancient_debris_$
-      - basalt_$
-      - polished_basalt_$
+      - $_wart_block.png
       - $nether_brick.png
       - $nether_bricks.png
       - $obsidian.png
+      - ancient_debris_$
+      - basalt_$
       - bedrock.png
-      - bone_block_$
       - blackstone$
+      - bone_block_$
       - chiseled_nether_bricks.png
       - chiseled_polished_blackstone.png
       - crimson_$
-      - warped_$
-      - $_wart_block.png
       - crying_obsidian.png
+      - end_$
       - end_stone$
       - gilded_blackstone.png
+      - glass_magenta.png
       - glowstone.png
-      - lodestone$
-      - nether$
-      - netherite$
-      - polished_blackstone$
-      - purpur_$
-      - end_$
+      - gold_block.png
       - gravel.png
+      - lodestone$
+      - magenta_stained_glass.png
       - magma.png
       - nether_wart_block.png
+      - nether$
+      - netherite$
       - netherrack.png
+      - polished_basalt_$
+      - polished_blackstone$
+      - purpur_$
       - purpur$
       - quartz$
-      - shulker_top_purple.png
-      - soul$
       - respawn_anchor$
       - shroomlight.png
       - shulker_box.png
+      - shulker_top_purple.png
       - smooth_basalt.png
+      - soul$
       - stripped_crimson_$
       - stripped_warped_$
+      - warped_$
 
     excludes:
       - crimson_step_top.png

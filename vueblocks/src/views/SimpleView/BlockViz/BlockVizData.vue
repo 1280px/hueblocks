@@ -35,12 +35,16 @@ function copyBlockTextureName(name: string) {
                     v-for="(block, j) in row.textures" :key="j"
                     :name="block.name" :blockset-idx="row.blocksetIdx" :texture="block.texture"
                     :class="{ 'block-hidden': hiddenBlockIds.has(`${i}_${j}`) }"
-                    @click="() => emit('hideBlock', `${i}_${j}`)"
+                    @click="(e: Event) => {
+                        emit('hideBlock', `${i}_${j}`);
+                        // Force update class bc Vue won't detect it until any next event
+                        (e.currentTarget as HTMLElement).classList.add('block-hidden')
+                    }"
                     @contextmenu.prevent="() => copyBlockTextureName(block.texture)"
                     @mouseenter.prevent="(e: MouseEvent) => tooltipData = {
                         target: e.target as HTMLElement, name: block.name,
                     }"
-                    @mouseleave.prevent="(e: MouseEvent) => tooltipData.target = null"
+                    @mouseleave.prevent="() => tooltipData.target = null"
                 />
             </div>
         </div>
