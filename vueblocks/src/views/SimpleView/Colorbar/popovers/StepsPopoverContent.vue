@@ -2,8 +2,6 @@
 import type { ColorRGB } from '@/types/colors'
 import type { ColorbarSeg } from '@/types/simpleview'
 
-import { defineEmits, defineProps } from 'vue'
-
 import Icon from '@/components/Icon.vue'
 import { useSimpleViewStore } from '@/stores/SimpleViewStore'
 

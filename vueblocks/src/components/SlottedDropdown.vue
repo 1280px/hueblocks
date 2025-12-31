@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, defineModel, defineProps, useId } from 'vue'
+import { computed, useId } from 'vue'
 
 import Icon from '@/components/Icon.vue'
 

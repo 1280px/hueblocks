@@ -131,7 +131,7 @@ export const useGlobalStore = defineStore('GlobalStore', () => {
 
             currBlocksetPalettes.value.splice(editIdx, 0, {
                 name: 'Custom palette',
-                textures: customPaletteTextures, // TODO: Typing (doesn't break anything but still hurts)
+                textures: customPaletteTextures.value,
                 count: -2,
             })
         }

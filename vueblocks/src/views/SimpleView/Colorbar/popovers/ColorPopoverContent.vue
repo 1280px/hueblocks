@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import type { ColorbarSeg } from '@/types/simpleview'
 
-import { defineEmits, defineProps } from 'vue'
-
 import ColorPicker from '@/components/ColorPicker.vue'
 import Icon from '@/components/Icon.vue'
 import { overlayShow } from '@/overlay'
@@ -28,7 +26,7 @@ function deleteCbItem() {
     emit('done')
 }
 
-async function applyPickedColor() {
+async function applyBlockRef() {
     const res: ColorbarSeg = await overlayShow([
         BlockPickColor,
         { },
@@ -37,9 +35,7 @@ async function applyPickedColor() {
     if (res) {
         SimpleViewStore.colorbarData[cbIdx].color = [...res.color]
 
-        if (res.blockRef) {
-            SimpleViewStore.colorbarData[cbIdx].blockRef = res.blockRef
-        }
+        SimpleViewStore.colorbarData[cbIdx].blockRef = res.blockRef ? res.blockRef : null
     }
 }
 </script>
@@ -63,7 +59,8 @@ async function applyPickedColor() {
                 <ColorPicker
                     v-model="SimpleViewStore.colorbarData[cbIdx].color"
                     colorpick-text="Pick colour from a block…" colorpick-icon="block"
-                    @colorpick="applyPickedColor"
+                    @change="SimpleViewStore.colorbarData[cbIdx].blockRef = null"
+                    @colorpick="applyBlockRef"
                 />
             </label>
 

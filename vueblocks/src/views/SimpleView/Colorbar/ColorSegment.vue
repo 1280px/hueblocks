@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { ColorbarSeg } from '@/types/simpleview'
 
-import { computed, defineProps, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { getCssRgb } from '@/colors'
 import { useGlobalStore } from '@/stores/GlobalStore'
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { ColorbarSeg } from '@/types/simpleview'
 
-import { defineEmits, defineProps, ref } from 'vue'
+import { ref } from 'vue'
 
 import ColorPicker from '@/components/ColorPicker.vue'
 import { overlayShow } from '@/overlay'

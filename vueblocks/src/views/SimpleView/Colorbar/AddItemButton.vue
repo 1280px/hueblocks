@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { defineProps } from 'vue'
-
 import Icon from '@/components/Icon.vue'
 
 const { side } = defineProps<{
@@ -39,8 +37,7 @@ const { side } = defineProps<{
         }
 
         background-color: $white_20;
-        border: 0 solid $trans;
-        box-shadow: $SH_smooth;
+        border: 0 solid $trans; box-shadow: $SH_smooth;
         transition: $TR_regular;
 
         &:not(:disabled):hover {

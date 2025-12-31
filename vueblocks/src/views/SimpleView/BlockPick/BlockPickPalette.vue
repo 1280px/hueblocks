@@ -3,7 +3,7 @@ import type { Block as BlockT } from '@/types/blocks'
 import type { BlockTooltip as BlockTooltipT } from '@/types/overlays'
 import type { Palette } from '@/types/palettes'
 
-import { defineEmits, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 
 import Block from '@/components/Block.vue'
 import BlockTooltip from '@/components/BlockTooltip.vue'

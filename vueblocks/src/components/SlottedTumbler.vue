@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineModel, useId } from 'vue'
+import { useId } from 'vue'
 
 const value = defineModel<boolean>({ default: false })
 

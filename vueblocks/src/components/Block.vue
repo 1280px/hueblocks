@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { DisplayBlock } from '@/types/blocks'
 
-import { defineProps, ref } from 'vue'
+import { ref } from 'vue'
 
 import { useGlobalStore } from '@/stores/GlobalStore'
 

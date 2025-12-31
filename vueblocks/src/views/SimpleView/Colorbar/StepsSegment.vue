@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import type { ColorRGB } from '@/types/colors'
 
-import { defineProps } from 'vue'
-
 import { getCssRgb } from '@/colors'
 import SlottedButton from '@/components/SlottedButton.vue'
 import { useSimpleViewStore } from '@/stores/SimpleViewStore'

@@ -78,7 +78,9 @@
     pointer-events: none;
     z-index: 999;
 
-    @media (any-pointer: coarse) {
-        display: none;
+    display: none;
+
+    @media (hover: hover) and (pointer: fine) {
+        display: unset;
     }
 }

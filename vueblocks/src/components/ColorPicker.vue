@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { ColorHEX, ColorRGB } from '@/types/colors'
-import { computed, defineModel } from 'vue'
+import { computed } from 'vue'
 import { hex2rgb, rgb2hex } from '@/colors'
 import Icon from '@/components/Icon.vue'
 

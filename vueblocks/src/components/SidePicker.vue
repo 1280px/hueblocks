@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { BlockFacing } from '@/types/blocks'
 
-import { defineModel, useId } from 'vue'
+import { useId } from 'vue'
 
 import Icon from '@/components/Icon.vue'
 import { blockFacing } from '@/types/blocks'
