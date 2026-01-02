@@ -1,15 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 96 96" xmlns:bx="https://boxy-svg.com">
-  <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal; transform-origin: 40px 40px 0px;" transform="matrix(1, 0, 0, 1, -38, -40)">
+<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 96 96">
+  <g style="mix-blend-mode: normal; transform-origin: 40px 40px 0px;" transform="matrix(1, 0, 0, 1, -38, -40)">
     <path d="M0,172v-172h172v172z" fill="none"/>
     <g fill="currentColor">
       <path d="M 85.984 40 C 83.914 40.002 81.842 40.465 79.946 41.396 C 79.939 41.4 79.935 41.405 79.93 41.41 L 41.249 60.517 C 39.253 61.506 37.999 63.483 38 65.639 L 38 110.341 C 37.999 112.498 39.253 114.474 41.249 115.462 L 79.969 134.601 C 79.971 134.601 79.974 134.601 79.977 134.601 C 83.781 136.475 88.253 136.463 92.063 134.585 C 92.065 134.582 92.068 134.58 92.07 134.578 L 130.751 115.47 C 132.747 114.481 134.001 112.505 134 110.349 L 134 65.639 C 134.001 63.483 132.747 61.506 130.751 60.517 L 92.054 41.403 C 92.047 41.398 92.039 41.391 92.031 41.387 C 90.13 40.459 88.055 39.998 85.984 40 Z M 86 48 C 86.207 48.001 126 68 126 68 L 126 108 C 126 108 86.277 128.136 86 128 L 46 108 L 46 68 C 46 68 85.793 47.999 86 48 Z" style=""/>
     </g>
   </g>
-  <defs>
-    <bx:grid x="0" y="0" width="4" height="4"/>
-    <bx:export>
-      <bx:file format="svg"/>
-    </bx:export>
-  </defs>
 </svg>
