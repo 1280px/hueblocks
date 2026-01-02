@@ -117,6 +117,8 @@ export const useGlobalStore = defineStore('GlobalStore', () => {
         ]
     }
 
+    const currPaletteIdx = ref<PaletteIndex>(0)
+
     const customPaletteTextures = ref<Palette['textures']>([])
     const toggleCustomPalette = (isShown: boolean) => {
         const customIdx = currBlocksetPalettes.value.findIndex(
@@ -140,19 +142,87 @@ export const useGlobalStore = defineStore('GlobalStore', () => {
         }
     }
 
-    const currPaletteIdx = ref<PaletteIndex>(0)
+    const importCustomPalette = async () => {
+        const opener = document.createElement('input')
+        opener.setAttribute('type', 'file')
+        opener.setAttribute('accept', 'application/json')
+        opener.style.display = 'none'
+        document.body.appendChild(opener)
+        opener.click()
+
+        const file: File | undefined = await new Promise((resolve) => {
+            opener.onchange = () => resolve(opener.files?.[0])
+        })
+        if (!file) { throw new Error('') }
+        opener.remove()
+
+        let textures: Palette['textures']
+        try {
+            textures = await new Promise((resolve) => {
+                const reader = new FileReader()
+                reader.onload = () => {
+                    resolve(JSON.parse(reader!.result as string)) // Yuck.
+                }
+                reader.readAsText(file)
+            })
+        }
+        catch (err) {
+            throw new Error((err as Error).message ?? 'Unable to read JSON!')
+        }
+
+        // eslint-disable-next-line prefer-const
+        let missings = [...textures]
+        for (const block of currBlocksetBlockdata.value) {
+            const idx = missings.indexOf(block.texture)
+            if (idx !== -1) {
+                missings.splice(idx, 1)
+            }
+        }
+
+        if (missings.length) {
+            // eslint-disable-next-line no-alert
+            if (confirm(
+                `${missings.length} textures from this palette do not exist!\n\n`
+                + 'This might\'ve happened because of incorrectly chosen verion, i.e. if a palette '
+                + 'was created a while ago and some textures used by it are now named differently. \n\n'
+                + 'Press "Cancel" to abort, or "OK" to drop missing textures and continue.',
+            )) {
+                return textures.filter(texture => !missings.includes(texture))
+            }
+            else { throw new Error('') }
+        }
+        else {
+            return textures
+        }
+    }
+
+    const exportCustomPalette = (customPaletteTextures: Palette['textures']) => {
+        const json = (
+            JSON.stringify(customPaletteTextures, null, 4)
+        )
+        const blob = new Blob(
+            [json],
+            { type: 'application/json' },
+        )
+
+        const addr = URL.createObjectURL(blob)
+        const link = document.createElement('a')
+        link.setAttribute('href', addr)
+        link.setAttribute('download', 'palette.json') // Otherwise FF just opens JSON
+        document.body.appendChild(link)
+        link.click()
+        link.remove()
+    }
 
     return {
         locale, viewMode, getIconPath,
         blockSize, changeBlockSize,
         blockFacing,
         blocksetsPath,
-        blocksetsData, loadBlocksetsData,
-        currBlocksetIdx,
+        blocksetsData, loadBlocksetsData, currBlocksetIdx,
         getBlocksetPath, getTexturePath,
         currBlocksetBlockdata, loadBlocksetBlockdata,
-        currBlocksetPalettes, loadBlocksetPalettes,
-        customPaletteTextures, toggleCustomPalette,
-        currPaletteIdx,
+        currBlocksetPalettes, loadBlocksetPalettes, currPaletteIdx,
+        customPaletteTextures, toggleCustomPalette, importCustomPalette, exportCustomPalette,
     }
 })

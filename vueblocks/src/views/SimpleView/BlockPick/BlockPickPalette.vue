@@ -24,8 +24,8 @@ const GlobalStore = useGlobalStore()
 const SimpleViewStore = useSimpleViewStore()
 
 const blockdataByAlphabet = ref<Record<string, BlockT[]>>({})
-
 const tooltipData = ref<BlockTooltipT>({ target: null, name: 'missingNo' })
+const errText = ref<string>('')
 
 function updateBlocksetData() {
     const filteredBlockdata = SimpleViewStore.getFilteredBlockdata(
@@ -85,6 +85,17 @@ function selectPaletteTextures(paletteIdx: number) {
     // console.log(selectedTextures.value)
 }
 
+async function handlePaletteImport() {
+    try {
+        const newSelectedTextures: BlockT['texture'][] = await GlobalStore.importCustomPalette()
+        selectedTextures.value = new Set(newSelectedTextures)
+        errText.value = ''
+    }
+    catch (err) {
+        errText.value = (err as Error).message ?? 'An unknown palette import error has occured :('
+    }
+}
+
 // We use this to not create unnecessary reactivity for every block
 const isProcessing = ref<boolean>(false)
 
@@ -102,7 +113,17 @@ watch(
 
 <template>
     <header>
-        <h2>— &nbsp; Pick 3+ blocks you want to use as a palette &nbsp; —</h2>
+        <h2 v-if="selectedTextures.size < 3">
+            — &nbsp; Pick 3+ blocks you want to use as a palette &nbsp; —
+        </h2>
+        <h2 v-else>
+            — &nbsp; Editing custom palette ({{ selectedTextures.size }}
+            / {{ GlobalStore.currBlocksetBlockdata.length }} blocks) &nbsp; —
+        </h2>
+
+        <h3 v-show="errText">
+            {{ errText }}
+        </h3>
     </header>
 
     <main v-if="isProcessing">
@@ -144,24 +165,25 @@ watch(
 
         <SlottedButton
             class="round"
-            title="Zoom out (0.5x)"
-            @click="GlobalStore.changeBlockSize(0.5)"
+            title="Import JSON…"
+            @click="handlePaletteImport()"
         >
-            <Icon name="zoom-out" />
-        </SlottedButton>
-
-        <SlottedButton
-            class="round"
-            title="Zoom in (2.0x)"
-            @click="GlobalStore.changeBlockSize(2.0)"
-        >
-            <Icon name="zoom-in" />
+            <Icon name="import" />
         </SlottedButton>
 
         <SlottedButton
             class="round"
             :disabled="selectedTextures.size < 3"
-            :title="selectedTextures.size < 3 ? 'Please select at least 3 blocks!' : 'Create custom palette'"
+            :title="selectedTextures.size < 3 ? 'Please select at least 3 blocks!' : 'Export JSON…'"
+            @click="GlobalStore.exportCustomPalette(Array.from(selectedTextures))"
+        >
+            <Icon name="export" />
+        </SlottedButton>
+
+        <SlottedButton
+            class="round"
+            :disabled="selectedTextures.size < 3"
+            :title="selectedTextures.size < 3 ? 'Please select at least 3 blocks!' : 'Update custom palette'"
             @click="emit('done', Array.from(selectedTextures))"
         >
             <Icon name="check" />
