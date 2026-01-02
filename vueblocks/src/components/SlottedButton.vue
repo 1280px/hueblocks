@@ -35,18 +35,20 @@
             }
         }
 
-        &:not(:disabled):hover {
-            border-color: $accent-light;
+        &:not(:disabled) {
+            &:hover {
+                border-color: $accent-light;
 
-            &.trans {
-                background-color: $white_20;
-                border-color: $trans;
+                &.trans {
+                    background-color: $white_20; border-color: $trans;
+                }
             }
 
-            &:active {
+            &:focus-visible, &:hover:active {
                 padding: 0;
-                border: 4px solid $accent-light_50;
                 background-color: $dark_60;
+                border: 4px solid $accent-light_50;
+                outline: none;
                 transition: $TR_fast;
 
                 &.trans {

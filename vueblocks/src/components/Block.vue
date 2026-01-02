@@ -5,7 +5,11 @@ import { ref } from 'vue'
 
 import { useGlobalStore } from '@/stores/GlobalStore'
 
-const { blocksetIdx = -1, texture = 'missingNo', name } = defineProps<DisplayBlock>()
+const {
+    blocksetIdx = -1,
+    texture = 'missingNo',
+    name = '',
+} = defineProps<DisplayBlock>()
 
 const GlobalStore = useGlobalStore()
 
@@ -32,11 +36,13 @@ const isLoaded = ref<boolean>(false)
 
     .block {
         image-rendering: pixelated;
-        overflow: clip; line-break: anywhere;
+        overflow: clip;
+        line-break: anywhere;
         text-align: left;
+        transition: $TR_regular, background 0ms;
 
         &.loading {
-            background-color: $accent-light_25;
+            background: $accent-light_25;
         }
 
         & img {

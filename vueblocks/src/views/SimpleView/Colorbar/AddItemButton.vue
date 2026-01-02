@@ -40,12 +40,15 @@ const { side } = defineProps<{
         border: 0 solid $trans; box-shadow: $SH_smooth;
         transition: $TR_regular;
 
-        &:not(:disabled):hover {
-            background-color: $white_30;
+        &:not(:disabled) {
+            &:hover {
+                background-color: $white_30;
+            }
 
-            &:active {
+            &:focus-visible, &:hover:active {
                 background-color: $white_50;
                 border: 2px solid $white_30;
+                outline: none;
                 transition: $TR_fast;
             }
         }

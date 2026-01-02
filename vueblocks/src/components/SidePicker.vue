@@ -65,9 +65,10 @@ const id = useId()
             border-color: $accent-light;
         }
 
-        &:focus, :active {
-            border: 4px solid $accent-light_50;
+        &:focus, &:active {
             background-color: $dark_60;
+            border: 4px solid $accent-light_50;
+            outline: none;
             transition: $TR_fast;
         }
     }

@@ -50,7 +50,7 @@ const id = useId()
             &:hover {
                 border-color: $accent-light;
             }
-            &:focus, :active {
+            &:focus, &:active {
                 padding: 0 6px 1px 6px;
                 background-color: $dark_60;
                 border: 4px solid $accent-light_50;

@@ -106,6 +106,7 @@ watch(
         <SlottedButton
             class="round"
             title="Zoom out (0.5x)"
+            :disabled="Number.parseInt(GlobalStore.blockSize) <= 16"
             @click="GlobalStore.changeBlockSize(0.5)"
         >
             <Icon name="zoom-out" />
@@ -114,6 +115,7 @@ watch(
         <SlottedButton
             class="round"
             title="Zoom in (2.0x)"
+            :disabled="Number.parseInt(GlobalStore.blockSize) >= 256"
             @click="GlobalStore.changeBlockSize(2.0)"
         >
             <Icon name="zoom-in" />
