@@ -32,6 +32,7 @@ filters:
   - itemframe$
   - lava$
   - leaves_$
+  - mycel_side.png
   - piston_bottom.png
   - piston_inner_top.png
   - portal.png
@@ -39,6 +40,7 @@ filters:
   - quartz_block_chiseled_top.png
   - quartz_block_lines_top.png
   - repeater$
+  - snow_side.png
   - stonebricksmooth_cracked.png
   - water$
   - workbench_front.png
@@ -51,6 +53,7 @@ filters:
   - crafting_table_front.png
   - door_$
   - dispenser_front_vertical.png
+  - dirt_podzol_side.png
   - dragon_egg.png
   - dropper_front_horizontal.png
   - dropper_front_vertical.png
@@ -61,6 +64,7 @@ filters:
   - frosted_ice_2.png
   - furnace_front_on.png
   - jukebox$
+  - mycelium_side.png
   - nether_portal.png
   - observer_front.png
   - observer_back$
@@ -88,8 +92,7 @@ filters:
   - dark_oak_door$
   - dark_oak_log_top.png
   - fletching_table_$
-  - grass_block_side.png
-  - grass_block_top.png
+  - grass_block_$
   - item_frame.png
   - iron_door$
   - jigsaw$
@@ -98,6 +101,7 @@ filters:
   - lectern_$
   - oak_door$
   - oak_log_top.png
+  - podzol_side.png
   - smithing_table_side.png
   - smoker_front$
   - spruce_door$
@@ -158,7 +162,7 @@ filters:
   - vault_bottom$
   - vault_top$
 
-  # 1.21.9
+  # 1.21.11
   - dried_ghast_$
   # TODO: Maybe add a special handle for shelves to extract their back texture (useful in some builds)
   - $_shelf.png

@@ -1,8 +1,22 @@
-import os
 import sys
 
 import numpy as np
 from PIL import Image
+
+
+def add_srgb_gamma(lrgb):
+    # return np.power(lrgb, 1/2)
+    if (lrgb >= 0.0031308):
+        return (1.055 * np.power(lrgb, (1 / 2.4))) - 0.055
+    else:
+        return lrgb * 12.92
+    
+def remove_srgb_gamma(srgb):
+    # return np.power(srgb, 2)
+    if (srgb >= 0.04045):
+        return np.power((srgb + 0.055) / 1.055, 2.4)
+    else:
+        return srgb / 12.92
 
 
 def img2rgb(texture_path, colorcalc_rule):
@@ -14,17 +28,19 @@ def img2rgb(texture_path, colorcalc_rule):
     # closer to original image brightness! Check this amazing article and
     # video in it: https://sighack.com/post/averaging-rgb-colors-the-right-way
     if colorcalc_rule == 'modern':
+        srgb2lrgb = np.vectorize(lambda p: remove_srgb_gamma(p / 255.0))
+        lrgb2srgb = np.vectorize(lambda p: add_srgb_gamma(p) * 255.0)
+
         img_np = np.asarray(
             img.convert("RGB"),
             dtype=np.float64 # Otherwise will almost certainly overflow 
         )
-        img_np = img_np ** 2
 
-        mean_of_squares = np.mean(img_np, axis=(0, 1))
+        mean_of_squares = np.mean(srgb2lrgb(img_np), axis=(0, 1))
 
-        sqrts_of_mean_of_squares = np.floor(
-            np.sqrt(mean_of_squares)
-        ).astype(np.uint8) # Prevent color being out of 0-255 range
+        sqrts_of_mean_of_squares = np.clip(
+            lrgb2srgb(mean_of_squares),
+        0, 255) # Prevent color being out of 0..255 range
 
         img.close()
         return [int(c) for c in sqrts_of_mean_of_squares]
@@ -37,6 +53,7 @@ def img2rgb(texture_path, colorcalc_rule):
         # a bit different! Not much can be done about this, sadly, though.
         img_proc = img.resize((1, 1), Image.Resampling.LANCZOS)
         img_proc_np = np.asarray(img_proc.convert("RGB"))
+
         img_color = img_proc_np[0][0]
 
         img.close()
@@ -48,27 +65,23 @@ def img2rgb(texture_path, colorcalc_rule):
         sys.exit(1)
 
 
-def img2lab(texture_path, rgb=None):
-    # Since image color are stored as RGB, we get average RGB color
+def img2lab(texture_path, srgb=None):
+    # Since image colors stored as RGB, we get average RGB color
     # (if it wasn't pre-calculated and provided) from image first
-    if rgb is None:
-        rgb = img2rgb(texture_path, 'modern')
+    if srgb is None:
+        srgb = img2rgb(texture_path, 'modern')
 
     # See this amazing intractive article for colorspace conversion
     # details: https://observablehq.com/@mbostock/lab-and-rgb
 
-    # Convert to linear light RGB and normalize to 0..1
-    def color2llrgb(color):
-        value = color / 255
-        return (value / 12.92) if (value <= 0.04045) else ((value + 0.055) / 1.055)**2.4
-
-    llrgb = np.array(
-        [color2llrgb(color) for color in rgb]
+    # Convert to linear RGB and normalize to 0..1
+    lrgb = np.array(
+        [remove_srgb_gamma(color / 255.0) for color in srgb]
     )
 
     # Now, convert from RGB to XYZ in two steps: first convert colorspace
-    # from LLRGB to XYZ, and then convert chromatic adaptation from D65
-    # (ref in RGB) to D50 (ref in CIELAB). Matrices taken from:
+    # from linear RGB to XYZ, and then convert chromatic adaptation from
+    # D65 (ref in RGB) to D50 (ref in CIELAB). Matrices taken from:
     # 1. http://www.brucelindbloom.com/index.html?Eqn_RGB_XYZ_Matrix.html
     # 2. http://www.brucelindbloom.com/index.html?Eqn_ChromAdapt.html
     bradford_lrgbD65_xyzD65 = np.array([
@@ -86,7 +99,7 @@ def img2lab(texture_path, rgb=None):
         bradford_xyzD65_xyzD50,
         np.dot(
             bradford_lrgbD65_xyzD65,
-            llrgb
+            lrgb
         )
     )
 

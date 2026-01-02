@@ -24,12 +24,12 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
         {
             color: [12, 34, 56],
             blockRef: null,
-            steps: 6,
+            steps: 8,
         },
         {
             color: [200, 100, 20],
             blockRef: null,
-            steps: 14,
+            steps: 16,
         },
         {
             color: [122, 43, 172],
@@ -38,19 +38,17 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
                 blocksetIdx: 1,
                 texture: 'purple_wool.png',
             },
-            steps: 3,
+            steps: 4,
         },
         {
-            color: [64, 0, 64],
+            color: [48, 0, 64],
             blockRef: null,
-            steps: 3,
+            steps: 4,
         },
     ])
 
     const blockVizData = ref<BlockVizRow[]>([])
 
-    // Uses exactly the same algorithm as original HueBlocks;
-    // results in faster but more "inaccurate" graident generation
     function blockVizCalcRGB(
         blockdata: Block[],
         startRGB: ColorRGB,
@@ -62,6 +60,12 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
         for (let step = 0; step < steps; step++) {
             // Calculate step color as linear mixture of start and end colors
             const stepRGB = [
+                // ((endRGB[0] ** 0.1) * (step / (steps - 1))
+                //     + (startRGB[0] ** 0.5) * (((steps - 1) - step) / (steps - 1))) ** 2,
+                // ((endRGB[1] ** 0.1) * (step / (steps - 1))
+                //     + (startRGB[1] ** 0.5) * (((steps - 1) - step) / (steps - 1))) ** 2,
+                // ((endRGB[2] ** 0.1) * (step / (steps - 1))
+                //     + (startRGB[2] ** 0.5) * (((steps - 1) - step) / (steps - 1))) ** 2,
                 endRGB[0] * (step / (steps - 1)) + startRGB[0] * (((steps - 1) - step) / (steps - 1)),
                 endRGB[1] * (step / (steps - 1)) + startRGB[1] * (((steps - 1) - step) / (steps - 1)),
                 endRGB[2] * (step / (steps - 1)) + startRGB[2] * (((steps - 1) - step) / (steps - 1)),
@@ -78,8 +82,12 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
                     + 255 - Math.abs(stepRGB[1] - block.rgb[1])
                     + 255 - Math.abs(stepRGB[2] - block.rgb[2])
                 ) / (255 * 3)
-                // 0.0 means 'completely opposite colour', 1.0 means 'same colour';
+                // 0.0 means 'completely opposite color', 1.0 means 'same color';
                 // values < 0.8 in 99% of cases are pretty much junk.
+
+                // I also tried using Weighted Euclidian, but somehow it seems to
+                // give worse results on tests than the abomination of a code above!
+                // https://www.baeldung.com/cs/compute-similarity-of-colours
 
                 if (blockScore > closestBlockScore) {
                     closestBlock = block
@@ -92,8 +100,6 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
         return newSegData
     }
 
-    // Uses CIELAB transformations and sqrt of mean of squares;
-    // results in better but noticeably slower gradient generation
     function blockVizCalcCIELAB(
         blockdata: Block[],
         startRGB: ColorRGB,

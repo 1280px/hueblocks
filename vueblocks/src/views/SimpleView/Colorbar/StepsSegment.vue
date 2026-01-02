@@ -21,7 +21,8 @@ const SimpleViewStore = useSimpleViewStore()
             background: (
                 `linear-gradient(
                 ${SimpleViewStore.blockFilteringCfg.useCIELAB ? 'in lab' : ''} 90deg,
-                ${getCssRgb(bg[0])}, ${getCssRgb(bg[1])})`
+                ${getCssRgb(bg[0])}, ${getCssRgb(bg[1])}
+                )`
             ),
         }"
     >
@@ -44,7 +45,7 @@ const SimpleViewStore = useSimpleViewStore()
         flex: 1;
         container-type: inline-size;
 
-        @container (max-width: 75px) {
+        @container (max-width: 78.5px) {
             .colorbar__len-segment__appendix {
                 display: none;
             }
