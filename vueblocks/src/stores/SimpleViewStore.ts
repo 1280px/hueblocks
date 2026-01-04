@@ -1,4 +1,4 @@
-import type { Block, BlockFacing } from '@/types/blocks'
+import type { Block, BlockFacing, DisplayBlock } from '@/types/blocks'
 import type { BlocksetIndex } from '@/types/blocksets'
 import type { ColorLAB, ColorRGB } from '@/types/colors'
 import type { Palette } from '@/types/palettes'
@@ -7,17 +7,18 @@ import type { BlockDisplayConfig, BlockFilteringConfig, BlockVizRow, ColorbarSeg
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-import { deltaE, rgb2lab } from '@/colors'
+import { rgb2lab } from '@/colors'
 
 export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
     const blockDisplayCfg = ref<BlockDisplayConfig>({
         hideDuplicates: true,
         resultsInOneRow: false,
         keepPrevResults: false,
+        showColorsDebug: false,
     })
 
     const blockFilteringCfg = ref<BlockFilteringConfig>({
-        useCIELAB: true,
+        useOkLAB: true,
     })
 
     const colorbarData = ref<ColorbarSeg[]>([
@@ -50,11 +51,12 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
     const blockVizData = ref<BlockVizRow[]>([])
 
     function blockVizCalcRGB(
+        blocksetIdx: BlocksetIndex,
         blockdata: Block[],
         startRGB: ColorRGB,
         endRGB: ColorRGB,
         steps: number,
-    ): BlockVizRow['textures'] {
+    ): BlockVizRow {
         const newSegData = []
 
         for (let step = 0; step < steps; step++) {
@@ -73,7 +75,7 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
             // console.log(startRGB, endRGB, stepRGB)
 
             // Now go through all blockdata and find block with closest RGB
-            let closestBlock: Block = { name: 'missingNo' } as Block
+            let closestBlock: DisplayBlock = { name: 'missingNo' } as DisplayBlock
             let closestBlockScore: number = 0
 
             for (const block of blockdata) {
@@ -90,8 +92,19 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
                 // https://www.baeldung.com/cs/compute-similarity-of-colours
 
                 if (blockScore > closestBlockScore) {
-                    closestBlock = block
+                    closestBlock = {
+                        name: block.name,
+                        texture: block.texture,
+                        blocksetIdx,
+                    }
                     closestBlockScore = blockScore
+
+                    if (blockDisplayCfg.value.showColorsDebug) {
+                        closestBlock.debugData = {
+                            rgbTarget: stepRGB,
+                            rgbReal: block.rgb,
+                        }
+                    }
                 }
                 // console.log(closestBlock, closestBlockScore)
             }
@@ -100,21 +113,20 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
         return newSegData
     }
 
-    function blockVizCalcCIELAB(
+    function blockVizCalcOkLAB(
+        blocksetIdx: BlocksetIndex,
         blockdata: Block[],
         startRGB: ColorRGB,
         endRGB: ColorRGB,
         steps: number,
-    ): BlockVizRow['textures'] {
+    ): BlockVizRow {
         const newSegData = []
 
-        // Here I'm using antimatter15's RGB<->LAB convertors implementation:
-        // https://github.com/antimatter15/rgb-lab/blob/master/color.js
         const startLAB = rgb2lab(startRGB)
         const endLAB = rgb2lab(endRGB)
 
         for (let step = 0; step < steps; step++) {
-            // Just like in RGB, in CIELAB "step" color can be found linearly
+            // Just like in RGB, in OkLAB "step" color can be found linearly
             const stepLAB = [
                 endLAB[0] * (step / (steps - 1)) + startLAB[0] * (((steps - 1) - step) / (steps - 1)),
                 endLAB[1] * (step / (steps - 1)) + startLAB[1] * (((steps - 1) - step) / (steps - 1)),
@@ -122,17 +134,34 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
             ] as ColorLAB
             // console.log(startLAB, endLAB, stepLAB)
 
-            // L*a*b deltas computed the same way as Euclidian distance
-            // (the smaller <=> the closer), which I find very neat
-            let closestBlock: Block = { name: 'missingNo' } as Block
+            // OkLAB, unlike CIELAB, is uniform, meaning colour deltas
+            // it can be computed as simple as using Euclidian distance:
+            let closestBlock: DisplayBlock = { name: 'missingNo' } as DisplayBlock
             let closestBlockDelta: number = Infinity
 
             for (const block of blockdata) {
-                const blockDelta = deltaE(stepLAB, block.lab)
+                // const blockDelta = deltaE(stepLAB, block.lab)
+
+                const blockDelta = (
+                    (stepLAB[0] - block.lab[0]) ** 2
+                    + (stepLAB[1] - block.lab[1]) ** 2
+                    + (stepLAB[2] - block.lab[2]) ** 2
+                ) ** (1 / 2)
 
                 if (blockDelta < closestBlockDelta) {
-                    closestBlock = block
+                    closestBlock = {
+                        name: block.name,
+                        texture: block.texture,
+                        blocksetIdx,
+                    }
                     closestBlockDelta = blockDelta
+
+                    if (blockDisplayCfg.value.showColorsDebug) {
+                        closestBlock.debugData = {
+                            labReal: block.lab,
+                            labTarget: stepLAB,
+                        }
+                    }
                 }
                 // console.log(closestBlock, closestBlockDelta)
             }
@@ -190,10 +219,7 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
         const filteredBlockdata = getFilteredBlockdata(blockdata, palette, facing)
 
         // Create a blockviz row objecy for new render results...
-        const newBlockVizRow: BlockVizRow = {
-            blocksetIdx,
-            textures: [],
-        }
+        let newBlockVizRow: BlockVizRow = []
 
         // And then, render the whole colorbar data, segment by segment!
         for (let cbIdx = 0; cbIdx < colorbarData.value.length - 1; cbIdx++) {
@@ -201,21 +227,21 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
             const segEnd = colorbarData.value[cbIdx + 1].color
             const segSteps = colorbarData.value[cbIdx].steps
 
-            let seg: BlockVizRow['textures'] = []
-            if (blockFilteringCfg.value.useCIELAB) {
-                seg = blockVizCalcCIELAB(filteredBlockdata, segStart, segEnd, segSteps)
+            let seg: BlockVizRow = []
+            if (blockFilteringCfg.value.useOkLAB) {
+                seg = blockVizCalcOkLAB(blocksetIdx, filteredBlockdata, segStart, segEnd, segSteps)
             }
             else {
-                seg = blockVizCalcRGB(filteredBlockdata, segStart, segEnd, segSteps)
+                seg = blockVizCalcRGB(blocksetIdx, filteredBlockdata, segStart, segEnd, segSteps)
             }
 
-            newBlockVizRow.textures.push(...seg)
+            newBlockVizRow.push(...seg)
         }
 
         // Finally, check the row's texture data for duplicates
         if (blockDisplayCfg.value.hideDuplicates) {
-            newBlockVizRow.textures = newBlockVizRow.textures.filter((td, i) => {
-                return i <= 0 || td.texture !== newBlockVizRow.textures[i - 1].texture
+            newBlockVizRow = newBlockVizRow.filter((db, i) => {
+                return i <= 0 || db.texture !== newBlockVizRow[i - 1].texture
             })
         }
 

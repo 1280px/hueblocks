@@ -1,69 +1,64 @@
 import type { ColorHEX, ColorLAB, ColorRGB } from './types/colors'
 
-// RGB <--> LAB color converters and LHC distance calculator
-// Source: https://github.com/antimatter15/rgb-lab/
+// Linear RGB (it used below) <--> Serial RGB (used by JS)
+
+function addSrgbGamma(c_lrgb: number): number {
+    // return c_lrgb ** (1 / 2)
+    return (c_lrgb >= 0.0031308) ? (1.055 * (c_lrgb ** (1 / 2.4))) - 0.055 : (c_lrgb * 12.92)
+}
+
+function removeSrgbGamma(c_srgb: number): number {
+    // return c_srgb ** 2
+    return (c_srgb >= 0.04045) ? ((c_srgb + 0.055) / 1.055) ** 2.4 : (c_srgb / 12.92)
+}
+
+// Linear RGB <--> OkLAB (not CIELAB!) converters, based on this blogpost:
+// https://bottosson.github.io/posts/oklab/#converting-from-linear-srgb-to-oklab
+
+function rgb2lab(srgb: ColorRGB): ColorLAB {
+    // SRGB -> LRGB
+    const lrgb = srgb.map(color => removeSrgbGamma(color / 255.0))
+
+    // LRGB -> CIEXYZ -> LMS
+    // https://en.wikipedia.org/wiki/Oklab_color_space#Conversion_from_sRGB
+    const l = 0.4122214708 * lrgb[0] + 0.5363325363 * lrgb[1] + 0.0514459929 * lrgb[2]
+    const m = 0.2119034982 * lrgb[0] + 0.6806995451 * lrgb[1] + 0.1073969566 * lrgb[2]
+    const s = 0.0883024619 * lrgb[0] + 0.2817188376 * lrgb[1] + 0.6299787005 * lrgb[2]
+
+    // LMS -> LMS'
+    const l_ = l ** (1 / 3)
+    const m_ = m ** (1 / 3)
+    const s_ = s ** (1 / 3)
+
+    // LMS' -> Lab
+    // https://en.wikipedia.org/wiki/Oklab_color_space#Conversion_from_CIE_XYZ
+    return [
+        +0.2104542553 * l_ + 0.7936177850 * m_ - 0.0040720468 * s_,
+        +1.9779984951 * l_ - 2.4285922050 * m_ + 0.4505937099 * s_,
+        +0.0259040371 * l_ + 0.7827717662 * m_ - 0.8086757660 * s_,
+    ]
+}
 
 function lab2rgb(lab: ColorLAB): ColorRGB {
-    let y = (lab[0] + 16) / 116
-    let x = lab[1] / 500 + y
-    let z = y - lab[2] / 200
-    let r; let g; let b
+    // Lab -> LMS'
+    const l_ = +lab[0] + 0.3963377774 * +lab[1] + 0.2158037573 * +lab[2]
+    const m_ = +lab[0] - 0.1055613458 * +lab[1] - 0.0638541728 * +lab[2]
+    const s_ = +lab[0] - 0.0894841775 * +lab[1] - 1.2914855480 * +lab[2]
 
-    x = 0.96422 * ((x * x * x > 0.008856) ? x * x * x : (x - 16 / 116) / 7.787)
-    y = 1.00000 * ((y * y * y > 0.008856) ? y * y * y : (y - 16 / 116) / 7.787)
-    z = 0.82521 * ((z * z * z > 0.008856) ? z * z * z : (z - 16 / 116) / 7.787)
+    // LMS' -> LMS
+    const l = l_ ** 3
+    const m = m_ ** 3
+    const s = s_ ** 3
 
-    r = x * 3.2406 + y * -1.5372 + z * -0.4986
-    g = x * -0.9689 + y * 1.8758 + z * 0.0415
-    b = x * 0.0557 + y * -0.2040 + z * 1.0570
+    // LMS -> CIEXYZ -> LRGB (inverse matrix)
+    const lrgb: ColorRGB = [
+        +4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
+        -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
+        -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s,
+    ]
 
-    r = (r > 0.0031308) ? (1.055 * r ** (1 / 2.4) - 0.055) : 12.92 * r
-    g = (g > 0.0031308) ? (1.055 * g ** (1 / 2.4) - 0.055) : 12.92 * g
-    b = (b > 0.0031308) ? (1.055 * b ** (1 / 2.4) - 0.055) : 12.92 * b
-
-    return [Math.max(0, Math.min(1, r)) * 255, Math.max(0, Math.min(1, g)) * 255, Math.max(0, Math.min(1, b)) * 255]
-}
-
-function rgb2lab(rgb: ColorRGB): ColorLAB {
-    let r = rgb[0] / 255
-    let g = rgb[1] / 255
-    let b = rgb[2] / 255
-    let x; let y; let z
-
-    r = (r > 0.04045) ? ((r + 0.055) / 1.055) ** 2.4 : r / 12.92
-    g = (g > 0.04045) ? ((g + 0.055) / 1.055) ** 2.4 : g / 12.92
-    b = (b > 0.04045) ? ((b + 0.055) / 1.055) ** 2.4 : b / 12.92
-
-    x = (r * 0.4124 + g * 0.3576 + b * 0.1805) / 0.96422
-    y = (r * 0.2126 + g * 0.7152 + b * 0.0722) / 1.00000
-    z = (r * 0.0193 + g * 0.1192 + b * 0.9505) / 0.82521
-
-    x = (x > 0.008856) ? x ** (1 / 3) : (7.787 * x) + 16 / 116
-    y = (y > 0.008856) ? y ** (1 / 3) : (7.787 * y) + 16 / 116
-    z = (z > 0.008856) ? z ** (1 / 3) : (7.787 * z) + 16 / 116
-
-    return [(116 * y) - 16, 500 * (x - y), 200 * (y - z)]
-}
-
-function deltaE(labA: ColorLAB, labB: ColorLAB): number {
-    const deltaL = labA[0] - labB[0]
-    const deltaA = labA[1] - labB[1]
-    const deltaB = labA[2] - labB[2]
-
-    const c1 = Math.sqrt(labA[1] * labA[1] + labA[2] * labA[2])
-    const c2 = Math.sqrt(labB[1] * labB[1] + labB[2] * labB[2])
-
-    const deltaC = c1 - c2
-    let deltaH = deltaA * deltaA + deltaB * deltaB - deltaC * deltaC
-    deltaH = deltaH < 0 ? 0 : Math.sqrt(deltaH)
-
-    const deltaLKlsl = deltaL / (1.0)
-    const deltaCkcsc = deltaC / (1.0 + 0.045 * c1)
-    const deltaHkhsh = deltaH / (1.0 + 0.015 * c1)
-
-    const i = deltaLKlsl * deltaLKlsl + deltaCkcsc * deltaCkcsc + deltaHkhsh * deltaHkhsh
-
-    return i < 0 ? 0 : Math.sqrt(i)
+    // LRGB -> SRGB
+    return lrgb.map(color => addSrgbGamma(color) * 255.0) as ColorRGB
 }
 
 // Compact HEX <--> RGB converters I found on S.O. years ago
@@ -99,11 +94,10 @@ function getRandomRbg(lightK: number): ColorRGB {
 }
 
 function getCssRgb(rgb: ColorRGB): string {
-    return `rgb(${rgb[0] || 0}, ${rgb[1] || 0}, ${rgb[2] || 0})`
+    return `rgb(${Math.floor(rgb[0] || 0)}, ${Math.floor(rgb[1] || 0)}, ${Math.floor(rgb[2] || 0)})`
 }
 
 export {
-    deltaE,
     getCssRgb,
     getRandomRbg,
     hex2rgb,

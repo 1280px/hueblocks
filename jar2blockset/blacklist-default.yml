@@ -124,6 +124,7 @@ filters:
   - cracked_stone_bricks.png
   - crimson_door$
   - crimson_stem_top.png
+  - crimson_nylium_side.png
   - glow_item_frame.png
   - lightning_rod$
   - mangrove_door$
@@ -142,6 +143,7 @@ filters:
   - suspicious_sand$
   - warped_door$
   - warped_stem_top.png
+  - warped_nylium_side.png
 
   # 1.21.5
   - $copper_bulb_lit_powered.png

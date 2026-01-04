@@ -20,7 +20,7 @@ const SimpleViewStore = useSimpleViewStore()
             flex: value,
             background: (
                 `linear-gradient(
-                ${SimpleViewStore.blockFilteringCfg.useCIELAB ? 'in lab' : ''} 90deg,
+                ${SimpleViewStore.blockFilteringCfg.useOkLAB ? 'in oklab' : ''} 90deg,
                 ${getCssRgb(bg[0])}, ${getCssRgb(bg[1])}
                 )`
             ),

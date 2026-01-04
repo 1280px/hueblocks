@@ -24,11 +24,11 @@ const SimpleViewStore = useSimpleViewStore()
             Keep previous results
         </SlottedCheckbox>
 
-        <SlottedCheckbox v-model="SimpleViewStore.blockFilteringCfg.useCIELAB">
+        <SlottedCheckbox v-model="SimpleViewStore.blockFilteringCfg.useOkLAB">
             <abbr
-                title="Use colourspace closer to how human eyes percive colour. Results in more vibrant and natural looking, but often less saturated and contrast gradients."
+                title="Use colourspace closer to how human eyes perceive colour. Results in more vibrant and natural looking, but often less saturated (&quot;washed-out&quot;) and contrast gradients."
             >
-                Use&nbsp;CIELAB
+                Use&nbsp;OkLAB
             </abbr>
         </SlottedCheckbox>
     </section>

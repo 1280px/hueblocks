@@ -1,11 +1,24 @@
 <script setup lang="ts">
 import SlottedMsgbox from '@/components/SlottedMsgbox.vue'
-// import ModeSwitcher from './ModeSwitcher.vue'
+import { useSimpleViewStore } from '@/stores/SimpleViewStore'
+
+const SimpleViewStore = useSimpleViewStore()
+
+function toggleDebugMode() {
+    SimpleViewStore.blockDisplayCfg.showColorsDebug = !SimpleViewStore.blockDisplayCfg.showColorsDebug
+
+    if (SimpleViewStore.blockDisplayCfg.showColorsDebug) {
+        // eslint-disable-next-line no-alert
+        alert('Debug mode toggled, re-generate a gradient to see effect.')
+    }
+}
 </script>
 
 <template>
     <header>
-        <h1>HueBlocks<sup><sub><sup>NEW</sup></sub></sup></h1>
+        <h1 @dblclick.prevent="toggleDebugMode">
+            HueBlocks<sup><sub><sup>NEW</sup></sub></sup>
+        </h1>
         <h3>Create beautiful block gradients in a few clicks!</h3>
 
         <small>
@@ -15,12 +28,10 @@ import SlottedMsgbox from '@/components/SlottedMsgbox.vue'
             <a href="https://1280px.github.io/hueblocks">legacy version</a>
         </small>
 
-        <SlottedMsgbox :duration="5">
-            This is a new version of HueBlocks, still work in progress and missing some OG features! <br>
+        <SlottedMsgbox :duration="3">
+            This is a new version of HueBlocks, mostly finished but still missing custom blocksets! <br>
             If you wish to go to an older version of HB, click "legacy version" link above this message.
         </SlottedMsgbox>
-
-        <!-- <ModeSwitcher /> -->
     </header>
 </template>
 

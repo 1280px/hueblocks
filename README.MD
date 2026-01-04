@@ -16,7 +16,7 @@ Additionally, you can:
 - Choose Minecraft Java Edition version which blocks you're interested in
 - Use palettes to generate gradients using only specific sets of blocks, or even create your own palettes and share them with others via JSON import/export tool
 - Filter textures by their facing (for example, if you're building a house wall, you're probably not that interested in blocks that only have a fitting texture on their top side)
-- Switch between RGB and CIELAB colourspaces
+- Switch between RGB and OkLAB colourspaces
 - *and more!*
 <!-- - Choose blocks noise threshold, allowing to filter out too "smooth" (like concrete) or, more commonly, too "noisy" blocks (crafting tables, glazed terracotta, TNT, you name it) -->
 <!-- - Upload and use custom textures right from your browser, without any need to mess with backend -->
@@ -34,12 +34,14 @@ For each of these parts, there is a separate README with more details and docume
 - If you want to create blocksets from your own textures or change generation configs (i.e. to include semi-transparent blocks, use custom palettes or edit textures blacklist) — [check this](https://github.com/1280px/hueblocks-new/tree/master/jar2blockset#readme),
 - And if you want to mess with web app (it's very modular by design, so, if you know Vue 3, even something as creating a whole new separate mode shouldn't take much time) — [check that](https://github.com/1280px/hueblocks-new/tree/master/vueblocks#readme).
 
-Additionally, if you're interested in color theory behind most of calculations, **I highly recommend  checking out Gneiss Name channel on YouTube**. His videos have greatly helped me refresh my memory on the basics, and also were great introductions to some topics I didn't understand before. In particular, I recommend watching these as sort of QnA:
-- [What is CIELAB/OkLAB, and how is it different from (s)RGB?](https://www.youtube.com/watch?v=nJlZT5AE9zY)
+Additionally, if you're interested in color theory behind most of calculations, **I highly recommend  checking out Gneiss Name channel on YouTube**. His videos have greatly helped me refresh my memory on the basics, and also were great introductions to some topics I didn't understand before. 
+<br>In particular, I recommend watching these episodes as sort of QnA:
+- [What is OkLAB, and how is it different from (s)RGB?](https://www.youtube.com/watch?v=nJlZT5AE9zY)
   - [If you're very new to colourspaces, watch this first](https://www.youtube.com/watch?v=2kDuYv3ocxU)
 - [What's the purpose of taking sqrt of squares for averaging block colour?](https://www.youtube.com/watch?v=e0HM_vfSuDw)
 - [How exactly is block texture noise calculated?](https://www.youtube.com/watch?v=4meYZQZFuaA)
-  - [Another technique of getting "denoised" colour averages I want to try out](https://www.youtube.com/watch?v=HuW9qJbL0xM)
+  - [Another technique of getting "denoised" texture averages](https://www.youtube.com/watch?v=HuW9qJbL0xM)
+
 You can also check the j2bs source code for additional sources, commented right next to the code itself.
 
 

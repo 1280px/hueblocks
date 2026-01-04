@@ -1,16 +1,16 @@
-import type { Block, DisplayBlock } from './blocks'
-import type { BlocksetIndex } from './blocksets'
+import type { DisplayBlock } from './blocks'
 import type { ColorRGB } from './colors'
 
 export interface BlockDisplayConfig {
     hideDuplicates: boolean,
     resultsInOneRow: boolean,
     keepPrevResults: boolean,
+    showColorsDebug: boolean,
 }
 export interface BlockFilteringConfig {
-    useCIELAB: boolean,
-    // noiseThresholdMin: 0,
-    // noiseThresholdMax: 4,
+    useOkLAB: boolean,
+    // noiseThresholdMin: 0.0,
+    // noiseThresholdMax: 1.0,
 }
 
 export interface ColorbarSeg {
@@ -24,7 +24,4 @@ export type ColorbarPopoverData = null
     | { mode: 'steps', cbIdx: number }
     | { mode: 'addItem', side: 'left' | 'right' }
 
-export interface BlockVizRow {
-    blocksetIdx: BlocksetIndex,
-    textures: Block[],
-}
+export type BlockVizRow = DisplayBlock[]

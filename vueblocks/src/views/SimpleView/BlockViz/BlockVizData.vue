@@ -32,17 +32,18 @@ function copyBlockTextureName(name: string) {
         >
             <div v-for="(row, i) in SimpleViewStore.blockVizData" :key="i">
                 <Block
-                    v-for="(block, j) in row.textures" :key="j"
-                    :name="block.name" :blockset-idx="row.blocksetIdx" :texture="block.texture"
+                    v-for="(db, j) in row" :key="j"
+                    :name="db.name" :blockset-idx="db.blocksetIdx" :texture="db.texture"
                     :class="{ 'block-hidden': hiddenBlockIds.has(`${i}_${j}`) }"
+                    :debug-data="SimpleViewStore.blockDisplayCfg.showColorsDebug ? db.debugData : undefined"
                     @click="(e: Event) => {
                         emit('hideBlock', `${i}_${j}`);
                         // Force update class bc Vue won't detect it until any next event
                         (e.currentTarget as HTMLElement).classList.add('block-hidden')
                     }"
-                    @contextmenu.prevent="() => copyBlockTextureName(block.texture)"
+                    @contextmenu.prevent="() => copyBlockTextureName(db.texture)"
                     @mouseenter.prevent="(e: MouseEvent) => tooltipData = {
-                        target: e.target as HTMLElement, name: block.name,
+                        target: e.target as HTMLElement, name: db.name,
                     }"
                     @mouseleave.prevent="() => tooltipData.target = null"
                 />

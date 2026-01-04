@@ -4,19 +4,19 @@ import numpy as np
 from PIL import Image
 
 
-def add_srgb_gamma(lrgb):
-    # return np.power(lrgb, 1/2)
-    if (lrgb >= 0.0031308):
-        return (1.055 * np.power(lrgb, (1 / 2.4))) - 0.055
+def add_srgb_gamma(c_lrgb):
+    # return np.power(c_lrgb, 1/2)
+    if (c_lrgb >= 0.0031308):
+        return (1.055 * np.power(c_lrgb, (1 / 2.4))) - 0.055
     else:
-        return lrgb * 12.92
+        return c_lrgb * 12.92
     
-def remove_srgb_gamma(srgb):
-    # return np.power(srgb, 2)
-    if (srgb >= 0.04045):
-        return np.power((srgb + 0.055) / 1.055, 2.4)
+def remove_srgb_gamma(c_srgb):
+    # return np.power(c_srgb, 2)
+    if (c_srgb >= 0.04045):
+        return np.power((c_srgb + 0.055) / 1.055, 2.4)
     else:
-        return srgb / 12.92
+        return c_srgb / 12.92
 
 
 def img2rgb(texture_path, colorcalc_rule):
@@ -28,8 +28,8 @@ def img2rgb(texture_path, colorcalc_rule):
     # closer to original image brightness! Check this amazing article and
     # video in it: https://sighack.com/post/averaging-rgb-colors-the-right-way
     if colorcalc_rule == 'modern':
-        srgb2lrgb = np.vectorize(lambda p: remove_srgb_gamma(p / 255.0))
-        lrgb2srgb = np.vectorize(lambda p: add_srgb_gamma(p) * 255.0)
+        srgb2lrgb = np.vectorize(lambda color: remove_srgb_gamma(color / 255.0))
+        lrgb2srgb = np.vectorize(lambda color: add_srgb_gamma(color) * 255.0)
 
         img_np = np.asarray(
             img.convert("RGB"),
@@ -71,55 +71,31 @@ def img2lab(texture_path, srgb=None):
     if srgb is None:
         srgb = img2rgb(texture_path, 'modern')
 
-    # See this amazing intractive article for colorspace conversion
-    # details: https://observablehq.com/@mbostock/lab-and-rgb
-
     # Convert to linear RGB and normalize to 0..1
     lrgb = np.array(
         [remove_srgb_gamma(color / 255.0) for color in srgb]
     )
 
-    # Now, convert from RGB to XYZ in two steps: first convert colorspace
-    # from linear RGB to XYZ, and then convert chromatic adaptation from
-    # D65 (ref in RGB) to D50 (ref in CIELAB). Matrices taken from:
-    # 1. http://www.brucelindbloom.com/index.html?Eqn_RGB_XYZ_Matrix.html
-    # 2. http://www.brucelindbloom.com/index.html?Eqn_ChromAdapt.html
-    bradford_lrgbD65_xyzD65 = np.array([
-        [0.4124564, 0.3575761, 0.1804375],
-        [0.2126729, 0.7151522, 0.0721750],
-        [0.0193339, 0.1191920, 0.9503041]
-    ])
-    bradford_xyzD65_xyzD50 = np.array([
-        [1.0478112, 0.0228866, -0.0501270],
-        [0.0295424, 0.9904844, -0.0170491],
-        [-0.0092345, 0.0150436, 0.7521316]
-    ])
+    # The following process is exactly the same as implemented
+    # client-side, so, see rgb2lab(1) in colors.ts for more details.
 
-    xyz = np.dot(
-        bradford_xyzD65_xyzD50,
-        np.dot(
-            bradford_lrgbD65_xyzD65,
-            lrgb
-        )
-    )
+    # LRGB -> CIEXYZ -> LMS
+    l = 0.4122214708 * lrgb[0] + 0.5363325363 * lrgb[1] + 0.0514459929 * lrgb[2]
+    m = 0.2119034982 * lrgb[0] + 0.6806995451 * lrgb[1] + 0.1073969566 * lrgb[2]
+    s = 0.0883024619 * lrgb[0] + 0.2817188376 * lrgb[1] + 0.6299787005 * lrgb[2]
 
-    # Finally, convert from XYZ to CIELAB
-    def lab_f(x):
-        return np.cbrt(x) if (x > ((6/29)**3)) else ((1/3) * (29/6)**2 * x + (4/29))
+    # LMS -> LMS'
+    l_ = np.power(l, 1 / 3)
+    m_ = np.power(m, 1 / 3)
+    s_ = np.power(s, 1 / 3)
 
-    # (pre-calculated from Bradford RGB D65 -> XYZ D50 conversion
-    # matrix by summing its values along the horizontal axis)
-    xyz_tristimulus = np.array([0.96422, 1.0, 0.82521])
-
-    f_xyz_norm = np.array(
-        [lab_f(xyz[i] / xyz_tristimulus[i]) for i in range(xyz.shape[0])]
-    )
-
+    # LMS' -> Lab
     lab = np.array([
-        116 * f_xyz_norm[1] - 16,
-        500 * (f_xyz_norm[0] - f_xyz_norm[1]),
-        200 * (f_xyz_norm[1] - f_xyz_norm[2])
+        +0.2104542553 * l_ + 0.7936177850 * m_ - 0.0040720468 * s_,
+        +1.9779984951 * l_ - 2.4285922050 * m_ + 0.4505937099 * s_,
+        +0.0259040371 * l_ + 0.7827717662 * m_ - 0.8086757660 * s_,
     ])
 
-    # print('CONTROL:', texture_path, lab, rgb, '\n')
-    return list(lab)
+    # Force non-scientific notation because it breaks client-side logic
+    return [f'{lab[0]:.20f}', f'{lab[1]:.20f}', f'{lab[2]:.20f}']
+

@@ -24,4 +24,11 @@ export interface Block {
 // change every time current blockset is changed as well:
 export interface DisplayBlock extends Pick<Block, 'name' | 'texture'> {
     blocksetIdx: BlocksetIndex,
+    // The fields below are only used in debugging, otherwise being unset:
+    debugData?: {
+        rgbTarget?: ColorRGB,
+        rgbReal?: ColorRGB,
+        labTarget?: ColorLAB,
+        labReal?: ColorLAB,
+    },
 }

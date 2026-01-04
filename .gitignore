@@ -4,6 +4,7 @@
 *.pyc
 
 /vueblocks/data/blocksets_OLD*/
+/**/*_OLD*
 node_modules/
 dist/
 *.log
