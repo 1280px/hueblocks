@@ -9,6 +9,7 @@ import Block from '@/components/Block.vue'
 import BlockTooltip from '@/components/BlockTooltip.vue'
 import Icon from '@/components/Icon.vue'
 import SlottedButton from '@/components/SlottedButton.vue'
+import { overlayIsShown } from '@/overlay'
 import { useGlobalStore } from '@/stores/GlobalStore'
 import { useSimpleViewStore } from '@/stores/SimpleViewStore'
 
@@ -24,8 +25,10 @@ const GlobalStore = useGlobalStore()
 const SimpleViewStore = useSimpleViewStore()
 
 const blockdataByAlphabet = ref<Record<string, BlockT[]>>({})
-const tooltipData = ref<BlockTooltipT>({ target: null, name: 'missingNo' })
+
 const errText = ref<string>('')
+
+const tooltipData = ref<BlockTooltipT>({ target: null, name: 'missingNo' })
 
 function updateBlocksetData() {
     const filteredBlockdata = SimpleViewStore.getFilteredBlockdata(
@@ -96,16 +99,11 @@ async function handlePaletteImport() {
     }
 }
 
-// We use this to not create unnecessary reactivity for every block
-const isProcessing = ref<boolean>(false)
-
 watch(
-    [() => GlobalStore.currBlocksetBlockdata, () => originalPaletteIdx],
+    overlayIsShown,
     () => {
-        isProcessing.value = false
         updateBlocksetData()
         selectPaletteTextures(originalPaletteIdx)
-        isProcessing.value = true
     },
     { immediate: true },
 )
@@ -126,7 +124,7 @@ watch(
         </h3>
     </header>
 
-    <main v-if="isProcessing">
+    <main>
         <section v-for="bdLetter of Object.keys(blockdataByAlphabet)" :key="bdLetter">
             <span>{{ bdLetter }}</span>
 
@@ -156,7 +154,7 @@ watch(
 
     <aside>
         <SlottedButton
-            class="round"
+            round
             title="Cancel (ESC)"
             @click="emit('done')"
         >
@@ -164,7 +162,7 @@ watch(
         </SlottedButton>
 
         <SlottedButton
-            class="round"
+            round
             title="Import JSON…"
             @click="handlePaletteImport()"
         >
@@ -172,7 +170,7 @@ watch(
         </SlottedButton>
 
         <SlottedButton
-            class="round"
+            round
             :disabled="selectedTextures.size < 3"
             :title="selectedTextures.size < 3 ? 'Please select at least 3 blocks!' : 'Export JSON…'"
             @click="GlobalStore.exportCustomPalette(Array.from(selectedTextures))"
@@ -181,7 +179,7 @@ watch(
         </SlottedButton>
 
         <SlottedButton
-            class="round"
+            round
             :disabled="selectedTextures.size < 3"
             :title="selectedTextures.size < 3 ? 'Please select at least 3 blocks!' : 'Update custom palette'"
             @click="emit('done', Array.from(selectedTextures))"

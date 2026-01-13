@@ -76,17 +76,17 @@ function rgb2hex(rgb: ColorRGB): ColorHEX {
 function getRandomRbg(lightK: number): ColorRGB {
     return [
         Math.floor((
-            (lightK + Math.random()) * 120
+            (lightK + Math.random()) * 140
             + (Math.random() * 2) * 40
             + (Math.random() * 56)
         ) ** lightK % 255),
         Math.floor((
-            (lightK + Math.random()) * 100
+            (lightK + Math.random()) * 120
             + (Math.random() * 4) * 30
             + (Math.random() * 16)
         ) ** lightK % 255),
         Math.floor((
-            (lightK + Math.random()) * 80
+            (lightK + Math.random()) * 100
             + (Math.random() * 2) * 40
             + (Math.random() * 96)
         ) ** lightK % 255),

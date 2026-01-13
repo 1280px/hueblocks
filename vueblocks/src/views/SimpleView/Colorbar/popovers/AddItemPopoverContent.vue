@@ -4,7 +4,9 @@ import type { ColorbarSeg } from '@/types/simpleview'
 import { ref } from 'vue'
 
 import ColorPicker from '@/components/ColorPicker.vue'
+import SlottedButton from '@/components/SlottedButton.vue'
 import { overlayShow } from '@/overlay'
+import { useGlobalStore } from '@/stores/GlobalStore'
 import { useSimpleViewStore } from '@/stores/SimpleViewStore'
 import BlockPickColor from '@/views/SimpleView/BlockPick/BlockPickColor.vue'
 
@@ -17,6 +19,7 @@ const emit = defineEmits<{
 }>()
 
 const SimpleViewStore = useSimpleViewStore()
+const GlobalStore = useGlobalStore()
 
 const cbRefIdx = (side === 'left' ? 0 : (SimpleViewStore.colorbarData.length - 1))
 const cbRefItem = SimpleViewStore.colorbarData[cbRefIdx]
@@ -41,18 +44,15 @@ function addCbItem() {
     emit('done')
 }
 
-async function applyPickedColor() {
-    const res: ColorbarSeg = await overlayShow([
-        BlockPickColor,
-        { },
-    ])
+async function applyPickedBlock() {
+    const res: ColorbarSeg = await overlayShow(
+        [BlockPickColor, { originalFacing: GlobalStore.blockFacing }],
+    )
 
     if (res) {
         cbNewItem.value.color = [...res.color]
 
-        if (res.blockRef) {
-            cbNewItem.value.blockRef = res.blockRef
-        }
+        cbNewItem.value.blockRef = res.blockRef ? res.blockRef : null
     }
 }
 </script>
@@ -70,14 +70,18 @@ async function applyPickedColor() {
             <ColorPicker
                 v-model="cbNewItem.color"
                 colorpick-text="Pick colour from a block…" colorpick-icon="block"
-                @colorpick="applyPickedColor"
+                @colorpick="applyPickedBlock"
             />
         </label>
 
         <div class="popover-item">
-            <button type="submit" @click.prevent="addCbItem">
+            <SlottedButton
+                variant="black"
+                type="submit"
+                @click.prevent="addCbItem"
+            >
                 Add!
-            </button>
+            </SlottedButton>
         </div>
     </div>
 </template>

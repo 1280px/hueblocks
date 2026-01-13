@@ -3,6 +3,7 @@ import type { ColorHEX, ColorRGB } from '@/types/colors'
 import { computed } from 'vue'
 import { hex2rgb, rgb2hex } from '@/colors'
 import Icon from '@/components/Icon.vue'
+import SlottedButton from './SlottedButton.vue'
 
 const { colorpickIcon = null, colorpickText = null } = defineProps<{
     colorpickIcon?: string | null,
@@ -31,13 +32,14 @@ const currColorHex = computed<ColorHEX>({
             v-model="currColorHex"
             type="color" placeholder="cbItemColor"
         >
-        <button
+        <SlottedButton
             v-if="colorpickIcon && colorpickText"
+            variant="black"
             :title="colorpickText"
             @click="() => emit('colorpick')"
         >
             <Icon :name="colorpickIcon" />
-        </button>
+        </SlottedButton>
     </div>
 </template>
 
@@ -52,5 +54,29 @@ const currColorHex = computed<ColorHEX>({
 
     .color-picker > button {
         min-width: 32px;
+        border-left-width: 0; border-radius: 0 $BR_big $BR_big 0;
+    }
+
+    .color-picker > input {
+        appearance: none;
+        height: 100%; // fix for Safari (doesn't show picker at all)
+        margin: 0; padding: 0;
+        background-color: $accent-dark_75;
+        border: 2px solid $accent-dark_25;
+        border-radius: $BR_big 0 0 $BR_big;
+        cursor: pointer;
+        transition: $TR_regular;
+
+        &:not(:disabled) {
+            &:hover {
+                border-color: $accent-dark_75;
+            }
+            &:focus-visible, &:hover:active {
+                background-color: $accent-bg;
+                border: 4px solid $accent-dark_75;
+                outline: none;
+                transition: $TR_fast;
+            }
+        }
     }
 </style>

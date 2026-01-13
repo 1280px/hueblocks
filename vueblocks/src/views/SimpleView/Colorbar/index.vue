@@ -96,7 +96,11 @@ const popoverIsShown = computed({
 
 <template>
     <section class="colorbar">
-        <SlottedButton class="trans" title="Swap left to right" @click="colorbarSwap">
+        <SlottedButton
+            variant="trans"
+            title="Swap left to right"
+            @click="colorbarSwap"
+        >
             <Icon name="swap" />
         </SlottedButton>
 
@@ -128,7 +132,11 @@ const popoverIsShown = computed({
             @click="(e: MouseEvent) => popoverShow(e, { mode: 'addItem', side: 'right' })"
         />
 
-        <SlottedButton class="trans" title="Randomize colours" @click="colorbarRandom">
+        <SlottedButton
+            variant="trans"
+            title="Randomize colours"
+            @click="colorbarRandom"
+        >
             <Icon name="random" />
         </SlottedButton>
     </section>

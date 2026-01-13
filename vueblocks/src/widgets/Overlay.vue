@@ -29,6 +29,7 @@ function done(data?) {
     // have to close it to unfreeze background interactions:
     setTimeout(() => dialogRef.value?.close(), 750)
 
+    // content.value = [null, { }] // <-- Don't unmount intentionally
     res?.(data || null)
 }
 watch(visible, async (v) => {
@@ -70,7 +71,7 @@ defineExpose({
         margin: 0; padding: 32px;
         box-sizing: border-box;
         overflow-y: scroll;
-        background-color: $accent-dark_bg; border-color: $trans;
+        background-color: $accent-bg; border-color: $trans;
         z-index: 99;
 
         @media (any-pointer: fine) {

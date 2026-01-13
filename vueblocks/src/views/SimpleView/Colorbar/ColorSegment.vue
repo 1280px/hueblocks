@@ -55,7 +55,8 @@ const colorCss = computed<string>(() => getCssRgb(color))
 
     .colorbar__color-segment__tag {
         position: relative;
-        left: -10px; bottom: calc(-100% + 2px);
+        left: -10px; bottom: -38px;
+        // We have to hardcode positions like this because calc() breaks in Safari
         width: 20px; height: 20px;
         background-color: $white;
         border-radius: 3px 3px 4px 4px;

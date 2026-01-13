@@ -51,20 +51,27 @@ $dark_20: color.change($dark, $alpha: 20%);
 $dark_bg: #111;
 $dark_border: #666;
 
-$accent-dark: #151942;
-$accent-dark_50: color.change($accent-dark, $alpha: 50%);
-$accent-dark_25: color.change($accent-dark, $alpha: 25%);
-
-$accent-dark_bg: color.mix(color.change($dark, $alpha: 80%), $accent-dark, $weight: 66%);
-
-$accent-light: #a1a3b3;
-$accent-light_50: color.change($accent-light, $alpha: 50%);
-$accent-light_25: color.change($accent-light, $alpha: 25%);
-
 $white: #fff;
 $white_80: color.change($white, $alpha: 80%);
 $white_50: color.change($white, $alpha: 50%);
 $white_30: color.change($white, $alpha: 30%);
 $white_20: color.change($white, $alpha: 20%);
+
+$error: #dd3939;
+$error_30: color.change($error, $alpha: 30%);
+
+$success: #77d452;
+$success_30: color.change($success, $alpha: 30%);
+
+$accent-dark: #151942;
+$accent-dark_75: color.change($accent-dark, $alpha: 75%);
+$accent-dark_50: color.change($accent-dark, $alpha: 50%);
+$accent-dark_25: color.change($accent-dark, $alpha: 25%);
+
+$accent-bg: color.mix(color.change($dark, $alpha: 80%), $accent-dark, $weight: 66%);
+
+$accent-light: #a1a3b3;
+$accent-light_50: color.change($accent-light, $alpha: 50%);
+$accent-light_25: color.change($accent-light, $alpha: 25%);
 
 $trans: color.change($white, $alpha: 0%);

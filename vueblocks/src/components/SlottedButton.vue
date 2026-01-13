@@ -1,5 +1,14 @@
+<script setup lang="ts">
+const { round = false, variant = 'default' } = defineProps<{
+    round?: boolean,
+    variant?: 'default' | 'trans' | 'black',
+}>()
+</script>
+
 <template>
-    <button>
+    <button
+        :class="{ trans: variant === 'trans', black: variant === 'black', round }"
+    >
         <slot />
     </button>
 </template>
@@ -35,12 +44,24 @@
             }
         }
 
+        &.black {
+            background-color: $accent-dark_75; border-color: $accent-dark_25;
+
+            &:disabled {
+                background-color: $dark_60;
+            }
+        }
+
         &:not(:disabled) {
             &:hover {
                 border-color: $accent-light;
 
                 &.trans {
                     background-color: $white_20; border-color: $trans;
+                }
+
+                &.black {
+                    border-color: $accent-dark_75;
                 }
             }
 
@@ -55,6 +76,10 @@
                     background-color: $white_30;
                     border: 2px solid $white_20;
                     transition: $TR_fast;
+                }
+
+                &.black {
+                    background-color: $accent-bg; border-color: $accent-dark_75;
                 }
             }
         }

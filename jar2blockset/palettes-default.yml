@@ -4,13 +4,12 @@
 # include every "red_$" block from the blockset EXCEPT for "red_sandstone$".
 # If a computed pallete happens to contain 0 blocks, vueblocks won't show it in the list.
 
-# Please note that the current palettes were straight up copied from HB-legacy,
-# revamped to works with filtering system, and will be changed in the future!
+# Note that HB will add "All blocks" palette automatically, no need to make one yourself!
 
 palettes:
   - name: 'Default (opaque only)'
     # Ommiting includes section means "include all blocks (and then exclude ones below)",
-    # and ommiting excludes section means "don't exclude any blocks from the included ones"
+    # and ommiting excludes section means "don't exclude any blocks from the included ones".
 
     excludes:
       - $_stained_glass.png
@@ -31,31 +30,35 @@ palettes:
       - $_stem_top.png
       - $_stem.png
       - $_wart_block.png
+      - $andesite_smooth.png
       - $copper.png
+      - $diorite_smooth.png
       - $froglight_side.png
+      - $granite_smooth.png
       - $sponge.png
       - amethyst_block.png
-      - andesite.png
       - bamboo_block.png
       - black_$
+      - block$
       - blue_$
       - bone_block_side.png
       - brown_$
       - calcite.png
       - clay.png
+      - cloth_$
       - coal_block.png
       - concrete_$
       - copper_block.png
       - cyan_$
       - diamond_block.png
-      - diorite.png
       - emerald_block.png
+      - glass_$
       - glazed_terracotta_$
       - gold_block.png
-      - granite.png
       - gray_$
       - green_$
       - hardened_clay$
+      - hay_block_top.png
       - honeycomb_block.png
       - iron_block.png
       - lapis_block.png
@@ -65,16 +68,18 @@ palettes:
       - log_$
       - magenta_$
       - melon$
+      - mushroom_$
       - netherite_block.png
       - orange_$
       - pink_$
       - planks_$
+      - polished_$
       - pumpkin$
       - purple_$
+      - quartzblock_side.png
       - quartz_block_side.png
       - raw_$
       - red_$
-      - redstone_block.png
       - redstone_block.png
       - resin_block.png
       - sandstone_top.png
@@ -84,17 +89,23 @@ palettes:
       - shulker$
       - terracotta.png
       - tinted_glass.png
+      - tree_$
       - white_$
+      - wood$
       - wool$
       - yellow_$
 
     excludes:
       - blue_ice.png
       - dead_$
+      - polished_basalt$
+      - polished_blackstone_bricks.png
       - red_sand.png
       - red_sandstone_bottom.png
+      - red_sandstone_carved.png
+      - red_sandstone_normal.png
+      - red_sandstone_smooth.png
       - red_sandstone.png
-      - test_block$
 
   - name: 'Grayscale blocks'
     includes:
@@ -106,12 +117,14 @@ palettes:
       - $basalt_side.png
       - $basalt_top.png
       - $diorite.png
+      - $snow.png
       - acacia_log.png
       - bedrock.png
       - birch_log.png
       - black_$
       - blackstone$
       - blast_furnace_$
+      - blockIron.png
       - bone_block$
       - calcite.png
       - chiseled_deepslate.png
@@ -119,6 +132,10 @@ palettes:
       - chiseled_stone_bricks.png
       - chiseled_tuff$
       - clay.png
+      - cloth_0.png
+      - cloth_7.png
+      - cloth_8.png
+      - cloth_15.png
       - coal$
       - cobbled_deepslate.png
       - cobblestone.png
@@ -143,10 +160,12 @@ palettes:
       - log_birch.png
       - mud.png
       - mushroom_block_skin_stem.png
+      - mushroom_skin_stem.png
       - mushroom_stem.png
       - netherite_block.png
       - observer$
       - obsidian.png
+      - oreCoal.png
       - pale_moss_block.png
       - pale_oak_log.png
       - pale_oak_planks.png
@@ -155,7 +174,7 @@ palettes:
       - polished_blackstone$
       - polished_deepslate.png
       - polished_tuff.png
-      - powdered_snow.png
+      - quartzblock_$
       - quartz_$
       - reinforced_deepslate$
       - smithing_table_top.png
@@ -163,7 +182,6 @@ palettes:
       - smoker_top.png
       - smooth_basalt.png
       - smooth_stone$
-      - snow.png
       - stone_andesite$
       - stone_bricks.png
       - stone_diorite$
@@ -171,7 +189,10 @@ palettes:
       - stone.png
       - stonebrick$
       - stonecutter_bottom.png
+      - stoneslab_$
+      - stripped_pale_oak_$
       - tinted_glass.png
+      - tree_birch.png
       - tuff$
       - white_$
 
@@ -188,6 +209,7 @@ palettes:
       - light_gray_terracotta.png
       - quartz_ore.png
       - stonebrick_mossy.png
+      - stonebricksmooth_mossy.png
       - white_glazed_terracotta.png
       - white_terracotta.png
 
@@ -222,7 +244,6 @@ palettes:
       - dirt$
       - dripstone_block.png
       - granite.png
-      - grass_block_snow.png
       - gravel.png
       - hardened_clay_stained_brown.png
       - hardened_clay_stained_orange.png
@@ -239,11 +260,12 @@ palettes:
       - mossy_cobblestone.png
       - mud.png
       - muddy_mangrove_roots$
-      - mushroom_block$
-      - mushroom_stem$
+      - mushroom_$
       - mycelium$
+      - mycel$
       - obsidian.png
       - orange_terracotta.png
+      - ore$
       - podzol$
       - pumpkin$
       - raw_$
@@ -254,20 +276,27 @@ palettes:
       - sculk$
       - smooth_basalt.png
       - stone.png
+      - stone_andesite.png
+      - stone_diorite.png
+      - stone_granite.png
       - terracotta.png
+      - tree_$
       - tuff.png
       - white_terracotta.png
       - yellow_terracotta.png
 
     excludes:
+      - $_smooth.png
       - crimson_$
       - deepslate_bricks.png
       - deepslate_tiles.png
       - dirt_path_top.png
       - grass_path_top.png
       - nether_$
+      - pumpkin_jack.png
       - quartz_ore.png
-      - test_block$
+      - red_sandstone_carved.png
+      - sandstone_carved.png
       - warped_$
 
   - name: 'Nether + End blocks'
@@ -292,6 +321,7 @@ palettes:
       - glowstone.png
       - gold_block.png
       - gravel.png
+      - lightgem.png
       - lodestone$
       - magenta_stained_glass.png
       - magma.png
@@ -313,8 +343,8 @@ palettes:
       - stripped_crimson_$
       - stripped_warped_$
       - warped_$
+      - whitestone.png
 
     excludes:
       - crimson_step_top.png
-      - test_block$
       - warped_stem_top.png

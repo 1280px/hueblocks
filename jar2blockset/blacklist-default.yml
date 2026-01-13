@@ -25,9 +25,7 @@ filters:
   - dropper_front.png
   - enchantment_$
   - endframe_top.png
-  - grass_side.png
-  - grass_side_overlay.png
-  - grass_top$
+  - grass_$
   - hopper$
   - itemframe$
   - lava$

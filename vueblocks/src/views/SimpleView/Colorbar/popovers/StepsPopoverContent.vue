@@ -3,6 +3,7 @@ import type { ColorRGB } from '@/types/colors'
 import type { ColorbarSeg } from '@/types/simpleview'
 
 import Icon from '@/components/Icon.vue'
+import SlottedButton from '@/components/SlottedButton.vue'
 import { useSimpleViewStore } from '@/stores/SimpleViewStore'
 
 const { cbIdx } = defineProps<{
@@ -35,7 +36,8 @@ function splitCbItem() {
 <template>
     <div class="popover-content">
         <div class="popover-item">
-            <button
+            <SlottedButton
+                variant="black"
                 :title="SimpleViewStore.colorbarData[cbIdx].steps > 5
                     ? 'Insert colour tag in between' : 'Length too short to be splittable in between'
                 "
@@ -43,7 +45,7 @@ function splitCbItem() {
                 @click="splitCbItem"
             >
                 <Icon name="colortag" />
-            </button>
+            </SlottedButton>
 
             <hr>
 
@@ -54,9 +56,13 @@ function splitCbItem() {
                 >
             </label>
 
-            <button type="submit" @click.prevent="emit('done')">
-                OK
-            </button>
+            <SlottedButton
+                variant="black"
+                type="submit"
+                @click.prevent="emit('done')"
+            >
+                <Icon name="check" />
+            </SlottedButton>
         </div>
     </div>
 </template>

@@ -11,8 +11,13 @@ import BlockTooltip from '@/components/BlockTooltip.vue'
 import Icon from '@/components/Icon.vue'
 import SidePicker from '@/components/SidePicker.vue'
 import SlottedButton from '@/components/SlottedButton.vue'
+import { overlayIsShown } from '@/overlay'
 import { useGlobalStore } from '@/stores/GlobalStore'
 import { useSimpleViewStore } from '@/stores/SimpleViewStore'
+
+const { originalFacing = 'all' } = defineProps<{
+    originalFacing?: BlockFacing,
+}>()
 
 const emit = defineEmits<{
     done: [block?: Omit<ColorbarSeg, 'steps'>],
@@ -22,8 +27,7 @@ const GlobalStore = useGlobalStore()
 const SimpleViewStore = useSimpleViewStore()
 
 const blockdataByAlphabet = ref<Record<string, BlockT[]>>({})
-
-const localFilterByFacing = ref<BlockFacing>('all')
+const localFilterByFacing = ref<BlockFacing>(originalFacing)
 
 const tooltipData = ref<BlockTooltipT>({ target: null, name: 'missingNo' })
 
@@ -52,8 +56,11 @@ function updateBlocksetData() {
 }
 
 watch(
-    () => GlobalStore.currBlocksetBlockdata,
-    () => updateBlocksetData(),
+    overlayIsShown,
+    () => {
+        updateBlocksetData()
+        localFilterByFacing.value = originalFacing
+    },
     { immediate: true },
 )
 </script>
@@ -92,7 +99,7 @@ watch(
 
     <aside>
         <SlottedButton
-            class="round"
+            round
             title="Cancel (ESC)"
             @click="emit('done')"
         >
@@ -104,7 +111,7 @@ watch(
         />
 
         <SlottedButton
-            class="round"
+            round
             title="Zoom out (0.5x)"
             :disabled="Number.parseInt(GlobalStore.blockSize) <= 16"
             @click="GlobalStore.changeBlockSize(0.5)"
@@ -113,7 +120,7 @@ watch(
         </SlottedButton>
 
         <SlottedButton
-            class="round"
+            round
             title="Zoom in (2.0x)"
             :disabled="Number.parseInt(GlobalStore.blockSize) >= 256"
             @click="GlobalStore.changeBlockSize(2.0)"

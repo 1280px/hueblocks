@@ -3,7 +3,9 @@ import type { ColorbarSeg } from '@/types/simpleview'
 
 import ColorPicker from '@/components/ColorPicker.vue'
 import Icon from '@/components/Icon.vue'
+import SlottedButton from '@/components/SlottedButton.vue'
 import { overlayShow } from '@/overlay'
+import { useGlobalStore } from '@/stores/GlobalStore'
 import { useSimpleViewStore } from '@/stores/SimpleViewStore'
 import BlockPickColor from '@/views/SimpleView/BlockPick/BlockPickColor.vue'
 
@@ -16,6 +18,7 @@ const emit = defineEmits<{
 }>()
 
 const SimpleViewStore = useSimpleViewStore()
+const GlobalStore = useGlobalStore()
 
 function deleteCbItem() {
     if (cbIdx > 0) {
@@ -26,11 +29,10 @@ function deleteCbItem() {
     emit('done')
 }
 
-async function applyBlockRef() {
-    const res: ColorbarSeg = await overlayShow([
-        BlockPickColor,
-        { },
-    ])
+async function applyPickedBlock() {
+    const res: ColorbarSeg = await overlayShow(
+        [BlockPickColor, { originalFacing: GlobalStore.blockFacing }],
+    )
 
     if (res) {
         SimpleViewStore.colorbarData[cbIdx].color = [...res.color]
@@ -43,7 +45,8 @@ async function applyBlockRef() {
 <template>
     <div class="popover-content">
         <div class="popover-item">
-            <button
+            <SlottedButton
+                variant="black"
                 :title="SimpleViewStore.colorbarData.length > 2
                     ? 'Delete this colour tag' : 'There should be at least 2 colours for a gradient'
                 "
@@ -51,7 +54,7 @@ async function applyBlockRef() {
                 @click="deleteCbItem"
             >
                 <Icon name="colortag-del" />
-            </button>
+            </SlottedButton>
 
             <hr>
 
@@ -60,13 +63,17 @@ async function applyBlockRef() {
                     v-model="SimpleViewStore.colorbarData[cbIdx].color"
                     colorpick-text="Pick colour from a block…" colorpick-icon="block"
                     @change="SimpleViewStore.colorbarData[cbIdx].blockRef = null"
-                    @colorpick="applyBlockRef"
+                    @colorpick="applyPickedBlock"
                 />
             </label>
 
-            <button type="submit" @click.prevent="emit('done')">
-                OK
-            </button>
+            <SlottedButton
+                variant="black"
+                type="submit"
+                @click.prevent="emit('done')"
+            >
+                <Icon name="check" />
+            </SlottedButton>
         </div>
     </div>
 </template>

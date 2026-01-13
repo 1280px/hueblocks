@@ -26,7 +26,7 @@ const SimpleViewStore = useSimpleViewStore()
             ),
         }"
     >
-        <SlottedButton class="trans">
+        <SlottedButton variant="trans">
             <span class="colorbar__len-segment__count">
                 {{ value || 'missingNo' }}
             </span>
