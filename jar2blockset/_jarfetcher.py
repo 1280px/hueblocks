@@ -6,7 +6,7 @@ import requests
 
 PISTON_META_URL = 'https://piston-meta.mojang.com/mc/game/version_manifest.json'
 
-VERSIONS_LIST = ['1.5.2', '1.8.9', '1.13.2', 'latest']
+VERSIONS_LIST = ['1.8.9', '1.13.2', 'latest']
 
 
 if __name__ == "__main__":
