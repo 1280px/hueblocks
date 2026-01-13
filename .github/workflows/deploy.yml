@@ -53,7 +53,7 @@ jobs:
         # instead of script itself, which is how j2bs should probably behave by default.
         run: |
           fs=(data/*.jar)
-          IFS=$'\n' fss=($(printf "%s\n" "${fs[@]}" | sort -r))
+          IFS=$'\n' fss=($(printf "%s\n" "${fs[@]}" | sort -rV))
           unset IFS
           for f in "${fss[@]}"; do
             python -u '_main.py' "$f"
