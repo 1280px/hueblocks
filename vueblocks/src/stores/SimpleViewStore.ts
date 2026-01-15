@@ -134,8 +134,8 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
             ] as ColorLAB
             // console.log(startLAB, endLAB, stepLAB)
 
-            // OkLAB, unlike CIELAB, is uniform, meaning colour deltas
-            // it can be computed as simple as using Euclidian distance:
+            // OkLAB, unlike CIELAB, is uniform, meaning color deltas
+            // can be computed as simple as using Euclidian distance:
             let closestBlock: DisplayBlock = { name: 'missingNo' } as DisplayBlock
             let closestBlockDelta: number = Infinity
 

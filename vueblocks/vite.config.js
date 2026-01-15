@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => ({
         vueDevTools(),
     ],
     // Use base URL for GH Pages deploy, do not use it otherwise
-    base: mode === 'development' ? '/' : '/hueblocks-new',
+    base: mode === 'development' ? '/' : '/hueblocks',
     publicDir: 'data',
     resolve: {
         alias: {

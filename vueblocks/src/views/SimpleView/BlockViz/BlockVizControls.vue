@@ -87,6 +87,7 @@ const GlobalStore = useGlobalStore()
         border-radius: $BR_big;
         font-weight: $FW_bold;
         box-shadow: inset 0 0 0 0px $white;
+        transition: $TR_slow;
 
         &:not(:disabled) {
             &:hover {

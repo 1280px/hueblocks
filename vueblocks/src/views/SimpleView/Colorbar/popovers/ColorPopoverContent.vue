@@ -77,3 +77,7 @@ async function applyPickedBlock() {
         </div>
     </div>
 </template>
+
+<style lang="scss">
+    @use '@/assets/popovers' as *;
+</style>

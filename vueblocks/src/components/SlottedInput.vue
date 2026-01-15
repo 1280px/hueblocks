@@ -59,13 +59,11 @@ const id = useId()
             }
 
             &:focus, &:active {
-                box-shadow: inset 0 0 0 2px $accent-light_50;
-                background-color: $dark_60;
-                border-color: $white_80;
-                transition: $TR_fast;
+                box-shadow: inset 0 0 0 2px $white_50;
+                background-color: $dark_60; border-color: $white_50;
 
                 &.black {
-                    background-color: $accent-dark; border-color: $accent-light_50;
+                    background-color: $accent-dark; border-color: $white_50;
                 }
             }
         }

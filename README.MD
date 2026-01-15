@@ -1,8 +1,5 @@
-> [!TIP]
-> This version is still in development and, while is already very usable, it still might be not as stable and lacks a few features from previous version. If you wish to use legacy version of HueBlocks, [click here](https://1280px.github.io/hueblocks).
-
 <p align=center>
-  <a href="https://1280px.github.io/hueblocks-new/">
+  <a href="https://1280px.github.io/hueblocks/">
     <img src='readme-pic.png'><br>
   </a>
   <i>Create beautiful block gradients in a few clicks!</i>
@@ -21,9 +18,39 @@ Additionally, you can:
 <!-- - Choose blocks noise threshold, allowing to filter out too "smooth" (like concrete) or, more commonly, too "noisy" blocks (crafting tables, glazed terracotta, TNT, you name it) -->
 <!-- - Upload and use custom textures right from your browser, without any need to mess with backend -->
 
-By default, HB comes with blocks from **latest stable MCJE** (1.21.11 as of Jan '26) and **MCJE 1.13.2** (last version to have Programmer's Art by default). *If you need some other version, you can either fork a repo and host an instance with your own blocksets (see below), or just DM me and I'll consider adding it here (as long as it is a vanilla Java Edition version available from Mojang Studios servers)*.
+By default, HB comes with blocks from three MCJE versions — **1.8.9**, **1.13.2** (last version before Texture Update), and **latest stable MCJE** (1.21.11 as of Jan '26). *If you need other versions, you can fork a repo and host an instance with your own blocksets, either by putting their JAR files through jar2blockset script, or by re-creating blockset structure yourself.*
 
 ***Please note that not every single texture is included!*** All blocks with fully transparent pixels (i.e. flowers or trapdoors — but not semi-opaque blocks like stained glass), biome-/foliage-affected (such as grass and leaves), and overly-similar looking blocks were scrapped for the sake of better gradient appearance. *All of these paramaters, as well as palette presets, are fully configurable on backend side, so you can easily tweak it for your need on your instance.*
+
+> [!TIP]
+> Looking for older version? It's available at https://1280px.github.io/hueblocks-legacy
+
+
+# List of Changes
+
+Apart from being re-written on modern tech stack (Vue 3 + TS for frontend, Python 3.12 for backend), thus improved frontend modularity and MUCH better backend flexibility and configurability, HueBlocks New also introduces new very interesting features, and revamps some of the original ones.
+
+
+### Added features
+
+1. **Multicolour colourbar** — the feature that had started it all. Now you're not limited to using just 2 colours at once! The entire gradient now consisnts of as many points ("colour tags") as you like, with arbitrary lengths in between. Just like before, for each colour tag you can pick either colours or blocks, swap the entire gradient from left to right, and randomise colour values if you want to have some fun.
+2. **Colourspace switcher** — depending on your needs, you may want to have either very smooth or very contrast gradients. For such cases, you can use a switcher between SRGB (the only colour space featured in HueBlocks Legacy) and ~~CIELAB~~ OkLAB (used by default). Please keep in mind there is no a "better" or a "worse" colourspace, sometimes the best choice will be checking both — conveniently, switching between them is as simple as clicking a single "Use OkLAB" box.
+3. **Filter by facing** — quite often there are situations, when the "best" suggested gradient uses textures that cannot co-exist in the same side (e.g. a furnace top and a loom sides). To solve this, now, using the switch with a block pictogram on it, you can manually set the side(-s) you're interested in, and HBN will only use the applicable textures.
+
+
+### Improved features
+
+1. **Proper version selection support** — instead of two hardcoded blocksets that require manual update, HBN allows adding new Minecraft Java Edition versions as simple as providing their JARs to a jar2blockset utility. Extraction, filtering, colour and sides calculation, naming... everything is automated, and is also configurable in YAML files.
+2. **Improved custom palettes** — now you can edit any built-in palette you want (including custom palettes you created before), and easily import and export palettes as JSON.
+3. **Keep previous results**, because of a new colourbar, now shows different results not in the same row but in other rows, allowing easily comparing results of using different blocks or switching between colourspaces.
+4. **Colour calculation improvements** — apart from addition of OkLAB colour calculations, SRGB calculation was improved as well. So, even though I tried to preserve SRGB calculation as close to original as possible, now the SRGB average block colours should be extracted more accurately.
+5. **Better adaptiveness**, allowing for a better experience when using HueBlocks from a phone.
+
+
+### Not there yet
+
+1. **Custom blocksets** — The only feature missing from legacy version. I expect them to land some time before June 15th, when I'll have more free time. Feel free to make a PR if you wish to see them sooner!
+2. **Block noise calculation** — Finally, a way to distinguish between block "good" and "bad" for building. This is a feature I'm very excited implementing about, even though it's not there yet I hope to finish it in a coming months as well. By setting a "threshold" for observed texture variation (which will be computed backend-side), you will be able to filter "smooth" blocks from "noisy" blocks to the exact extent you want.
 
 
 # Technical Details
@@ -31,8 +58,8 @@ By default, HB comes with blocks from **latest stable MCJE** (1.21.11 as of Jan 
 HueBlocks consists of two parts — a Vue SPA web app (`vueblocks`) and a Python blocksets data generator (`jar2blockset`). Just like the legacy version, it has no actual back-end — all textures are downloaded, extracted and processed using Github Actions after every push, and then stored on their servers instead.
 
 For each of these parts, there is a separate README with more details and documentation. So:
-- If you want to create blocksets from your own textures or change generation configs (i.e. to include semi-transparent blocks, use custom palettes or edit textures blacklist) — [check this](https://github.com/1280px/hueblocks-new/tree/master/jar2blockset#readme),
-- And if you want to mess with web app (it's very modular by design, so, if you know Vue 3, even something as creating a whole new separate mode shouldn't take much time) — [check that](https://github.com/1280px/hueblocks-new/tree/master/vueblocks#readme).
+- If you want to create blocksets from your own textures or change generation configs (i.e. to include semi-transparent blocks, use custom palettes or edit textures blacklist) — [check this](https://github.com/1280px/hueblocks/tree/master/jar2blockset#readme),
+- And if you want to mess with web app (it's very modular by design, so, if you know Vue 3, even something as creating a whole new separate mode shouldn't take much time) — [check that](https://github.com/1280px/hueblocks/tree/master/vueblocks#readme).
 
 Additionally, if you're interested in color theory behind most of calculations, **I highly recommend  checking out Gneiss Name channel on YouTube**. His videos have greatly helped me refresh my memory on the basics, and also were great introductions to some topics I didn't understand before. 
 <br>In particular, I recommend watching these episodes as sort of QnA:

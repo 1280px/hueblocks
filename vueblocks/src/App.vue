@@ -6,9 +6,8 @@ import { useGlobalStore } from '@/stores/GlobalStore'
 import { getCssRgb, getRandomRbg } from './colors'
 import Header from './widgets/Header.vue'
 import Overlay from './widgets/Overlay.vue'
-import SlottedTumbler from './components/SlottedTumbler.vue'
 
-// This is the exact way how all views should load!
+// This is the exact way how all views should be loaded!
 const SimpleView = defineAsyncComponent({
     loader: () => import('./views/SimpleView/index.vue'),
     loadingComponent: () => 'Loading SimpleView…',
@@ -25,13 +24,17 @@ watch(overlayIsShown, (v) => {
 })
 
 onMounted(async () => {
-    (document.querySelector('#app') as HTMLElement).style.background = (
-        `linear-gradient(
-        ${164 + Math.random() * 36}deg in oklab,
-        ${getCssRgb(getRandomRbg(0.72))},
-        ${getCssRgb(getRandomRbg(3.72))} 800px
-        )`
-    )
+    // More familiar background to not scare away newcomers
+    // (this check will be removed together with the welcome message)
+    if (document.cookie.includes('nowelcome=true')) {
+        (document.querySelector('#app') as HTMLElement).style.background = (
+            `linear-gradient(
+            ${164 + Math.random() * 36}deg in oklab,
+            ${getCssRgb(getRandomRbg(0.72))},
+            ${getCssRgb(getRandomRbg(3.72))} 800px
+            )`
+        )
+    }
 
     await GlobalStore.loadBlocksetsData()
     await GlobalStore.loadBlocksetBlockdata()
@@ -43,8 +46,6 @@ onMounted(async () => {
 
 <template>
     <Header />
-
-    <SlottedTumbler />
 
     <SimpleView v-if="GlobalStore.viewMode === 'simple'" />
 
@@ -94,9 +95,10 @@ onMounted(async () => {
     a {
         color: inherit;
         transition: color $TR_regular;
-    }
-    a:hover {
-        color: $white_80;
+
+        &:hover {
+            color: $white_80;
+        }
     }
     small {
         color: $white_30;

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import SlottedMsgbox from '@/components/SlottedMsgbox.vue'
 import { useSimpleViewStore } from '@/stores/SimpleViewStore'
 
@@ -9,8 +10,15 @@ function toggleDebugMode() {
 
     if (SimpleViewStore.blockDisplayCfg.showColorsDebug) {
         // eslint-disable-next-line no-alert
-        alert('Debug mode toggled, re-generate a gradient to see effect.')
+        alert('Colour debug toggled, re-generate a gradient to see effect.')
     }
+}
+
+const welcomeIsShown = ref<boolean>(!document.cookie.includes('nowelcome=true'))
+
+function welcomeHide() {
+    document.cookie = 'nowelcome=true;'
+    welcomeIsShown.value = false
 }
 </script>
 
@@ -19,18 +27,27 @@ function toggleDebugMode() {
         <h1 @dblclick.prevent="toggleDebugMode">
             HueBlocks<sup><sub><sup>NEW</sup></sub></sup>
         </h1>
+
         <h3>Create beautiful block gradients in a few clicks!</h3>
 
         <small>
             <!-- <a href="" @click="">language: en</a> •  -->
-            <a href="https://github.com/1280px/hueblocks-new/">source code</a> •
-            <a href="https://github.com/1280px/hueblocks-new/graphs/contributors/">contributors</a> •
-            <a href="https://1280px.github.io/hueblocks">legacy version</a>
+            <a href="https://github.com/1280px/hueblocks/">source code</a> •
+            <a href="https://github.com/1280px/hueblocks/graphs/contributors/">contributors</a> •
+            <a href="https://1280px.github.io/hueblocks-legacy">legacy version</a>
         </small>
 
-        <SlottedMsgbox :duration="3">
-            This is a new version of HueBlocks, mostly finished but still missing custom blocksets! <br>
-            If you wish to go to an older version of HB, click "legacy version" link above this message.
+        <SlottedMsgbox v-if="welcomeIsShown" :timeout="15">
+            <h3>Welcome to the new version of Hueblocks 🎉</h3>
+            <span>
+                Starting January 15th, HueBlocks New is now an upstream version.<br>
+                <a href="https://github.com/1280px/hueblocks#list-of-changes">Click here to read the full list of changes and additions</a>, or
+                <a href="#" @click.prevent="welcomeHide">here</a>
+                to never show this box again.
+            </span>
+            <span>
+                If you wish to continue using legacy version anyway, use the "legacy version" link above.
+            </span>
         </SlottedMsgbox>
     </header>
 </template>
@@ -41,12 +58,7 @@ function toggleDebugMode() {
     header {
         display: flex; flex-direction: column;
         text-align: center;
-        margin: 80px 0 40px;
+        margin: 80px 0 38px; // Account 2px used by links underline
         gap: 12px;
-    }
-
-    box {
-        margin-top: 12px;
-        border-color: moccasin;
     }
 </style>

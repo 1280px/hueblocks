@@ -59,7 +59,7 @@ const currColorHex = computed<ColorHEX>({
 
     .color-picker > input {
         appearance: none;
-        height: 100%; // fix for Safari (doesn't show picker at all)
+        height: 100%; // fix for Safari (otherwise doesn't show picker at all)
         margin: 0; padding: 0;
         background-color: $accent-dark_80;
         border: 2px solid $accent-dark_25;
@@ -77,6 +77,10 @@ const currColorHex = computed<ColorHEX>({
                 outline: none;
                 transition: $TR_fast;
             }
+        }
+
+        &:last-child {
+            border-radius: $BR_big; // In case colorpick was not provided
         }
     }
 </style>
