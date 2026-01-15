@@ -61,7 +61,7 @@ const currColorHex = computed<ColorHEX>({
         appearance: none;
         height: 100%; // fix for Safari (doesn't show picker at all)
         margin: 0; padding: 0;
-        background-color: $accent-dark_75;
+        background-color: $accent-dark_80;
         border: 2px solid $accent-dark_25;
         border-radius: $BR_big 0 0 $BR_big;
         cursor: pointer;
@@ -69,11 +69,11 @@ const currColorHex = computed<ColorHEX>({
 
         &:not(:disabled) {
             &:hover {
-                border-color: $accent-dark_75;
+                border-color: $accent-dark_80;
             }
             &:focus-visible, &:hover:active {
-                background-color: $accent-bg;
-                border: 4px solid $accent-dark_75;
+                background-color: $accent_bg;
+                border: 4px solid $accent-dark_60;
                 outline: none;
                 transition: $TR_fast;
             }

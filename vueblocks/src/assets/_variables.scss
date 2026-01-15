@@ -1,9 +1,5 @@
 @use 'sass:color';
 
-// @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;700&display=swap');
-// @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700');
-
-
 @mixin flex-center {
     display: flex;
     justify-content: center;
@@ -48,8 +44,8 @@ $dark: #333;
 $dark_60: color.change($dark, $alpha: 60%);
 $dark_20: color.change($dark, $alpha: 20%);
 
+$dark_em: #181818bb;
 $dark_bg: #111;
-$dark_border: #666;
 
 $white: #fff;
 $white_80: color.change($white, $alpha: 80%);
@@ -64,11 +60,12 @@ $success: #77d452;
 $success_30: color.change($success, $alpha: 30%);
 
 $accent-dark: #151942;
-$accent-dark_75: color.change($accent-dark, $alpha: 75%);
+$accent-dark_80: color.change($accent-dark, $alpha: 80%);
+$accent-dark_60: color.change($accent-dark, $alpha: 60%);
 $accent-dark_50: color.change($accent-dark, $alpha: 50%);
 $accent-dark_25: color.change($accent-dark, $alpha: 25%);
 
-$accent-bg: color.mix(color.change($dark, $alpha: 80%), $accent-dark, $weight: 66%);
+$accent_bg: color.mix(color.change($dark, $alpha: 80%), $accent-dark, $weight: 66%);
 
 $accent-light: #a1a3b3;
 $accent-light_50: color.change($accent-light, $alpha: 50%);

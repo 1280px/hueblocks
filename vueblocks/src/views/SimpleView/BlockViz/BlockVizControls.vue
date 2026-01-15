@@ -19,7 +19,7 @@ const GlobalStore = useGlobalStore()
             </div>
 
             <div class="blockviz-controls__blob">
-                <button
+                <SlottedButton
                     id="big-black-button"
                     :disabled="!GlobalStore.currBlocksetBlockdata"
                     @click="() => emit('bbbClick')"
@@ -29,7 +29,7 @@ const GlobalStore = useGlobalStore()
                             ? 'GENERATE BLOCK GRAIDENT'
                             : 'Loading blockdata, please wait…'
                     }}
-                </button>
+                </SlottedButton>
             </div>
 
             <div class="blockviz-controls__blob round">
@@ -63,7 +63,7 @@ const GlobalStore = useGlobalStore()
     @use '@/assets/variables' as *;
 
     .blockviz-controls__wrap {
-        background: linear-gradient(transparent 32px, #181818bb 32px, $dark_bg);
+        background: linear-gradient(transparent 32px, $dark_em 32px, $dark_bg);
     }
     .blockviz-controls {
         @include flex-center;
@@ -73,7 +73,7 @@ const GlobalStore = useGlobalStore()
     .blockviz-controls__blob {
         @include flex-center;
         padding: 4px; gap: 4px;
-        background: linear-gradient(#181818bb 50.5%, $trans 50.5%);
+        background: linear-gradient($dark_em 50.5%, $trans 50.5%);
         border-radius: calc($BR_big + $BR_regular);
 
         &.round {
@@ -82,10 +82,26 @@ const GlobalStore = useGlobalStore()
     }
 
     #big-black-button {
-        appearance: none;
         height: 60px;
         padding: 0 20px;
         border-radius: $BR_big;
+        font-weight: $FW_bold;
+        box-shadow: inset 0 0 0 0px $white;
+
+        &:not(:disabled) {
+            &:hover {
+                border-color: $white_80;
+            }
+
+            &:focus-visible, &:hover:active {
+                // border-width: 4px;
+                // padding: 2px 18px;
+                border: 2px solid $white_80;
+                box-shadow: inset 0 0 0 12px $trans;
+                background-color: $white_30;
+                transition: $TR_regular;
+            }
+        }
     }
 
     .side-picker__wrap {

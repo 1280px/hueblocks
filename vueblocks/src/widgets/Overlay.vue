@@ -71,7 +71,7 @@ defineExpose({
         margin: 0; padding: 32px;
         box-sizing: border-box;
         overflow-y: scroll;
-        background-color: $accent-bg; border-color: $trans;
+        background-color: $accent_bg; border-color: $trans;
         z-index: 99;
 
         @media (any-pointer: fine) {

@@ -59,7 +59,7 @@ const id = useId()
             left: 2px; top: -6px;
             width: 10px; height: 10px;
             background-color: $white;
-            border: 2px solid $dark_border; border-radius: $BR_round;
+            border: 2px solid $accent-dark_60; border-radius: $BR_round;
             box-shadow: 0px 0px 0px 2px $white_50;
             transition: $TR_slow cubic-bezier(.77, 0, .18, 1);
         }

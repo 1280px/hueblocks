@@ -5,6 +5,7 @@ import { ref } from 'vue'
 
 import ColorPicker from '@/components/ColorPicker.vue'
 import SlottedButton from '@/components/SlottedButton.vue'
+import SlottedInput from '@/components/SlottedInput.vue'
 import { overlayShow } from '@/overlay'
 import { useGlobalStore } from '@/stores/GlobalStore'
 import { useSimpleViewStore } from '@/stores/SimpleViewStore'
@@ -21,13 +22,17 @@ const emit = defineEmits<{
 const SimpleViewStore = useSimpleViewStore()
 const GlobalStore = useGlobalStore()
 
-const cbRefIdx = (side === 'left' ? 0 : (SimpleViewStore.colorbarData.length - 1))
-const cbRefItem = SimpleViewStore.colorbarData[cbRefIdx]
+const cbRefIdx = side === 'left'
+    ? 0
+    : (SimpleViewStore.colorbarData.length - 1)
 
 const cbNewItem = ref<ColorbarSeg>({
-    color: [...cbRefItem.color],
-    blockRef: cbRefItem.blockRef,
-    steps: cbRefItem.steps,
+    color: SimpleViewStore.colorbarData[cbRefIdx].color,
+    blockRef: SimpleViewStore.colorbarData[cbRefIdx].blockRef,
+    // The very last color tag's length should never be used
+    steps: side === 'left'
+        ? SimpleViewStore.colorbarData[cbRefIdx].steps
+        : SimpleViewStore.colorbarData[cbRefIdx - 1].steps,
 })
 
 function addCbItem() {
@@ -35,8 +40,6 @@ function addCbItem() {
         SimpleViewStore.colorbarData.unshift({ ...cbNewItem.value })
     }
     else {
-        // Since last steps segment is defined by not the latest but
-        // second to last cbItem, we need to change its steps as well:
         SimpleViewStore.colorbarData[cbRefIdx].steps = cbNewItem.value.steps
         SimpleViewStore.colorbarData.push({ ...cbNewItem.value })
     }
@@ -59,12 +62,13 @@ async function applyPickedBlock() {
 
 <template>
     <div class="popover-content">
-        <label class="popover-item">Length:&nbsp;
-            <input
-                v-model="cbNewItem.steps"
-                type="number" min="3" max="999"
-            >
-        </label>
+        <SlottedInput
+            v-model="cbNewItem.steps"
+            variant="black"
+            type="number" min="3" max="999"
+        >
+            Length:
+        </SlottedInput>
 
         <label class="popover-item">Colour:&nbsp;
             <ColorPicker
@@ -85,7 +89,3 @@ async function applyPickedBlock() {
         </div>
     </div>
 </template>
-
-<style lang="scss">
-    @use '@/assets/popovers' as *;
-</style>

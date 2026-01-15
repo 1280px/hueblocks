@@ -3,8 +3,9 @@ import { computed, useId } from 'vue'
 
 import Icon from '@/components/Icon.vue'
 
-const { names } = defineProps<{
+const { names, variant = 'default' } = defineProps<{
     names: string[],
+    variant?: 'default' | 'black',
 }>()
 
 const value = defineModel<number>({ default: 0 })
@@ -20,7 +21,11 @@ const id = useId()
 <template>
     <label :for="id">
         <slot />
-        <select :id="id" v-model="ibValue" :disabled="names.length < 2">
+        <select
+            :id="id" v-model="ibValue"
+            :disabled="names?.length < 2"
+            :class="{ black: variant === 'black' }"
+        >
             <component
                 :is="name !== '<hr>' ? 'option' : 'hr'"
                 v-for="(name, i) in names" :key="i" :value="i"
@@ -28,7 +33,10 @@ const id = useId()
                 {{ name }}
             </component>
         </select>
-        <div class="select__arrow" :class="{ inactive: names.length < 2 }">
+        <div
+            class="select__arrow"
+            :class="{ inactive: names.length < 2, black: variant === 'black' }"
+        >
             <Icon name="dd-arrow" />
         </div>
     </label>
@@ -46,21 +54,37 @@ const id = useId()
         transition: $TR_regular;
         outline: none;
 
+        &:disabled {
+            background-color: $dark_20; border-color: $white_20; color: $white_50;
+        }
+
+        &.black {
+            background-color: $accent-dark_80; border-color: $accent-dark_25;
+
+            &:disabled {
+                background-color: $dark_em; border-color: $dark_60;
+            }
+        }
+
         &:not(:disabled) {
             &:hover {
                 border-color: $accent-light;
+
+                &.black {
+                    border-color: $accent-dark_60;
+                }
             }
+
             &:focus, &:active {
                 padding: 0 6px 1px 6px;
                 background-color: $dark_60;
                 border: 4px solid $accent-light_50;
                 transition: $TR_fast;
-            }
-        }
 
-        &:disabled {
-            border-color: $white_20;
-            background-color: $dark_20; color: $white_50;
+                &.black {
+                    background-color: $accent-dark; border-color: $accent-light_50;
+                }
+            }
         }
     }
 
@@ -68,9 +92,13 @@ const id = useId()
         @include flex-center;
         margin-left: -44px; padding-left: 20px;
         width: 20px; height: 20px;
-        background: linear-gradient(90deg, $trans, $dark_bg 50%); // color: $white_80;
+        background: linear-gradient(90deg, $trans, $dark_bg 50%); color: $white_80;
         border-radius: 0 $BR_round $BR_round 0;
         pointer-events: none;
+
+        &.black {
+            background: transparent;
+        }
 
         &.inactive {
             color: $white_50 !important;

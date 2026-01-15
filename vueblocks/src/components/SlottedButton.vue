@@ -45,10 +45,10 @@ const { round = false, variant = 'default' } = defineProps<{
         }
 
         &.black {
-            background-color: $accent-dark_75; border-color: $accent-dark_25;
+            background-color: $accent-dark_80; border-color: $accent-dark_25;
 
             &:disabled {
-                background-color: $dark_60;
+                background-color: $dark_em; border-color: $dark_60;
             }
         }
 
@@ -61,7 +61,7 @@ const { round = false, variant = 'default' } = defineProps<{
                 }
 
                 &.black {
-                    border-color: $accent-dark_75;
+                    border-color: $accent-dark_60;
                 }
             }
 
@@ -79,7 +79,7 @@ const { round = false, variant = 'default' } = defineProps<{
                 }
 
                 &.black {
-                    background-color: $accent-bg; border-color: $accent-dark_75;
+                    background-color: $accent_bg; border-color: $accent-dark_60;
                 }
             }
         }

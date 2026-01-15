@@ -4,6 +4,7 @@ import type { ColorbarSeg } from '@/types/simpleview'
 
 import Icon from '@/components/Icon.vue'
 import SlottedButton from '@/components/SlottedButton.vue'
+import SlottedInput from '@/components/SlottedInput.vue'
 import { useSimpleViewStore } from '@/stores/SimpleViewStore'
 
 const { cbIdx } = defineProps<{
@@ -49,12 +50,13 @@ function splitCbItem() {
 
             <hr>
 
-            <label class="popover-item">Length:
-                <input
-                    v-model="SimpleViewStore.colorbarData[cbIdx].steps"
-                    type="number" min="3" max="999"
-                >
-            </label>
+            <SlottedInput
+                v-model="SimpleViewStore.colorbarData[cbIdx].steps"
+                variant="black"
+                type="number" min="3" max="999"
+            >
+                Length:
+            </SlottedInput>
 
             <SlottedButton
                 variant="black"
@@ -66,7 +68,3 @@ function splitCbItem() {
         </div>
     </div>
 </template>
-
-<style lang="scss">
-    @use '@/assets/popovers' as *;
-</style>

@@ -6,6 +6,7 @@ import { useGlobalStore } from '@/stores/GlobalStore'
 import { getCssRgb, getRandomRbg } from './colors'
 import Header from './widgets/Header.vue'
 import Overlay from './widgets/Overlay.vue'
+import SlottedTumbler from './components/SlottedTumbler.vue'
 
 // This is the exact way how all views should load!
 const SimpleView = defineAsyncComponent({
@@ -26,9 +27,9 @@ watch(overlayIsShown, (v) => {
 onMounted(async () => {
     (document.querySelector('#app') as HTMLElement).style.background = (
         `linear-gradient(
-        ${160 + Math.random() * 40}deg in oklab,
+        ${164 + Math.random() * 36}deg in oklab,
         ${getCssRgb(getRandomRbg(0.72))},
-        ${getCssRgb(getRandomRbg(3.86))} 800px
+        ${getCssRgb(getRandomRbg(3.72))} 800px
         )`
     )
 
@@ -42,6 +43,8 @@ onMounted(async () => {
 
 <template>
     <Header />
+
+    <SlottedTumbler />
 
     <SimpleView v-if="GlobalStore.viewMode === 'simple'" />
 

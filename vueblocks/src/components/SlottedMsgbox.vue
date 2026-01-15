@@ -1,23 +1,31 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { ref, watch } from 'vue'
 
-const { duration } = defineProps<{
-    duration: number,
+const { timeout, variant = 'normal' } = defineProps<{
+    timeout?: number,
+    variant?: 'normal' | 'error' | 'success',
 }>()
 
 const showMsgbox = ref<boolean>(true)
 
-onMounted(() => {
-    setTimeout(
-        () => { showMsgbox.value = false },
-        (Math.max(+(duration || 0), 1)) * 1000,
-    )
-})
+watch(
+    () => timeout,
+    () => {
+        showMsgbox.value = true
+        if (timeout) {
+            setTimeout(
+                () => { showMsgbox.value = false },
+                (Math.max(+(timeout || 0), 1)) * 1000,
+            )
+        }
+    },
+    { immediate: true },
+)
 </script>
 
 <template>
     <Transition name="msgbox">
-        <blockquote v-if="showMsgbox">
+        <blockquote v-if="showMsgbox" :class="variant">
             <slot />
         </blockquote>
     </Transition>
@@ -27,10 +35,23 @@ onMounted(() => {
     @use '@/assets/variables' as *;
 
     blockquote {
-        display: block;
-        margin: auto; padding: 8px;
-        border: 2px solid moccasin; border-radius: $TR_regular;
+        display: flex; flex-direction: column;
+        margin: auto; padding: 12px; gap: 8px;
         animation: $TR_slow overlay-fade;
+        line-height: 1.3;
+
+        &.normal {
+            background-color: $accent-light_25;
+            border: 2px solid $white_50;
+        }
+        &.error {
+            background-color: $error_30;
+            border: 2px solid $error;
+        }
+        &.success {
+            background-color: $success_30;
+            border: 2px solid $success;
+        }
     }
 
     .msgbox-enter-active, .msgbox-leave-active {

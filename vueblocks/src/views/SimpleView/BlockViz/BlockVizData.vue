@@ -58,7 +58,7 @@ function copyBlockTextureName(name: string) {
     @use '@/assets/variables' as *;
 
     .blockviz-controls__wrap {
-        background: linear-gradient(transparent 32px, #181818bb 32px, $dark_bg);
+        background: linear-gradient(transparent 32px, $dark_em 32px, $dark_bg);
     }
     .blockviz-controls {
         @include flex-center;
@@ -68,7 +68,7 @@ function copyBlockTextureName(name: string) {
     .blockviz-controls__blob {
         @include flex-center;
         padding: 4px; gap: 4px;
-        background: linear-gradient(#181818bb 50.5%, $trans 50.5%);
+        background: linear-gradient($dark_em 50.5%, $trans 50.5%);
         border-radius: calc($BR_big + $BR_regular);
 
         &.round {
