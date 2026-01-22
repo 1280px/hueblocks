@@ -35,7 +35,7 @@ function updateBlocksetData() {
         GlobalStore.currBlocksetBlockdata,
         (
             GlobalStore.currBlocksetPalettes[GlobalStore.currPaletteIdx] === '<hr>'
-                ? GlobalStore.currBlocksetPalettes[0] as Palette // 'All Blocks' palette always comes first
+                ? GlobalStore.currBlocksetPalettes[0] as Palette // 'All Blocks' always comes first
                 : GlobalStore.currBlocksetPalettes[GlobalStore.currPaletteIdx] as Palette
         ),
         'all',
@@ -95,7 +95,7 @@ async function handlePaletteImport() {
         errText.value = ''
     }
     catch (err) {
-        errText.value = (err as Error).message ?? 'An unknown palette import error has occured :('
+        errText.value = (err as Error).message ?? 'An unknown import error has occured :('
     }
 }
 
@@ -145,7 +145,9 @@ watch(
                     @mouseleave.prevent="() => tooltipData.target = null"
                 >
                     <Block
-                        :name="block.name" :blockset-idx="GlobalStore.currBlocksetIdx" :texture="block.texture"
+                        :name="block.name"
+                        :blockset-idx="GlobalStore.currBlocksetIdx"
+                        :texture="block.texture"
                     />
                 </label>
             </template>
@@ -163,7 +165,7 @@ watch(
 
         <SlottedButton
             round
-            title="Import JSON…"
+            title="Import palette textures…"
             @click="handlePaletteImport()"
         >
             <Icon name="import" />
@@ -172,8 +174,14 @@ watch(
         <SlottedButton
             round
             :disabled="selectedTextures.size < 3"
-            :title="selectedTextures.size < 3 ? 'Please select at least 3 blocks!' : 'Export JSON…'"
+            :title="selectedTextures.size < 3
+                ? 'Please select at least 3 blocks!'
+                : 'Export selected textures… (right click to export unselected)'"
             @click="GlobalStore.exportCustomPalette(Array.from(selectedTextures))"
+            @contextmenu.prevent="GlobalStore.exportCustomPalette(
+                GlobalStore.currBlocksetBlockdata.map(b => b.texture)
+                    .filter(t => !selectedTextures.has(t)),
+            )"
         >
             <Icon name="export" />
         </SlottedButton>
@@ -181,7 +189,9 @@ watch(
         <SlottedButton
             round
             :disabled="selectedTextures.size < 3"
-            :title="selectedTextures.size < 3 ? 'Please select at least 3 blocks!' : 'Update custom palette'"
+            :title="selectedTextures.size < 3
+                ? 'Please select at least 3 blocks!'
+                : 'Update custom palette'"
             @click="emit('done', Array.from(selectedTextures))"
         >
             <Icon name="check" />

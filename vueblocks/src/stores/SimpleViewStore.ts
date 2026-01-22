@@ -2,7 +2,14 @@ import type { Block, BlockFacing, DisplayBlock } from '@/types/blocks'
 import type { BlocksetIndex } from '@/types/blocksets'
 import type { ColorLAB, ColorRGB } from '@/types/colors'
 import type { Palette } from '@/types/palettes'
-import type { BlockDisplayConfig, BlockFilteringConfig, BlockVizRow, ColorbarSeg } from '@/types/simpleview'
+import type {
+    BlockDisplayConfig,
+    BlockFilteringConfig,
+    BlockVizRow,
+    ColorbarSeg,
+} from '@/types/simpleview'
+
+import Cookies from 'js-cookie'
 
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
@@ -47,6 +54,29 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
             steps: 4,
         },
     ])
+    // Simpler gradient for newcomers from Hueblocks Legacy
+    if (!Cookies.get('nowelcome')) {
+        colorbarData.value = [
+            {
+                color: [230, 154, 50],
+                blockRef: {
+                    name: 'Honeycomb Block',
+                    blocksetIdx: 0,
+                    texture: 'honeycomb_block.png',
+                },
+                steps: 12,
+            },
+            {
+                color: [97, 28, 36],
+                blockRef: {
+                    name: 'Crimson Stem',
+                    blocksetIdx: 0,
+                    texture: 'crimson_stem.png',
+                },
+                steps: 4,
+            },
+        ]
+    }
 
     const blockVizData = ref<BlockVizRow[]>([])
 
@@ -59,18 +89,18 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
     ): BlockVizRow {
         const newSegData = []
 
-        for (let step = 0; step < steps; step++) {
+        for (let si = 0; si < steps; si++) {
             // Calculate step color as linear mixture of start and end colors
             const stepRGB = [
-                // ((endRGB[0] ** 0.1) * (step / (steps - 1))
-                //     + (startRGB[0] ** 0.5) * (((steps - 1) - step) / (steps - 1))) ** 2,
-                // ((endRGB[1] ** 0.1) * (step / (steps - 1))
-                //     + (startRGB[1] ** 0.5) * (((steps - 1) - step) / (steps - 1))) ** 2,
-                // ((endRGB[2] ** 0.1) * (step / (steps - 1))
-                //     + (startRGB[2] ** 0.5) * (((steps - 1) - step) / (steps - 1))) ** 2,
-                endRGB[0] * (step / (steps - 1)) + startRGB[0] * (((steps - 1) - step) / (steps - 1)),
-                endRGB[1] * (step / (steps - 1)) + startRGB[1] * (((steps - 1) - step) / (steps - 1)),
-                endRGB[2] * (step / (steps - 1)) + startRGB[2] * (((steps - 1) - step) / (steps - 1)),
+                // ((endRGB[0] ** 0.1) * (si / (steps - 1))
+                //     + (startRGB[0] ** 0.5) * (((steps - 1) - si) / (steps - 1))) ** 2,
+                // ((endRGB[1] ** 0.1) * (si / (steps - 1))
+                //     + (startRGB[1] ** 0.5) * (((steps - 1) - si) / (steps - 1))) ** 2,
+                // ((endRGB[2] ** 0.1) * (si / (steps - 1))
+                //     + (startRGB[2] ** 0.5) * (((steps - 1) - si) / (steps - 1))) ** 2,
+                endRGB[0] * (si / (steps - 1)) + startRGB[0] * (((steps - 1) - si) / (steps - 1)),
+                endRGB[1] * (si / (steps - 1)) + startRGB[1] * (((steps - 1) - si) / (steps - 1)),
+                endRGB[2] * (si / (steps - 1)) + startRGB[2] * (((steps - 1) - si) / (steps - 1)),
             ] as ColorRGB
             // console.log(startRGB, endRGB, stepRGB)
 
@@ -125,12 +155,12 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
         const startLAB = rgb2lab(startRGB)
         const endLAB = rgb2lab(endRGB)
 
-        for (let step = 0; step < steps; step++) {
+        for (let si = 0; si < steps; si++) {
             // Just like in RGB, in OkLAB "step" color can be found linearly
             const stepLAB = [
-                endLAB[0] * (step / (steps - 1)) + startLAB[0] * (((steps - 1) - step) / (steps - 1)),
-                endLAB[1] * (step / (steps - 1)) + startLAB[1] * (((steps - 1) - step) / (steps - 1)),
-                endLAB[2] * (step / (steps - 1)) + startLAB[2] * (((steps - 1) - step) / (steps - 1)),
+                endLAB[0] * (si / (steps - 1)) + startLAB[0] * (((steps - 1) - si) / (steps - 1)),
+                endLAB[1] * (si / (steps - 1)) + startLAB[1] * (((steps - 1) - si) / (steps - 1)),
+                endLAB[2] * (si / (steps - 1)) + startLAB[2] * (((steps - 1) - si) / (steps - 1)),
             ] as ColorLAB
             // console.log(startLAB, endLAB, stepLAB)
 

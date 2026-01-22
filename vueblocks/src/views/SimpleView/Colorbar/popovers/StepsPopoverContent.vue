@@ -39,8 +39,10 @@ function splitCbItem() {
         <div class="popover-item">
             <SlottedButton
                 variant="black"
-                :title="SimpleViewStore.colorbarData[cbIdx].steps > 5
-                    ? 'Insert colour tag in between' : 'Length too short to be splittable in between'
+                :title="
+                    SimpleViewStore.colorbarData[cbIdx].steps > 5
+                        ? 'Insert colour tag in between'
+                        : 'Length too short to be splittable in between'
                 "
                 :disabled="SimpleViewStore.colorbarData[cbIdx].steps <= 5"
                 @click="splitCbItem"

@@ -1,7 +1,16 @@
 import type { BlocksetIndex } from './blocksets'
 import type { ColorLAB, ColorRGB } from './colors'
 
-export const blockFacing = ['all', 'sides', 'top', 'bottom', 'north', 'west', 'south', 'east'] as const
+export const blockFacing = [
+    'all',
+    'sides',
+    'top',
+    'bottom',
+    'north',
+    'west',
+    'south',
+    'east',
+] as const
 // Note that 'all' and 'sides' are meta-faces, meaning OptiFine CTM
 // provides them as aliases for all sides and all sides except top and bottom
 // respectively, and for that reason j2bs blocksets don't use them at all.
@@ -24,7 +33,8 @@ export interface Block {
 // change every time current blockset is changed as well:
 export interface DisplayBlock extends Pick<Block, 'name' | 'texture'> {
     blocksetIdx: BlocksetIndex,
-    // The fields below are only used in debugging, otherwise being unset:
+
+    // The fields below are only used for color debug, otherwise being unset:
     debugData?: {
         rgbTarget?: ColorRGB,
         rgbReal?: ColorRGB,

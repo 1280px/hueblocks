@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import Cookies from 'js-cookie'
+
 import { defineAsyncComponent, onMounted, ref, watch } from 'vue'
 
 import { overlayBind, overlayIsShown } from '@/overlay'
@@ -24,13 +26,12 @@ watch(overlayIsShown, (v) => {
 })
 
 onMounted(async () => {
-    // More familiar background to not scare away newcomers
-    // (this check will be removed together with the welcome message)
-    if (document.cookie.includes('nowelcome=true')) {
+    // More familiar background to not scare away HBL newcomers
+    if (Cookies.get('nowelcome')) {
         (document.querySelector('#app') as HTMLElement).style.background = (
             `linear-gradient(
-            ${164 + Math.random() * 36}deg in oklab,
-            ${getCssRgb(getRandomRbg(0.72))},
+            ${170 + Math.random() * 30}deg in oklab,
+            ${getCssRgb(getRandomRbg(0.64))},
             ${getCssRgb(getRandomRbg(3.72))} 800px
             )`
         )

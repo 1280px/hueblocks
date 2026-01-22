@@ -72,7 +72,8 @@ watch(
 
                 <!-- <div style="display: flex; justify-content: center; flex-wrap: wrap;">
                     <SlottedDropdown
-                        v-model="SimpleViewStore.blockFilteringCfg.noiseMinThreshold" :names="['No threshold', 'Low noise', 'Low & Medium noise', 'Medium & High noise']"
+                        v-model="SimpleViewStore.blockFilteringCfg.noiseMinThreshold"
+                        :names="['No threshold', 'Low noise', 'Low & Medium noise', 'Medium & High noise']"
                         :default="0"
                     >
                         <abbr title="Filters out blocks with colour texture variability percentage higher than given. The lower the threshold, the less 'noisy' (texture-prominent) blocks will be used for generation.">Noise:</abbr>

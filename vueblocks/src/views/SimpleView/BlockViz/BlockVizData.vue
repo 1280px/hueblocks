@@ -35,7 +35,11 @@ function copyBlockTextureName(name: string) {
                     v-for="(db, j) in row" :key="j"
                     :name="db.name" :blockset-idx="db.blocksetIdx" :texture="db.texture"
                     :class="{ 'block-hidden': hiddenBlockIds.has(`${i}_${j}`) }"
-                    :debug-data="SimpleViewStore.blockDisplayCfg.showColorsDebug ? db.debugData : undefined"
+                    :debug-data="
+                        SimpleViewStore.blockDisplayCfg.showColorsDebug
+                            ? db.debugData
+                            : undefined
+                    "
                     @click="(e: Event) => {
                         emit('hideBlock', `${i}_${j}`);
                         // Force update class bc Vue won't detect it until any next event

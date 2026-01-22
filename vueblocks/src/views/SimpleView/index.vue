@@ -22,7 +22,7 @@ function bbbAction() {
         GlobalStore.currBlocksetBlockdata,
         (
             GlobalStore.currBlocksetPalettes[GlobalStore.currPaletteIdx] === '<hr>'
-                ? GlobalStore.currBlocksetPalettes[0] as Palette // 'All Blocks' palette always comes first
+                ? GlobalStore.currBlocksetPalettes[0] as Palette // 'All Blocks' always comes first
                 : GlobalStore.currBlocksetPalettes[GlobalStore.currPaletteIdx] as Palette
         ),
         GlobalStore.blockFacing,

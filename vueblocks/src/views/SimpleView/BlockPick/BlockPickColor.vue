@@ -36,7 +36,7 @@ function updateBlocksetData() {
         GlobalStore.currBlocksetBlockdata,
         (
             GlobalStore.currBlocksetPalettes[GlobalStore.currPaletteIdx] === '<hr>'
-                ? GlobalStore.currBlocksetPalettes[0] as Palette // 'All Blocks' palette always comes first
+                ? GlobalStore.currBlocksetPalettes[0] as Palette // 'All Blocks' always comes first
                 : GlobalStore.currBlocksetPalettes[GlobalStore.currPaletteIdx] as Palette
         ),
         localFilterByFacing.value,
@@ -91,7 +91,9 @@ watch(
                 @mouseleave.prevent="(e: MouseEvent) => tooltipData.target = null"
             >
                 <Block
-                    :name="block.name" :blockset-idx="GlobalStore.currBlocksetIdx" :texture="block.texture"
+                    :name="block.name"
+                    :blockset-idx="GlobalStore.currBlocksetIdx"
+                    :texture="block.texture"
                 />
             </button>
         </section>

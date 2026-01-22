@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import Cookies from 'js-cookie'
+
 import { ref } from 'vue'
 import SlottedMsgbox from '@/components/SlottedMsgbox.vue'
 import { useSimpleViewStore } from '@/stores/SimpleViewStore'
@@ -6,7 +8,8 @@ import { useSimpleViewStore } from '@/stores/SimpleViewStore'
 const SimpleViewStore = useSimpleViewStore()
 
 function toggleDebugMode() {
-    SimpleViewStore.blockDisplayCfg.showColorsDebug = !SimpleViewStore.blockDisplayCfg.showColorsDebug
+    SimpleViewStore.blockDisplayCfg.showColorsDebug
+        = !SimpleViewStore.blockDisplayCfg.showColorsDebug
 
     if (SimpleViewStore.blockDisplayCfg.showColorsDebug) {
         // eslint-disable-next-line no-alert
@@ -14,10 +17,10 @@ function toggleDebugMode() {
     }
 }
 
-const welcomeIsShown = ref<boolean>(!document.cookie.includes('nowelcome=true'))
+const welcomeIsShown = ref<boolean>(!Cookies.get('nowelcome'))
 
 function welcomeHide() {
-    document.cookie = 'nowelcome=true;'
+    Cookies.set('nowelcome', 'true')
     welcomeIsShown.value = false
 }
 </script>
@@ -41,12 +44,15 @@ function welcomeHide() {
             <h3>Welcome to the new version of Hueblocks 🎉</h3>
             <span>
                 Starting January 15th, HueBlocks New is now an upstream version.<br>
-                <a href="https://github.com/1280px/hueblocks#list-of-changes">Click here to read the full list of changes and additions</a>, or
-                <a href="#" @click.prevent="welcomeHide">here</a>
+                <a href="https://github.com/1280px/hueblocks#list-of-changes">
+                    Click here to read the full list of changes and additions</a>, or
+                <a href="#" @click.prevent="welcomeHide">
+                    here</a>
                 to never show this box again.
             </span>
             <span>
-                If you wish to continue using legacy version anyway, use the "legacy version" link above.
+                If you wish to continue using legacy version anyway,
+                use the "legacy version" link above.
             </span>
         </SlottedMsgbox>
     </header>

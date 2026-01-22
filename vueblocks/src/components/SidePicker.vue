@@ -56,8 +56,8 @@ const id = useId()
     .side-picker__btn {
         width: 100%; height: 100%;
         appearance: none;
-        background-color: $dark_20; color: $white; // We need to provide this to be used for DD menu background
-        text-indent: -100%; // Remove selected text option from DD itself without affecting DD menu styles
+        background-color: $dark_20; color: $white; // We need to provide this for DD menu background
+        text-indent: -100%; // Remove selected text from DD itself without affecting DD menu styles
         border: 2px solid $accent-light_50; border-radius: $BR_round;
         transition: $TR_regular;
 

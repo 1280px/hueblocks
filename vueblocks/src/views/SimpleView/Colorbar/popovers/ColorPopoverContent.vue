@@ -47,8 +47,10 @@ async function applyPickedBlock() {
         <div class="popover-item">
             <SlottedButton
                 variant="black"
-                :title="SimpleViewStore.colorbarData.length > 2
-                    ? 'Delete this colour tag' : 'There should be at least 2 colours for a gradient'
+                :title="
+                    SimpleViewStore.colorbarData.length > 2
+                        ? 'Delete this colour tag'
+                        : 'There should be at least 2 colours for a gradient'
                 "
                 :disabled="SimpleViewStore.colorbarData.length <= 2"
                 @click="deleteCbItem"

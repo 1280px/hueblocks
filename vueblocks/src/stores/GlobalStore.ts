@@ -184,8 +184,8 @@ export const useGlobalStore = defineStore('GlobalStore', () => {
             if (confirm(
                 `${missings.length} textures from this palette do not exist!\n\n`
                 + 'This might\'ve happened because of incorrectly chosen verion, i.e. if a palette '
-                + 'was created a while ago and some textures used by it are now named differently. \n\n'
-                + 'Press "Cancel" to abort, or "OK" to drop missing textures and continue.',
+                + 'was created a while ago and some textures used by it are now named differently. '
+                + '\n\nPress "Cancel" to abort, or "OK" to drop missing textures and continue.',
             )) {
                 return textures.filter(texture => !missings.includes(texture))
             }

@@ -66,7 +66,9 @@ function debugGetColorAccuracy() {
         :class="{ loading: !isLoaded }" class="block"
         :style="{
             width: GlobalStore.blockSize,
-            height: debugData ? `${Number.parseInt(GlobalStore.blockSize) * 2}px` : GlobalStore.blockSize,
+            height: debugData
+                ? `${Number.parseInt(GlobalStore.blockSize) * 2}px`
+                : GlobalStore.blockSize,
         }"
     >
         <img
@@ -78,7 +80,8 @@ function debugGetColorAccuracy() {
         <div
             v-if="debugData" :class="{ loading: !isLoaded }" class="debug-color"
             :style="{
-                background: `linear-gradient(90deg, ${debugTargetCssColor} 50%, ${debugRealCssColor} 50%)`,
+                background:
+                    `linear-gradient(90deg, ${debugTargetCssColor} 50%, ${debugRealCssColor} 50%)`,
                 fontSize: `${Number.parseInt(GlobalStore.blockSize) / 3}px`,
             }"
         >
