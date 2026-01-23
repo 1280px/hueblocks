@@ -13,99 +13,75 @@ palettes:
 
     excludes:
       - $_stained_glass.png
-      - frosted_ice_$
-      - glass_$
-      - honey_block_$
+      - frosted_ice$
+      - glass$
+      - honey_block$
       - ice.png
       - slime_block.png
       - slime.png
       - tinted_glass.png
 
-  - name: 'Colorful blocks'
-    includes:
-      - $_coral_block.png
-      - $_log_top.png
-      - $_log.png
-      - $_planks.png
-      - $_stem_top.png
-      - $_stem.png
-      - $_wart_block.png
-      - $andesite_smooth.png
-      - $copper.png
-      - $diorite_smooth.png
-      - $froglight_side.png
-      - $granite_smooth.png
-      - $sponge.png
-      - amethyst_block.png
-      - bamboo_block.png
-      - black_$
-      - block$
-      - blue_$
-      - bone_block_side.png
-      - brown_$
-      - calcite.png
-      - clay.png
-      - cloth_$
-      - coal_block.png
-      - concrete_$
-      - copper_block.png
-      - cyan_$
-      - diamond_block.png
-      - emerald_block.png
-      - glass_$
-      - glazed_terracotta_$
-      - gold_block.png
-      - gray_$
-      - green_$
-      - hardened_clay$
-      - hay_block_top.png
-      - honeycomb_block.png
-      - iron_block.png
-      - lapis_block.png
-      - light_blue_$
-      - light_gray_$
-      - lime_$
-      - log_$
-      - magenta_$
-      - melon$
-      - mushroom_$
-      - netherite_block.png
-      - orange_$
-      - pink_$
-      - planks_$
-      - polished_$
-      - pumpkin$
-      - purple_$
-      - quartzblock_side.png
-      - quartz_block_side.png
-      - raw_$
-      - red_$
-      - redstone_block.png
-      - resin_block.png
-      - sandstone_top.png
-      - sculk.png
-      - shroomlight.png
-      - shulker_box.png
-      - shulker$
-      - terracotta.png
-      - tinted_glass.png
-      - tree_$
-      - white_$
-      - wood$
-      - wool$
-      - yellow_$
+  - name: 'Build-friendly blocks'
 
     excludes:
-      - blue_ice.png
-      - dead_$
-      - polished_basalt$
-      - polished_blackstone_bricks.png
-      - red_sand.png
-      - red_sandstone_bottom.png
-      - red_sandstone_carved.png
-      - red_sandstone_normal.png
-      - red_sandstone_smooth.png
-      - red_sandstone.png
+      - $_glazed_terracotta.png
+      - $_stained_glass.png
+      - $copper_bulb_lit.png
+      - $copper_bulb.png
+      - barrel_$
+      - bedrock.png
+      - bee_nest_$
+      - beehive_side.png
+      - birch_trapdoor.png
+      - blast_furnace_$
+      - bookshelf.png
+      - budding_amethyst.png
+      - cartography_table$
+      - carved_pumpkin.png
+      - chiseled_bookshelf_empty.png
+      - chiseled_bookshelf_occupied.png
+      - command_block.png
+      - commandBlock.png
+      - composter_bottom.png
+      - crafter_$
+      - crafting_table_$
+      - dark_oak_trapdoor.png
+      - daylight_detector$
+      - daylightDetector$
+      - dispenser_front$
+      - farmland.png
+      - farmland$
+      - frosted_ice$
+      - furnace_front$
+      - furnace_side.png
+      - glass$
+      - honey_block$
+      - ice.png
+      - jack_o_lantern.png
+      - lodestone$
+      - loom$
+      - magma.png
+      - musicBlock.png
+      - note_block.png
+      - noteblock.png
+      - observer$
+      - pale_oak_trapdoor.png
+      - piston$
+      - pumpkin_face$
+      - pumpkin_jack.png
+      - redstone_lamp$
+      - redstoneLight$
+      - respawn_anchor$
+      - sculk_catalyst$
+      - slime$
+      - smithing_table_bottom.png
+      - smithing_table_front.png
+      - smoker$
+      - stonecutter$
+      - target$
+      - tinted_glass.png
+      - tnt$
+      - workbench$
 
   - name: 'Grayscale blocks'
     includes:

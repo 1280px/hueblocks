@@ -100,9 +100,7 @@ export const useGlobalStore = defineStore('GlobalStore', () => {
                 textures: [],
                 count: -1,
             },
-
             ...currBlocksetPalettes.value,
-
             '<hr>',
             // {
             //     name: 'Custom palette',
@@ -117,7 +115,7 @@ export const useGlobalStore = defineStore('GlobalStore', () => {
         ]
     }
 
-    const currPaletteIdx = ref<PaletteIndex>(0)
+    const currPaletteIdx = ref<PaletteIndex>(2)
 
     const customPaletteTextures = ref<Palette['textures']>([])
     const toggleCustomPalette = (isShown: boolean) => {

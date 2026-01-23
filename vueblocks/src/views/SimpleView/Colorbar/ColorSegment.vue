@@ -46,11 +46,14 @@ const colorCss = computed<string>(() => getCssRgb(color))
 
     .colorbar__color-segment {
         background-color: $white;
-        // Prevent browsers from distoring width on
-        // non-100% scale using the border trick:
+        // Prevent browsers from distoring width on non-100% scale using the border trick:
         width: 0; height: 100%;
         margin: 0; padding: 0;
         border: 0 solid $white; border-width: 0 1px 0 1px;
+
+        &:focus-visible {
+            outline: 1px solid $white;
+        }
     }
 
     .colorbar__color-segment__tag {
@@ -85,6 +88,7 @@ const colorCss = computed<string>(() => getCssRgb(color))
             opacity: .8;
         }
 
+        .colorbar__color-segment:focus-visible &,
         .colorbar__color-segment__tag:active & {
             transition: $TR_fast;
             opacity: .7;

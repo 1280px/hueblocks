@@ -29,29 +29,27 @@ const id = useId()
         transition: $TR_regular;
 
         &:hover {
-            background-color: $white_30;
-            border-color: $white_80;
+            background-color: $white_30; border-color: $white_80;
+        }
 
-            &:active {
-                background-color: $white_50;
-                border-color: $white;
-                box-shadow: inset 0 0 0 2px $white;
-                // transition: $TR_fast;
-            }
+        &:focus-visible, &:hover:active {
+            outline: none;
+            background-color: $white_50; border-color: $white;
+            box-shadow: inset 0 0 0 2px $white;
+            // transition: $TR_fast;
         }
 
         &:checked {
-            background-color: $white_80;
-            border-color: $trans;
+            background-color: $white_80; border-color: $trans;
 
             &:hover {
                 background-color: $white;
+            }
 
-                &:active {
-                    background-color: $white_80;
-                    border-color: $accent-dark_25;
-                    box-shadow: inset 0 0 0 2px $accent-dark_25;
-                }
+            &:focus-visible, &:hover:active {
+                outline: none;
+                background-color: $white_80; border-color: $accent-dark_50;
+                box-shadow: inset 0 0 0 2px $accent-dark_50;
             }
         }
     }
