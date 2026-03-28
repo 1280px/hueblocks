@@ -2,7 +2,7 @@
   <a href="https://1280px.github.io/hueblocks/">
     <img src='readme-pic.png'><br>
   </a>
-  <i>Create beautiful block gradients in a few clicks!</i>
+  <i><a href="https://1280px.github.io/hueblocks">Create beautiful block gradients in a few clicks!</a></i>
 </p>
 
 
@@ -18,7 +18,7 @@ Additionally, you can:
 <!-- - Choose blocks noise threshold, allowing to filter out too "smooth" (like concrete) or, more commonly, too "noisy" blocks (crafting tables, glazed terracotta, TNT, you name it) -->
 <!-- - Upload and use custom textures right from your browser, without any need to mess with backend -->
 
-By default, HB comes with blocks from three MCJE versions — **1.8.9**, **1.13.2** (last version before Texture Update), and **latest stable MCJE** (1.21.11 as of Jan '26). *If you need other versions, you can fork a repo and host an instance with your own blocksets, either by putting their JAR files through jar2blockset script, or by re-creating blockset structure yourself.*
+By default, HB comes with blocks from three MCJE versions — **1.8.9**, **1.13.2** (last version before Texture Update), and **latest stable MCJE** (26.1 as of Mar '26). *If you need other versions, you can fork a repo and host an instance with your own blocksets, either by putting their JAR files through jar2blockset script, or by re-creating blockset structure yourself.*
 
 ***Please note that not every single texture is included!*** All blocks with fully transparent pixels (i.e. flowers or trapdoors — but not semi-opaque blocks like stained glass), biome-/foliage-affected (such as grass and leaves), and overly-similar looking blocks were scrapped for the sake of better gradient appearance. *All of these paramaters, as well as palette presets, are fully configurable on backend side, so you can easily tweak it for your need on your instance.*
 
@@ -35,7 +35,7 @@ Apart from being re-written on modern tech stack (Vue 3 + TS for frontend, Pytho
 
 1. **Multicolour colourbar** — the feature that had started it all. Now you're not limited to using just 2 colours at once! The entire gradient now consisnts of as many points ("colour tags") as you like, with arbitrary lengths in between. Just like before, for each colour tag you can pick either colours or blocks, swap the entire gradient from left to right, and randomise colour values if you want to have some fun.
 2. **Colourspace switcher** — depending on your needs, you may want to have either very smooth or very contrast gradients. For such cases, you can use a switcher between SRGB (the only colour space featured in HueBlocks Legacy) and ~~CIELAB~~ OkLAB (used by default). Please keep in mind there is no a "better" or a "worse" colourspace, sometimes the best choice will be checking both — conveniently, switching between them is as simple as clicking a single "Use OkLAB" box.
-3. **Filter by facing** — quite often there are situations, when the "best" suggested gradient uses textures that cannot co-exist in the same side (e.g. a furnace top and a loom sides). To solve this, now, using the switch with a block pictogram on it, you can manually set the side(-s) you're interested in, and HBN will only use the applicable textures.
+3. **Filter by facing** — quite often there are situations, when the "best" suggested gradient uses textures that cannot co-exist in the same side (e.g. a furnace top and a loom sides). To solve this, now, using the switch with a block pictogram on it, you can manually set the side(-s) you're interested in, and HBN will use only applicable textures.
 
 
 ### Improved features
