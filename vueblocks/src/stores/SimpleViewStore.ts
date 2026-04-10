@@ -91,7 +91,10 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
         if (!file) { throw new Error('') }
         opener.remove()
 
-        let newColorbarData: ColorbarSeg[] = await new Promise((resolve, reject) => {
+        const ecbd: {
+            oklab: boolean,
+            colorbar: ColorbarSeg[],
+        } = await new Promise((resolve, reject) => {
             const reader = new FileReader()
             reader.onload = () => {
                 try {
@@ -107,18 +110,19 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
         // Check for broken objects, just in case
         // TODO: Add check for broken blockRefs as well
         try {
-            for (const [i, cbd] of newColorbarData.entries()) {
+            for (const [i, cbd] of ecbd.colorbar.entries()) {
                 const keys = Object.keys(cbd)
                 if (
                     !keys.includes('steps')
                     || !keys.includes('color')
                     || !keys.includes('blockRef')
                 ) {
-                    newColorbarData = newColorbarData.splice(i, 1)
+                    ecbd.colorbar = ecbd.colorbar.splice(i, 1)
                 }
             }
 
-            colorbarData.value = newColorbarData
+            colorbarData.value = ecbd.colorbar
+            blockFilteringCfg.value.useOkLAB = ecbd.oklab ?? true
         }
         catch (err) {
             throw new Error(`Failed to parse colours: ${(err as Error).message}`)
@@ -126,8 +130,13 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
     }
 
     const exportColorbarData = async () => {
+        const ecbd = { // Extended ColorBar Data
+            oklab: blockFilteringCfg.value.useOkLAB,
+            colorbar: colorbarData.value,
+        }
+
         const json = (
-            JSON.stringify(colorbarData.value, null, 4)
+            JSON.stringify(ecbd, null, 4)
         )
         const blob = new Blob(
             [json],
