@@ -25,10 +25,12 @@ const { side } = defineProps<{
         &.left {
             border-radius: $BR_big 0 0 $BR_big;
             border-right-color: $trans !important;
+            margin-inline-start: 8px;
         }
         &.right {
             border-radius: 0 $BR_big $BR_big 0;
             border-left-color: $trans !important;
+            margin-inline-end: 8px;
         }
 
         & > * {
@@ -59,15 +61,22 @@ const { side } = defineProps<{
             cursor: not-allowed;
 
             &.left {
-                margin-left: 20px;
+                margin-inline-start: 20px;
             }
             &.right {
-                margin-right: 20px;
+                margin-inline-end: 20px;
             }
 
             & > * {
                 opacity: 0;
             }
+        }
+    }
+
+    @media (max-width: 640px) {
+        button {
+            margin: 0 !important;
+            width: 100%;
         }
     }
 </style>

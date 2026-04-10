@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import type { Palette } from '@/types/palettes'
 
+import { ref } from 'vue'
+
+import SlottedMsgbox from '@/components/SlottedMsgbox.vue'
 import { useGlobalStore } from '@/stores/GlobalStore'
 import { useSimpleViewStore } from '@/stores/SimpleViewStore'
 import BlockDisplayOptions from './BlockViz/BlockDisplayOptions.vue'
@@ -15,6 +18,16 @@ const SimpleViewStore = useSimpleViewStore()
 // This is a rather fragile solution, however, as it's impossible to
 // remove rows other than delete all of them, it is toletable I guess?
 const hiddenBlockIds = new Set<string>() // Format: 'row_block'
+
+const errContent = ref<string>('')
+const errIsShown = ref<boolean>(false)
+function showErrMsg(t: string) {
+    if (t?.length) {
+        errContent.value = t
+        errIsShown.value = true
+        setTimeout(() => errIsShown.value = false, 5000)
+    }
+}
 
 function bbbAction() {
     SimpleViewStore.blockVizGenerate(
@@ -34,9 +47,15 @@ function bbbAction() {
 </script>
 
 <template>
+    <header>
+        <SlottedMsgbox variant="error" :is-shown="errIsShown">
+            {{ errContent }}
+        </SlottedMsgbox>
+    </header>
+
     <main>
         <section class="colorbar__wrap">
-            <Colorbar />
+            <Colorbar @import-error="showErrMsg" />
         </section>
 
         <BlockDisplayOptions />
@@ -59,6 +78,13 @@ function bbbAction() {
 <style lang="scss" scoped>
     @use '@/assets/variables' as *;
 
+    header {
+        @include flex-center;
+
+        & blockquote {
+            margin-bottom: 8px;
+        }
+    }
     main {
         @include responsive-width;
         display: flex; flex-direction: column;

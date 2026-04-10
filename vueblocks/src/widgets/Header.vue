@@ -7,17 +7,27 @@ import { useSimpleViewStore } from '@/stores/SimpleViewStore'
 
 const SimpleViewStore = useSimpleViewStore()
 
+const welcomeIsShown = ref<boolean>(!Cookies.get('nowelcome'))
+
+if (welcomeIsShown.value) {
+    setTimeout(() => welcomeIsShown.value = false, 15000)
+}
+
+const debugTxt = ref<string>('')
+
 function toggleDebugMode() {
     SimpleViewStore.blockDisplayCfg.showColorsDebug
         = !SimpleViewStore.blockDisplayCfg.showColorsDebug
 
     if (SimpleViewStore.blockDisplayCfg.showColorsDebug) {
-        // eslint-disable-next-line no-alert
-        alert('Colour debug toggled, re-generate a gradient to see effect.')
+        welcomeIsShown.value = true
+        debugTxt.value = 'Colour debug toggled, re-generate gradient to see the effect.'
+        setTimeout(() => welcomeIsShown.value = false, 5000)
+    }
+    else {
+        welcomeIsShown.value = false
     }
 }
-
-const welcomeIsShown = ref<boolean>(!Cookies.get('nowelcome'))
 
 function welcomeHide() {
     Cookies.set('nowelcome', 'true')
@@ -40,20 +50,25 @@ function welcomeHide() {
             <a href="https://1280px.github.io/hueblocks-legacy">legacy version</a>
         </small>
 
-        <SlottedMsgbox v-if="welcomeIsShown" :timeout="15">
-            <h3>Welcome to the new version of Hueblocks 🎉</h3>
-            <span>
-                Starting January 15th, HueBlocks New is now an upstream version.<br>
-                <a href="https://github.com/1280px/hueblocks#list-of-changes">
-                    Click here to read the full list of changes and additions</a>, or
-                <a href="#" @click.prevent="welcomeHide">
-                    here</a>
-                to never show this box again.
+        <SlottedMsgbox :is-shown="welcomeIsShown">
+            <span v-if="debugTxt">
+                {{ debugTxt }}
             </span>
-            <span>
-                If you wish to continue using legacy version anyway,
-                use the "legacy version" link above.
-            </span>
+            <template v-else>
+                <h3>Welcome to the new version of Hueblocks 🎉</h3>
+                <span>
+                    Starting January 15th, HueBlocks New is now an upstream version.<br>
+                    <a href="https://github.com/1280px/hueblocks#list-of-changes">
+                        Click here to read the full list of changes and additions</a>, or
+                    <a href="#" @click.prevent="welcomeHide">
+                        here</a>
+                    to never show this box again.
+                </span>
+                <span>
+                    If you wish to continue using legacy version anyway,
+                    use the "legacy version" link above.
+                </span>
+            </template>
         </SlottedMsgbox>
     </header>
 </template>

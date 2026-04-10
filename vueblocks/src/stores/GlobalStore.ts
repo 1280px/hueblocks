@@ -27,6 +27,8 @@ export const useGlobalStore = defineStore('GlobalStore', () => {
 
     const blockFacing = ref<BlockFacing>('all')
 
+    // Blockset operations
+
     const blocksetsPath = `${_baseUrl}/blocksets/` + `_blocksets.json`
 
     const blocksetsData = ref<((Blockset | '<hr>')[])>([])
@@ -66,6 +68,8 @@ export const useGlobalStore = defineStore('GlobalStore', () => {
         return `${_baseUrl}/blocksets/${blocksetsData?.value[blocksetIdx]?.dir}`
     }
 
+    // Blockdata & textures
+
     const getTexturePath = (blocksetIdx: number, texture: string) => {
         const blocksetPath = getBlocksetPath(blocksetIdx)
         return `${blocksetPath}/${texture}`
@@ -82,6 +86,8 @@ export const useGlobalStore = defineStore('GlobalStore', () => {
 
         currBlocksetBlockdata.value = data.slice(1)
     }
+
+    // Palletes
 
     const currBlocksetPalettes = ref<(Palette | '<hr>')[]>([])
     const loadBlocksetPalettes = async () => {
@@ -154,33 +160,33 @@ export const useGlobalStore = defineStore('GlobalStore', () => {
         if (!file) { throw new Error('') }
         opener.remove()
 
-        let textures: Palette['textures']
-        try {
-            textures = await new Promise((resolve) => {
-                const reader = new FileReader()
-                reader.onload = () => {
+        const textures: Palette['textures'] = await new Promise((resolve, reject) => {
+            const reader = new FileReader()
+            reader.onload = () => {
+                try {
                     resolve(JSON.parse(reader!.result as string)) // Yuck.
                 }
-                reader.readAsText(file)
-            })
-        }
-        catch (err) {
-            throw new Error((err as Error).message ?? 'Unable to read JSON!')
-        }
-
-        // eslint-disable-next-line prefer-const
-        let missings = [...textures]
-        for (const block of currBlocksetBlockdata.value) {
-            const idx = missings.indexOf(block.texture)
-            if (idx !== -1) {
-                missings.splice(idx, 1)
+                catch {
+                    reject(new Error('Unable to read JSON! Are you sure this is correct file?'))
+                }
             }
-        }
+            reader.readAsText(file)
+        })
 
-        if (missings.length) {
-            // eslint-disable-next-line no-alert
+        try {
+            let missings = [...textures]
+            for (const block of currBlocksetBlockdata.value) {
+                const idx = missings.indexOf(block.texture)
+                if (idx !== -1) {
+                    missings.splice(idx, 1)
+                }
+            }
+
+            if (!missings.length) {
+                return textures
+            }
             if (confirm(
-                `${missings.length} textures from this palette do not exist!\n\n`
+                `${missings.length}/${textures.length} textures from this palette do not exist!\n\n`
                 + 'This might\'ve happened because of incorrectly chosen verion, i.e. if a palette '
                 + 'was created a while ago and some textures used by it are now named differently. '
                 + '\n\nPress "Cancel" to abort, or "OK" to drop missing textures and continue.',
@@ -189,8 +195,8 @@ export const useGlobalStore = defineStore('GlobalStore', () => {
             }
             else { throw new Error('') }
         }
-        else {
-            return textures
+        catch (err) {
+            throw new Error(`Failed to parse palette: ${(err as Error).message}`)
         }
     }
 

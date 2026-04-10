@@ -9,6 +9,7 @@ import Block from '@/components/Block.vue'
 import BlockTooltip from '@/components/BlockTooltip.vue'
 import Icon from '@/components/Icon.vue'
 import SlottedButton from '@/components/SlottedButton.vue'
+import SlottedMsgbox from '@/components/SlottedMsgbox.vue'
 import { overlayIsShown } from '@/overlay'
 import { useGlobalStore } from '@/stores/GlobalStore'
 import { useSimpleViewStore } from '@/stores/SimpleViewStore'
@@ -26,7 +27,8 @@ const SimpleViewStore = useSimpleViewStore()
 
 const blockdataByAlphabet = ref<Record<string, BlockT[]>>({})
 
-const errText = ref<string>('')
+const errContent = ref<string>('')
+const errIsShown = ref<boolean>(false)
 
 const tooltipData = ref<BlockTooltipT>({ target: null, name: 'missingNo' })
 
@@ -92,10 +94,12 @@ async function handlePaletteImport() {
     try {
         const newSelectedTextures: BlockT['texture'][] = await GlobalStore.importCustomPalette()
         selectedTextures.value = new Set(newSelectedTextures)
-        errText.value = ''
+        errContent.value = ''
     }
     catch (err) {
-        errText.value = (err as Error).message ?? 'An unknown import error has occured :('
+        errIsShown.value = true
+        errContent.value = (err as Error).message ?? 'An unknown import error has occured :('
+        setTimeout(() => errIsShown.value = false, 5000)
     }
 }
 
@@ -119,9 +123,9 @@ watch(
             / {{ GlobalStore.currBlocksetBlockdata.length }} blocks) &nbsp; —
         </h2>
 
-        <h3 v-show="errText">
-            {{ errText }}
-        </h3>
+        <SlottedMsgbox variant="error" :is-shown="errIsShown">
+            {{ errContent }}
+        </SlottedMsgbox>
     </header>
 
     <main>
@@ -176,7 +180,7 @@ watch(
             :disabled="selectedTextures.size < 3"
             :title="selectedTextures.size < 3
                 ? 'Please select at least 3 blocks!'
-                : 'Export selected textures… (right click to export unselected)'"
+                : 'Export selected textures… \n(right click to export unselected)'"
             @click="GlobalStore.exportCustomPalette(Array.from(selectedTextures))"
             @contextmenu.prevent="GlobalStore.exportCustomPalette(
                 GlobalStore.currBlocksetBlockdata.map(b => b.texture)
@@ -203,6 +207,11 @@ watch(
 
 <style lang="scss" scoped>
     @use '@/assets/variables' as *;
+
+    header {
+        flex-direction: column;
+        gap: 12px;
+    }
 
     section {
         display: flex;

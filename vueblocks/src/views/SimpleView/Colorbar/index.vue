@@ -17,6 +17,10 @@ import ColorPopoverContent from './popovers/ColorPopoverContent.vue'
 import StepsPopoverContent from './popovers/StepsPopoverContent.vue'
 import StepsSegment from './StepsSegment.vue'
 
+const emit = defineEmits<{
+    importError: [errText: string],
+}>()
+
 const SimpleViewStore = useSimpleViewStore()
 
 // Colorbar aside buttons
@@ -41,6 +45,17 @@ function colorbarRandom() {
         cbItem.blockRef = null
         // cbItem.color = getRandomRbg(0.33)
         cbItem.color = getRandomRbg(Math.random() > 0.75 ? 0.96 : 1.12)
+    }
+}
+
+async function colorbarImportHandle() {
+    try {
+        await SimpleViewStore.importColorbarData()
+    }
+    catch (err) {
+        if ((err as Error)?.message) {
+            emit('importError', (err as Error).message)
+        }
     }
 }
 
@@ -98,6 +113,14 @@ const popoverIsShown = computed({
     <section class="colorbar">
         <SlottedButton
             variant="trans"
+            title="Randomize colours"
+            @click="colorbarRandom"
+        >
+            <Icon name="random" />
+        </SlottedButton>
+
+        <SlottedButton
+            variant="trans"
             title="Swap left to right"
             @click="colorbarSwap"
         >
@@ -134,10 +157,18 @@ const popoverIsShown = computed({
 
         <SlottedButton
             variant="trans"
-            title="Randomize colours"
-            @click="colorbarRandom"
+            title="Import colour gradient…"
+            @click="colorbarImportHandle"
         >
-            <Icon name="random" />
+            <Icon name="import" />
+        </SlottedButton>
+
+        <SlottedButton
+            variant="trans"
+            title="Export colour gradient…"
+            @click="SimpleViewStore.exportColorbarData"
+        >
+            <Icon name="export" />
         </SlottedButton>
     </section>
 
@@ -172,12 +203,12 @@ const popoverIsShown = computed({
         flex: 1;
         display: flex;
         height: 40px;
-        margin-bottom: 28px;
+        margin: 0 4px 28px 4px;
         border-radius: $BR_big;
 
         & button.trans {
             width: 32px;
-            margin: 0 8px;
+            margin: 0 2px;
             align-self: center;
         }
     }
@@ -188,5 +219,25 @@ const popoverIsShown = computed({
         align-items: stretch;
         background-color: $white_30;
         box-shadow: $SH_smooth;
+    }
+
+    @media (max-width: 640px) {
+        .colorbar {
+            display: grid;
+            grid-template: 2fr / repeat(8, 1fr); grid-gap: 8px 0;
+            height: auto;
+        }
+
+        .colorbar__inner {
+            width: 100%; height: 40px;
+            grid-column: span 6;
+        }
+
+        button.trans {
+            order: -1;
+            grid-column: span 2;
+            width: 100% !important; 
+            margin: auto !important;
+        }
     }
 </style>

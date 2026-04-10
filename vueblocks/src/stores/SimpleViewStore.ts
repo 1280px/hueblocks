@@ -10,7 +10,6 @@ import type {
 } from '@/types/simpleview'
 
 import Cookies from 'js-cookie'
-
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
@@ -76,6 +75,72 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
                 steps: 4,
             },
         ]
+    }
+
+    const importColorbarData = async () => {
+        const opener = document.createElement('input')
+        opener.setAttribute('type', 'file')
+        opener.setAttribute('accept', 'application/json')
+        opener.style.display = 'none'
+        document.body.appendChild(opener)
+        opener.click()
+
+        const file: File | undefined = await new Promise((resolve) => {
+            opener.onchange = () => resolve(opener.files?.[0])
+        })
+        if (!file) { throw new Error('') }
+        opener.remove()
+
+        let newColorbarData: ColorbarSeg[] = await new Promise((resolve, reject) => {
+            const reader = new FileReader()
+            reader.onload = () => {
+                try {
+                    resolve(JSON.parse(reader!.result as string)) // Yuck.
+                }
+                catch {
+                    reject(new Error('Unable to read JSON! Are you sure this is correct file?'))
+                }
+            }
+            reader.readAsText(file)
+        })
+
+        // Check for broken objects, just in case
+        // TODO: Add check for broken blockRefs as well
+        try {
+            for (const [i, cbd] of newColorbarData.entries()) {
+                const keys = Object.keys(cbd)
+                if (
+                    !keys.includes('steps')
+                    || !keys.includes('color')
+                    || !keys.includes('blockRef')
+                ) {
+                    newColorbarData = newColorbarData.splice(i, 1)
+                }
+            }
+
+            colorbarData.value = newColorbarData
+        }
+        catch (err) {
+            throw new Error(`Failed to parse colours: ${(err as Error).message}`)
+        }
+    }
+
+    const exportColorbarData = async () => {
+        const json = (
+            JSON.stringify(colorbarData.value, null, 4)
+        )
+        const blob = new Blob(
+            [json],
+            { type: 'application/json' },
+        )
+
+        const addr = URL.createObjectURL(blob)
+        const link = document.createElement('a')
+        link.setAttribute('href', addr)
+        link.setAttribute('download', 'colours.json') // Otherwise FF just opens JSON
+        document.body.appendChild(link)
+        link.click()
+        link.remove()
     }
 
     const blockVizData = ref<BlockVizRow[]>([])
@@ -285,7 +350,7 @@ export const useSimpleViewStore = defineStore('SimpleViewStore', () => {
 
     return {
         blockDisplayCfg, blockFilteringCfg,
-        colorbarData,
+        colorbarData, importColorbarData, exportColorbarData,
         getFilteredBlockdata,
         blockVizData, blockVizGenerate,
     }

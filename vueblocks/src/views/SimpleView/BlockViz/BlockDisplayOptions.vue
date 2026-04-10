@@ -26,7 +26,11 @@ const SimpleViewStore = useSimpleViewStore()
 
         <SlottedCheckbox v-model="SimpleViewStore.blockFilteringCfg.useOkLAB">
             <abbr
-                title="Use colourspace closer to how human eyes perceive colour. Results in more vibrant and natural looking, but often less saturated (&quot;washed-out&quot;) and contrast gradients."
+                :title="
+                    'Use colourspace closer to how human eyes perceive colour.'
+                        + '\nResults in more vibrant, smooth, and natural looking, but'
+                        + '\noften less saturated (&quot;washed-out&quot;) and contrast gradients.'
+                "
             >
                 Use&nbsp;OkLAB
             </abbr>

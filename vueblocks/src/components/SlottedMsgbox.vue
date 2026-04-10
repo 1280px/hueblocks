@@ -1,31 +1,13 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-
-const { timeout, variant = 'normal' } = defineProps<{
-    timeout?: number,
+const { variant = 'normal', isShown = true } = defineProps<{
     variant?: 'normal' | 'error' | 'success',
+    isShown?: boolean,
 }>()
-
-const showMsgbox = ref<boolean>(true)
-
-watch(
-    () => timeout,
-    () => {
-        showMsgbox.value = true
-        if (timeout) {
-            setTimeout(
-                () => { showMsgbox.value = false },
-                (Math.max(+(timeout || 0), 1)) * 1000,
-            )
-        }
-    },
-    { immediate: true },
-)
 </script>
 
 <template>
     <Transition name="msgbox">
-        <blockquote v-if="showMsgbox" :class="variant">
+        <blockquote v-if="isShown" :class="variant">
             <slot />
         </blockquote>
     </Transition>

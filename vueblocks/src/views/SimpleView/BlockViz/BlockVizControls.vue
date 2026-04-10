@@ -68,7 +68,7 @@ const GlobalStore = useGlobalStore()
     .blockviz-controls {
         @include flex-center;
         height: 64px;
-        gap: 2vw; // 4vw;
+        margin: 0 4px; gap: 2vw; // 4vw;
     }
     .blockviz-controls__blob {
         @include flex-center;
