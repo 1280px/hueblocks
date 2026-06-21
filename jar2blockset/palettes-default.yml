@@ -71,6 +71,7 @@ palettes:
       - pumpkin_jack.png
       - redstone_lamp$
       - redstoneLight$
+      - reinforced_deepslate$
       - respawn_anchor$
       - sculk_catalyst$
       - slime$
@@ -210,6 +211,7 @@ palettes:
       - budding_amethyst.png
       - calcite.png
       - carved_pumpkin.png
+      - cinnabar.png
       - clay.png
       - cobblestone_mossy.png
       - cobblestone.png
@@ -243,6 +245,7 @@ palettes:
       - orange_terracotta.png
       - ore$
       - podzol$
+      - potent_sulfur.png
       - pumpkin$
       - raw_$
       - red_mushroom_block.png
@@ -255,6 +258,7 @@ palettes:
       - stone_andesite.png
       - stone_diorite.png
       - stone_granite.png
+      - sulfur.png
       - terracotta.png
       - tree_$
       - tuff.png

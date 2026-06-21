@@ -162,7 +162,10 @@ filters:
   - vault_bottom$
   - vault_top$
 
-  # 1.21.11
+  # 26.2
   - dried_ghast_$
-  # TODO: Maybe add a special handle for shelves to extract their back texture (useful in some builds)
+  # TODO: Maybe add a special handle for shelves to extract their back textures?
+  # (can be useful in some builds, but stored in a way unusable without preprocessing)
   - $_shelf.png
+  - $bed_head_up.png
+  - $bed_foot_up.png
