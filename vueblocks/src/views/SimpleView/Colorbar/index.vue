@@ -113,18 +113,18 @@ const popoverIsShown = computed({
     <section class="colorbar">
         <SlottedButton
             variant="trans"
-            title="Randomize colours"
-            @click="colorbarRandom"
+            title="Import colour gradient…"
+            @click="colorbarImportHandle"
         >
-            <Icon name="random" />
+            <Icon name="import" />
         </SlottedButton>
 
         <SlottedButton
             variant="trans"
-            title="Swap left to right"
-            @click="colorbarSwap"
+            title="Export colour gradient…"
+            @click="SimpleViewStore.exportColorbarData"
         >
-            <Icon name="swap" />
+            <Icon name="export" />
         </SlottedButton>
 
         <AddItemButton
@@ -157,18 +157,18 @@ const popoverIsShown = computed({
 
         <SlottedButton
             variant="trans"
-            title="Import colour gradient…"
-            @click="colorbarImportHandle"
+            title="Swap left to right"
+            @click="colorbarSwap"
         >
-            <Icon name="import" />
+            <Icon name="swap" />
         </SlottedButton>
 
         <SlottedButton
             variant="trans"
-            title="Export colour gradient…"
-            @click="SimpleViewStore.exportColorbarData"
+            title="Randomize colours"
+            @click="colorbarRandom"
         >
-            <Icon name="export" />
+            <Icon name="random" />
         </SlottedButton>
     </section>
 
